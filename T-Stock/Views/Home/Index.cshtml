@@ -1,8 +1,54 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="sidebar">
+    <div class="top">
+        <div class="logo">
+            <i class="ri-unsplash-fill"></i>
+             <span>T-Stock</span>
+        </div>
+        <i class="ri-menu-fill" id="btn"></i>
+    </div>
+    <div class="user">
+        <img src="test.png" alt="me" class="user-img" />
+        <div>
+            <p class="bold">Kai</p>
+            <p>**Admin**</p>
+        </div>
+    </div>
+    <ul>
+        <li>
+            <a href="#">
+                <i class="ri-home-5-line"></i>
+                <span class="nav-item">Home</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="ri-shopping-bag-fill"></i>
+                <span class="nav-item">Products</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="ri-file-list-line"></i>
+                <span class="nav-item">Inventory</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="ri-file-chart-fill"></i>
+                <span class="nav-item">Reports</span>
+            </a>
+        </li>
+    </ul>
+
+    
+</div>
+
+<div class="main-content">
+    <div class="container">
+        <h1>T-Stock</h1>
+    </div>
 </div>

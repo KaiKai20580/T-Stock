@@ -18,12 +18,8 @@ c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\T-Stock.RazorAs
 c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\rjimswa.dswa.cache.json
 c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
 c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
-c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\scopedcss\bundle\T-Stock.styles.css
-c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\scopedcss\projectbundle\T-Stock.bundle.scp.css
-c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\o0jyih2a7m-b9sayid5wm.gz
 c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\cjqd5asw7m-61n19gt1b8.gz
-c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\gzvvrwnjbb-xtxxf3hu2r.gz
 c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\isocmn0rfn-bqjiyaj88i.gz
 c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\c92nj4h0ab-c2jlpeoesf.gz
 c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\oibqi74w1p-erw9l3u2r3.gz
@@ -83,8 +79,6 @@ c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\juw9
 c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\nxjxa1ab5s-muycvpuwrr.gz
 c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\2kzcthwrns-87fc7y1x7t.gz
 c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\cetztrdzg9-mlv21k5csn.gz
-c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\q3qs2ib9j0-5tp8vktlsq.gz
-c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\5jbjijne9k-5tp8vktlsq.gz
 c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\staticwebassets.build.json
 c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\staticwebassets.build.json.cache
 c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\staticwebassets.development.json
@@ -94,3 +88,7 @@ c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\refint\T-Stock.
 c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\T-Stock.pdb
 c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\T-Stock.genruntimeconfig.cache
 c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\ref\T-Stock.dll
+c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\T-Stock.sourcelink.json
+C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
+C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\gzvvrwnjbb-6nmh0lch9a.gz
+C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\o0jyih2a7m-o9ksnp1vlq.gz
