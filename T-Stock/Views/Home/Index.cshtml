@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Home";
 }
+@model List<T_Stock.Models.Inventory>
 
 <div class="sidebar">
     <div class="top">
@@ -8,10 +9,9 @@
             <i class="ri-unsplash-fill"></i>
              <span>T-Stock</span>
         </div>
-        <i class="ri-menu-fill" id="btn"></i>
     </div>
     <div class="user">
-        <img src="test.png" alt="me" class="user-img" />
+        <img src="/test.png" alt="me" class="user-img" />
         <div>
             <p class="bold">Kai</p>
             <p>**Admin**</p>
@@ -19,21 +19,27 @@
     </div>
     <ul>
         <li>
-            <a href="#">
-                <i class="ri-home-5-line"></i>
+            <a href="/Inventory/Create">
+                <i class="ri-home-5-fill"></i>
                 <span class="nav-item">Home</span>
             </a>
         </li>
         <li>
             <a href="#">
-                <i class="ri-shopping-bag-fill"></i>
-                <span class="nav-item">Products</span>
+                <i class="ri-clipboard-line"></i>
+                <span class="nav-item">Inventory</span>
             </a>
         </li>
         <li>
             <a href="#">
-                <i class="ri-file-list-line"></i>
-                <span class="nav-item">Inventory</span>
+                <i class="ri-file-list-fill"></i>
+                <span class="nav-item">Purchase <br /> Order</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="ri-caravan-line"></i>
+                <span class="nav-item">Supplier</span>
             </a>
         </li>
         <li>
@@ -51,4 +57,34 @@
     <div class="container">
         <h1>T-Stock</h1>
     </div>
+    <div class="search-container">
+        <input type="text" placeholder="Search..."/>
+        <i class="ri-search-line"></i>
+    </div>
 </div>
+<div class="dashboard">
+    <h3>Overview</h3>
+    <div class="info">
+        <div class="product"><p>Total Product</p></div>
+        <div class="order"><p>Orders</p></div>
+        <div class="stock"><p>Total Stock</p></div>
+        <div class="out-of-stock"><p>Out Of Stock</p></div>
+    </div>
+</div>
+
+
+@*
+@if (Model != null && Model.Any())
+{
+    <ul>
+        @foreach (var item in Model)
+        {
+            <li>@item.ItemName</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No items found.</p>
+}
+*@

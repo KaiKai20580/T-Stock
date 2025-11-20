@@ -9,14 +9,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{E14DE126-CCC7-4BF9-9B5B-0F0EF5C63EEA}|T-Stock\\T-Stock.csproj|c:\\tarumt (school)\\year 2\\sem 2\\t-stock\\t-stock\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{E14DE126-CCC7-4BF9-9B5B-0F0EF5C63EEA}|T-Stock\\T-Stock.csproj|solutionrelative:t-stock\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E14DE126-CCC7-4BF9-9B5B-0F0EF5C63EEA}|T-Stock\\T-Stock.csproj|c:\\tarumt (school)\\year 2\\sem 2\\t-stock\\t-stock\\wwwroot\\js\\site.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{E14DE126-CCC7-4BF9-9B5B-0F0EF5C63EEA}|T-Stock\\T-Stock.csproj|solutionrelative:t-stock\\wwwroot\\js\\site.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E14DE126-CCC7-4BF9-9B5B-0F0EF5C63EEA}|T-Stock\\T-Stock.csproj|c:\\tarumt (school)\\year 2\\sem 2\\t-stock\\t-stock\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E14DE126-CCC7-4BF9-9B5B-0F0EF5C63EEA}|T-Stock\\T-Stock.csproj|solutionrelative:t-stock\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,21 +18,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 1,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "site.js",
-              "DocumentMoniker": "C:\\TARUMT (School)\\Year 2\\Sem 2\\T-Stock\\T-Stock\\wwwroot\\js\\site.js",
-              "RelativeDocumentMoniker": "T-Stock\\wwwroot\\js\\site.js",
-              "ToolTip": "C:\\TARUMT (School)\\Year 2\\Sem 2\\T-Stock\\T-Stock\\wwwroot\\js\\site.js",
-              "RelativeToolTip": "T-Stock\\wwwroot\\js\\site.js",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-11-19T12:20:35.888Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Document",
               "DocumentIndex": 1,
@@ -49,22 +28,10 @@
               "RelativeDocumentMoniker": "T-Stock\\Views\\Home\\Index.cshtml",
               "ToolTip": "C:\\TARUMT (School)\\Year 2\\Sem 2\\T-Stock\\T-Stock\\Views\\Home\\Index.cshtml",
               "RelativeToolTip": "T-Stock\\Views\\Home\\Index.cshtml",
-              "ViewState": "AgIAACcAAAAAAAAAAAAAAC8AAAAGAAAAAAAAAA==",
+              "ViewState": "AgIAADkAAAAAAAAAAAAAAEQAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-11-19T01:20:56.956Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "_Layout.cshtml",
-              "DocumentMoniker": "C:\\TARUMT (School)\\Year 2\\Sem 2\\T-Stock\\T-Stock\\Views\\Shared\\_Layout.cshtml",
-              "RelativeDocumentMoniker": "T-Stock\\Views\\Shared\\_Layout.cshtml",
-              "ToolTip": "C:\\TARUMT (School)\\Year 2\\Sem 2\\T-Stock\\T-Stock\\Views\\Shared\\_Layout.cshtml",
-              "RelativeToolTip": "T-Stock\\Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAZAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-11-19T01:19:16.625Z"
             },
             {
               "$type": "Document",
@@ -74,7 +41,7 @@
               "RelativeDocumentMoniker": "T-Stock\\wwwroot\\css\\site.css",
               "ToolTip": "C:\\TARUMT (School)\\Year 2\\Sem 2\\T-Stock\\T-Stock\\wwwroot\\css\\site.css",
               "RelativeToolTip": "T-Stock\\wwwroot\\css\\site.css",
-              "ViewState": "AgIAAJYAAAAAAAAAAAAAAKUAAAAYAAAAAAAAAA==",
+              "ViewState": "AgIAAOIAAAAAAAAAAAAAAOsAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
               "WhenOpened": "2025-11-19T01:21:49.351Z",
               "EditorCaption": ""
