@@ -89,7 +89,6 @@ c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\T-Stock.pdb
 c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\T-Stock.genruntimeconfig.cache
 c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\ref\T-Stock.dll
 c:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\T-Stock.sourcelink.json
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\gzvvrwnjbb-3r8b2a0bt1.gz
 C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\bin\Debug\net9.0\DnsClient.dll
 C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\bin\Debug\net9.0\MongoDB.Bson.dll
 C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\bin\Debug\net9.0\MongoDB.Driver.dll
@@ -106,4 +105,5 @@ C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\bin\Debug\net9.0\MongoDB.Libmong
 C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\bin\Debug\net9.0\runtimes\linux\native\libmongocrypt.so
 C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\bin\Debug\net9.0\runtimes\osx\native\libmongocrypt.dylib
 C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\bin\Debug\net9.0\runtimes\win\native\mongocrypt.dll
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\o0jyih2a7m-gprtldi4p4.gz
+C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\o0jyih2a7m-emaxcnfu5j.gz
+C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\gzvvrwnjbb-rcxphmnl7c.gz
