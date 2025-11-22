@@ -5,29 +5,34 @@
     font-family: Arial, sans-serif;
 }
 
-.sidebar:hover ~ .main-content {
+.sidebar:hover ~ #ajax-content .main-content {
     left: 120px;
     width: calc(100% - 320px);
 }
 
-.sidebar:hover ~ .dashboard {
+.sidebar:hover ~ #ajax-content .dashboard {
     left: 120px;
     width: calc(100% - 320px);
 }
 
-.sidebar:hover ~ .sales {
+.sidebar:hover ~ #ajax-content .sales {
     left: 120px;
     width: calc(100% - 1320px);
 }
 
-.sidebar:hover ~ .purchase-order {
+.sidebar:hover ~ #ajax-content .purchase-order {
     left: 70px;
     width: calc(100% - 1290px);
 }
 
-.sidebar:hover ~ .budget {
+.sidebar:hover ~ #ajax-content .budget {
     left: 90px;
     width: calc(100% - 1300px);
+}
+
+.sidebar:hover ~ #ajax-content .CREATE {
+    left: 120px;
+    width: calc(100% - 800px);
 }
 
 
@@ -457,8 +462,26 @@ body,
 .CREATE {
     margin-left: 100px;
     padding: 20px;
+    position: relative;
+    background-color: #fff;
+    min-height: 10vh;
+    top: 0;
+    left: 0px;
+    transition: all 0.5s ease;
+    width: calc(100% - 1000px);
 }
 
+.CREATE h2 {
+    width: 1000px;
+}
+
+.CREATE table {
+    width: 500px;
+}
+
+.CREATE .form-group {
+    width: 500px;
+}
 
 
 
@@ -565,4 +588,13 @@ body.dark-mode {
 
     body.dark-mode .i-dashboard-out {
         background-color: red;
+    }
+
+    body.dark-mode .CREATE {
+        background-color: black;
+    }
+
+    body.dark-mode .CREATE th {
+        background-color: darkgray;
+        border: 1px solid black;
     }

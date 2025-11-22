@@ -20,14 +20,17 @@ namespace T_Stock.Controllers
             return View(items);
         }
 
-
-        // Show create form
+        [HttpGet]
         public IActionResult Create()
         {
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_CreatePartial");
+            }
+
             return View();
         }
 
-        // Handle form submission
         [HttpPost]
         public IActionResult Create(Inventory model)
         {

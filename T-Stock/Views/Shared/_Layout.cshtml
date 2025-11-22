@@ -26,13 +26,13 @@
                 </div>
                 <ul>
                     <li>
-                        <a href="/Inventory/Create">
+                        <a class="ajax-nav" href="/Home/Index">
                             <i class="ri-home-5-fill"></i>
                             <span class="nav-item">Home</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a class="ajax-nav" href="/Inventory/Create">
                             <i class="ri-clipboard-line"></i>
                             <span class="nav-item">Inventory</span>
                         </a>
@@ -61,12 +61,17 @@
                     <p>Logout</p>
                 </div>
             </div>
+    <div id="ajax-content">
         @RenderBody()
-
+    </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
