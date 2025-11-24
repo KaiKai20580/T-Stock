@@ -433,15 +433,59 @@
     color: red;
 }
 
-.toggle-button {
+.theme-toggle {
+    width: 60px;
+    height: 35px;
+    background: #ccc;
+    border-radius: 30px;
+    position: relative;
+    cursor: pointer;
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5px;
+    top: 10px;
+    margin-left: 10px;
+
 }
 
-#darkModeToggle {
-    width: 150px;
-    height: 50px;
-    border-radius: 20px;
-    margin-left: 10px;
+    .theme-toggle i {
+        font-size: 14px;
+        width: 18px;
+        height: 18px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #444;
+        z-index: 2;
+        pointer-events: none;
+    }
+
+.toggle-ball {
+    position: absolute;
+    left: 4px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: white;
+    transition: left .2s ease;
+}
+
+.theme-toggle.active {
+    background: #394049;
+}
+
+.theme-toggle.active i {
+    color: #ffd;
+}
+
+.theme-toggle.active .toggle-ball {
+    left: 32px;
+    background: #222;
+}
+
+.toggle-ball.move-right {
+    left: 30px;
 }
 
 body,
@@ -598,3 +642,7 @@ body.dark-mode {
         background-color: darkgray;
         border: 1px solid black;
     }
+
+body.dark-mode .theme-toggle {
+    background: #30343a;
+}

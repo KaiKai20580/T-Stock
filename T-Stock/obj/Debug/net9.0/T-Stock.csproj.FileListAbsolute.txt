@@ -105,5 +105,5 @@ C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\bin\Debug\net9.0\MongoDB.Libmong
 C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\bin\Debug\net9.0\runtimes\linux\native\libmongocrypt.so
 C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\bin\Debug\net9.0\runtimes\osx\native\libmongocrypt.dylib
 C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\bin\Debug\net9.0\runtimes\win\native\mongocrypt.dll
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\o0jyih2a7m-ycpbguuv1p.gz
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\gzvvrwnjbb-zj2ai4ac62.gz
+C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\o0jyih2a7m-lc5z6rv5q3.gz
+C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\gzvvrwnjbb-mdv81kp8ah.gz

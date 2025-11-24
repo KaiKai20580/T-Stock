@@ -1,32 +1,30 @@
 ﻿/* Dark Mode*/
-if (document.cookie.includes("darkMode=true")) {
-    document.body.classList.add("dark-mode");
+function setTheme() {
+    const dark = document.cookie.includes("darkMode=true");
+    document.body.classList.toggle("dark-mode", dark);
+    document.querySelector(".toggle-ball")?.classList.toggle("move-right", dark);
 }
 
-document.addEventListener('click', function (e) {
-    if (e.target && e.target.id === 'darkModeToggle') {
-        document.body.classList.toggle('dark-mode');
+function bindToggle() {
+    document.querySelector("#themeToggle")?.addEventListener("click", () => {
+        document.body.classList.toggle("dark-mode");
+        document.querySelector(".toggle-ball")?.classList.toggle("move-right");
 
-        document.cookie = "darkMode=" + (document.body.classList.contains("dark-mode")) + ";path=/;max-age=31536000";
+        document.cookie = "darkMode=" + document.body.classList.contains("dark-mode") + "; path=/; max-age=90000000";
+    });
+}
 
-    }
+document.addEventListener("DOMContentLoaded", () => {
+    setTheme();
+    bindToggle();
 });
 
-
-
+// AJAX navigation
 $(document).on("click", ".ajax-nav", function (e) {
     e.preventDefault();
-    const url = $(this).attr("href");
 
-    $("#ajax-content").load(url, function () {
-        // After loading, find the <title> inside the partial
-        const newTitle = $("#ajax-content").find("title").text();
-        if (newTitle) {
-            document.title = newTitle; // update browser tab
-        }
+    $("#ajax-content").load($(this).attr("href"), () => {
+        setTheme();
+        bindToggle();
     });
-
-    return false;
-
 });
-
