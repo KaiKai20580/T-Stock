@@ -1,0 +1,110 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<title>@ViewData["Title"]</title>
+@model List<T_Stock.Models.Inventory>
+
+<div class="main-content">
+    <div class="container">
+        <h1>Welcome KaiKai !</h1>
+    </div>
+    <div class="search-container">
+        <input type="text" placeholder="Search..." />
+        <i class="ri-search-line"></i>
+    </div>
+
+    <div class="notitoggle">
+        <div class="notification">
+            <a asp-controller="Notification" asp-action="Index">
+                <i class="ri-notification-4-fill"></i>
+            </a>
+        </div>
+        <div class="theme-toggle" id="themeToggle">
+            <i class="ri-sun-fill"></i>
+            <div class="toggle-ball"></div>
+            <i class="ri-moon-fill"></i>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard">
+    <h3>Overview</h3>
+    <div class="info">
+        <div class="product">
+            <div class="i-dashboard">
+                <i class="ri-box-3-fill"></i>
+            </div>
+            <div class="product-text">
+                <h2>1000</h2>
+                <p>Total Product</p>
+            </div>
+        </div>
+
+        <div class="order">
+            <div class="i-dashboard">
+                <i class="ri-file-list-fill"></i>
+            </div>
+            <div class="order-text">
+                <h2>1000</h2>
+                <p>Orders</p>
+            </div>
+
+        </div>
+        <div class="stock">
+            <div class="i-dashboard">
+                <i class="ri-increase-decrease-fill"></i>
+            </div>
+            <div class="stock-text">
+                <h2>1000</h2>
+                <p>Total Stock</p>
+            </div>
+
+        </div>
+        <div class="out-of-stock">
+            <div class="i-dashboard-out">
+                <i class="ri-dropbox-fill"></i>
+            </div>
+            <div class="outstock-text">
+                <h2>0</h2>
+                <p>Out Of Stock</p>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="sales">
+    <h3>Top 5 Sales</h3>
+    <p>Pen</p>
+    <p>Pencil</p>
+    <p>Book</p>
+    <p>Apple</p>
+    <p>Grape</p>
+</div>
+
+<div class="budget">
+    <h3>Monthly Budget</h3>
+    <h4>RM 1000</h4>
+</div>
+
+<div class="purchase-order">
+    <h3>Purchase Order</h3>
+    <h4>5000 Pending</h4>
+</div>
+
+@*
+@if (Model != null && Model.Any())
+{
+    <ul>
+        @foreach (var item in Model)
+        {
+            <li>@item.ItemName</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No items found.</p>
+}
+*@
