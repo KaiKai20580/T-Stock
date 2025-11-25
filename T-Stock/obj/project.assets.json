@@ -799,11 +799,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\TARUMT (School)\\Year 2\\Sem 2\\T-Stock\\T-Stock\\T-Stock.csproj",
+      "projectUniqueName": "C:\\TARUMT\\Y2\\S2\\T-Stock\\T-Stock\\T-Stock.csproj",
       "projectName": "T-Stock",
-      "projectPath": "C:\\TARUMT (School)\\Year 2\\Sem 2\\T-Stock\\T-Stock\\T-Stock.csproj",
+      "projectPath": "C:\\TARUMT\\Y2\\S2\\T-Stock\\T-Stock\\T-Stock.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\TARUMT (School)\\Year 2\\Sem 2\\T-Stock\\T-Stock\\obj\\",
+      "outputPath": "C:\\TARUMT\\Y2\\S2\\T-Stock\\T-Stock\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

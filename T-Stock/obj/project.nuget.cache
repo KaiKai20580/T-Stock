@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "JGrqJYzItR8=",
+  "dgSpecHash": "oZ7u3Ilchlo=",
   "success": true,
-  "projectFilePath": "C:\\TARUMT (School)\\Year 2\\Sem 2\\T-Stock\\T-Stock\\T-Stock.csproj",
+  "projectFilePath": "C:\\TARUMT\\Y2\\S2\\T-Stock\\T-Stock\\T-Stock.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\User\\.nuget\\packages\\awssdk.core\\3.7.100.14\\awssdk.core.3.7.100.14.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\awssdk.securitytoken\\3.7.100.14\\awssdk.securitytoken.3.7.100.14.nupkg.sha512",
