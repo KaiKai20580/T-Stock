@@ -13,6 +13,7 @@ namespace T_Stock.Controllers
             _db = db;
         }
 
+        //test
         // Fetch all inventory items
         public IActionResult Index()
         {
