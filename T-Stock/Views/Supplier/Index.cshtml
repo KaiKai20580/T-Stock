@@ -1,0 +1,54 @@
+﻿@model List<T_Stock.Models.Inventory>
+<div class="supplierPage">
+    <div class="heading">
+    <h3>Supplier Management</h3>
+    <input type="search" placeholder="Search" /></<input/>
+    </div>
+    <div class="supplierManage">
+        <div class="filter">
+            <div class="nameFilter">
+            <select class ="filters" name="nameFilter">
+                <option selected disabled>-- Name --</option>
+                <option value="none">None</option>
+                <option value="alphabetical">A-Z Alphabetical</option>
+                <option value="n-alphabetical">Z-A Alphabetical</option>
+            </select>
+            </div>
+            <div class="dateFilter">
+                <select name="dateFilter">
+                    <option value="none">None</option>
+                    <option selected disabled>-- Update Date --</option>
+                    <option value="latest">Latest Updated</option>
+                    <option value="oldest">Oldest Updated</option>
+                </select>
+            </div>
+        </div>
+            <div class="supplierAdd">
+                <i class="ri-contacts-book-upload-line"></i>
+                <h3>Add Supplier</h3>
+            </div>
+    </div>
+    <div class="supplierList">
+        <table>
+            <thead>
+                <tr>
+                    <th>Supplier Name</th>
+                    <th>Contact Person</th>
+                    <th>Phone Number</th>
+                    <th>Email</th>
+                    <th>Last Updated</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ABC Supplies</td>
+                    <td>John Doe</td>
+                    <td>(123) 456-7890</td>
+                    <td>john@gmail.com</td>
+                    <td>2024-06-15</td>
+                    <td><i class="ri-edit-box-line"></i></td>
+                </tr>
+          </table>
+    </div>
+</div>

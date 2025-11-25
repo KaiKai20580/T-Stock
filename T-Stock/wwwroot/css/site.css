@@ -646,3 +646,84 @@ body.dark-mode {
 body.dark-mode .theme-toggle {
     background: #30343a;
 }
+
+/*KW CSS*/
+i {
+    font-size: 25px;
+    margin-left: 6px;
+}
+
+div.heading {
+    margin: 20px;
+}
+
+    div.heading h3 {
+        font-weight: 700;
+    }
+
+    div.heading input {
+        border-radius: 100px;
+        font-size: 30px;
+        padding: 10px 170px 10px 8px;
+    }
+
+div.supplierManage {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+    div.supplierManage select {
+        border-radius: 15px;
+        padding: 7px;
+        margin-right: 20px;
+    }
+
+select.filters option {
+    border-radius: 15px;
+    padding: 7px;
+    margin-right: 20px;
+    -webkit-appearance: none;
+}
+
+div.filter {
+    display: flex;
+}
+
+div.supplierAdd {
+    display: flex;
+    border: 2px solid black;
+    border-radius: 15px;
+    background-color: limegreen;
+}
+
+    div.supplierAdd h3 {
+        font-size: 20px;
+        padding: 6px;
+        margin: 0;
+    }
+
+table {
+    width: 100%;
+    padding: 0;
+    border-collapse: separate;
+    border-radius: 10px;
+    border-spacing: 0;
+    margin-top: 50px;
+    border: 1px solid grey;
+    overflow: hidden;
+}
+
+th {
+    margin-top: 50px;
+    background-color: lightgrey;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+
+tr:hover {
+    background-color: lightgrey;
+}
