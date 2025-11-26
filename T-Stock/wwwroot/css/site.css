@@ -16,18 +16,21 @@
 }
 
 .sidebar:hover ~ #ajax-content .sales {
-    left: 120px;
-    width: calc(100% - 1320px);
+    left: 80px;
+    transform:scaleX(0.9);
+    transform-origin:right;
 }
 
 .sidebar:hover ~ #ajax-content .purchase-order {
-    left: 70px;
-    width: calc(100% - 1290px);
+    left: 80px;
+    transform: scaleX(0.9);
+    transform-origin: right;
 }
 
 .sidebar:hover ~ #ajax-content .budget {
-    left: 90px;
-    width: calc(100% - 1300px);
+    left: 80px;
+    transform: scaleX(0.9);
+    transform-origin: right;
 }
 
 .sidebar:hover ~ #ajax-content .CREATE {
@@ -57,7 +60,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    height: 100vh;
+    height: 100%;
     width: 100px;
     background-color: #12171e;
     opacity: 1;
@@ -344,13 +347,13 @@
 
 .sales {
     position: relative;
-    width: calc(100% - 1300px);
+    width: clamp(300px, 100vw - 240px, 1290px);
     top: 0;
     left: 0;
     background-color: lightgray;
     margin-top: 20px;
     margin-left: 120px;
-    height: 30vh;
+    height: min-content;
     border-radius: 20px;
     transition: all 0.4s ease;
 }
@@ -365,15 +368,14 @@
 }
 
 .budget {
-    transform: translate(255px, -234px);
     background-color: lightgray;
-    width: calc(100% - 1290px);
-    height: 15vh;
+    height: min-content;
+    width: clamp(300px, 100vw - 240px, 1290px);
     border-radius: 20px;
     position: relative;
-    top: 0;
+    top: 20px;
     left: 0;
-    margin-left: 120px;
+    margin-left: 20px;
 }
 
 .budget h3{
@@ -411,21 +413,21 @@
     display: flex;
     gap: 10px;
     color: red;
-    transform: translate(27px, 150px);
+    transform: translate(27px, 60px);
     cursor: pointer;
 }
 
+
 .purchase-order {
     background-color: lightgray;
-    width: calc(100% - 1250px);
-    height: 15vh;
+    height: min-content;
+    width: clamp(300px, 100vw - 240px, 1290px);
     padding: 20px;
-    transform: translate(520px, -353px);
     border-radius: 20px;
     position: relative;
-    top: 0;
+    top: 20px;
     left: 0;
-    margin-left: 120px;
+    margin-left: 20px;
 }
 
 .purchase-order h4 {
@@ -527,7 +529,12 @@ body,
     width: 500px;
 }
 
-
+.down_container {
+    display: flex;
+    width:87%;
+    justify-content:space-around;
+    margin: 0;
+}
 
 
 

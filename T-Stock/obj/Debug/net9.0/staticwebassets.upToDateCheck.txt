@@ -1,5 +1,5 @@
-wwwroot\css\site.css
 wwwroot\favicon.ico
+wwwroot\js\site.js
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css
@@ -61,66 +61,66 @@ wwwroot\lib\jquery\dist\jquery.slim.min.js
 wwwroot\lib\jquery\dist\jquery.slim.min.map
 wwwroot\lib\jquery\LICENSE.txt
 wwwroot\test.png
-wwwroot\js\site.js
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\css\site.css
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\favicon.ico
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css.map
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css.map
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css.map
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css.map
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css.map
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css.map
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css.map
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css.map
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap.css
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap.css.map
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css.map
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css.map
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js.map
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js.map
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\js\bootstrap.js
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\js\bootstrap.js.map
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.js
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.min.js
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\jquery-validation\dist\additional-methods.js
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\jquery-validation\dist\additional-methods.min.js
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\jquery-validation\dist\jquery.validate.js
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\jquery-validation\dist\jquery.validate.min.js
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\jquery-validation\LICENSE.md
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\jquery\dist\jquery.js
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\jquery\dist\jquery.min.js
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\jquery\dist\jquery.min.map
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\jquery\dist\jquery.slim.js
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\jquery\dist\jquery.slim.min.js
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\jquery\dist\jquery.slim.min.map
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\lib\jquery\LICENSE.txt
-C:\TARUMT (School)\Year 2\Sem 2\T-Stock\T-Stock\wwwroot\js\site.js
+wwwroot\css\site.css
+C:\T-Stock\T-Stock\wwwroot\favicon.ico
+C:\T-Stock\T-Stock\wwwroot\js\site.js
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css.map
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css.map
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css.map
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css.map
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css.map
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css.map
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css.map
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css.map
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap.css
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap.css.map
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css.map
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css.map
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js.map
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js.map
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\js\bootstrap.js
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\js\bootstrap.js.map
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js
+C:\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map
+C:\T-Stock\T-Stock\wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.js
+C:\T-Stock\T-Stock\wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.min.js
+C:\T-Stock\T-Stock\wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
+C:\T-Stock\T-Stock\wwwroot\lib\jquery-validation\dist\additional-methods.js
+C:\T-Stock\T-Stock\wwwroot\lib\jquery-validation\dist\additional-methods.min.js
+C:\T-Stock\T-Stock\wwwroot\lib\jquery-validation\dist\jquery.validate.js
+C:\T-Stock\T-Stock\wwwroot\lib\jquery-validation\dist\jquery.validate.min.js
+C:\T-Stock\T-Stock\wwwroot\lib\jquery-validation\LICENSE.md
+C:\T-Stock\T-Stock\wwwroot\lib\jquery\dist\jquery.js
+C:\T-Stock\T-Stock\wwwroot\lib\jquery\dist\jquery.min.js
+C:\T-Stock\T-Stock\wwwroot\lib\jquery\dist\jquery.min.map
+C:\T-Stock\T-Stock\wwwroot\lib\jquery\dist\jquery.slim.js
+C:\T-Stock\T-Stock\wwwroot\lib\jquery\dist\jquery.slim.min.js
+C:\T-Stock\T-Stock\wwwroot\lib\jquery\dist\jquery.slim.min.map
+C:\T-Stock\T-Stock\wwwroot\lib\jquery\LICENSE.txt
+C:\T-Stock\T-Stock\wwwroot\css\site.css
