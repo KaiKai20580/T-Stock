@@ -30,6 +30,7 @@ logs/
 
 # Visual Studio cache/options
 .vs/
+.obj/
 
 # Auto-generated
 Generated\ Files/
