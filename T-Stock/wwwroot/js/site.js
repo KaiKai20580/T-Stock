@@ -5,16 +5,14 @@ function setTheme() {
     document.querySelector(".toggle-ball")?.classList.toggle("move-right", dark);
 }
 
-//function bindToggle() {
-//    document.querySelector("#themeToggle")?.addEventListener("click", () => {
-//        document.body.classList.toggle("dark-mode");
-//        document.querySelector(".toggle-ball")?.classList.toggle("move-right");
+function bindToggle() {
+    document.querySelector("#themeToggle")?.addEventListener("click", () => {
+        document.body.classList.toggle("dark-mode");
+        document.querySelector(".toggle-ball")?.classList.toggle("move-right");
 
-//        document.cookie = "darkMode=" + document.body.classList.contains("dark-mode") + "; path=/; max-age=90000000";
-//    });
-//}
-
-
+        document.cookie = "darkMode=" + document.body.classList.contains("dark-mode") + "; path=/; max-age=90000000";
+    });
+}
 
 document.addEventListener("DOMContentLoaded", () => {
     setTheme();
