@@ -21,12 +21,12 @@
 }
 
 .sidebar:hover ~ #ajax-content .purchase-order {
-    left: 70px;
+    left: 120px;
     width: calc(100% - 1290px);
 }
 
 .sidebar:hover ~ #ajax-content .budget {
-    left: 90px;
+    left: 120px;
     width: calc(100% - 1300px);
 }
 
@@ -365,15 +365,14 @@
 }
 
 .budget {
-    transform: translate(255px, -234px);
     background-color: lightgray;
     width: calc(100% - 1290px);
     height: 15vh;
     border-radius: 20px;
     position: relative;
-    top: 0;
+    top: 20px;
     left: 0;
-    margin-left: 120px;
+    margin-left: 20px;
 }
 
 .budget h3{
@@ -420,12 +419,11 @@
     width: calc(100% - 1250px);
     height: 15vh;
     padding: 20px;
-    transform: translate(520px, -353px);
     border-radius: 20px;
     position: relative;
-    top: 0;
+    top: 20px;
     left: 0;
-    margin-left: 120px;
+    margin-left: 20px;
 }
 
 .purchase-order h4 {
@@ -527,7 +525,10 @@ body,
     width: 500px;
 }
 
-
+.down_container {
+    display: flex;
+    margin: 0;
+}
 
 
 
