@@ -1,3 +1,14 @@
 ﻿@{
-    Layout = "_Layout";
+    string controller = ViewContext.RouteData.Values["controller"]?.ToString();
+    string action = ViewContext.RouteData.Values["action"]?.ToString();
+
+    // Disable layout on Login page
+    if (controller == "Account" && action == "Login")
+    {
+        Layout = null;
+    }
+    else
+    {
+        Layout = "_Layout";
+    }
 }

@@ -1,0 +1,120 @@
+﻿@model T_Stock.Models.User
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>T-Stock Login</title>
+
+    <style>
+        body {
+            margin: 0;
+            background: black;
+            font-family: Arial, sans-serif;
+            color: #000;
+        }
+
+        .login-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-box {
+            width: 430px;
+            background: #D9D9D9;
+            padding: 55px 45px;
+            border-radius: 30px;
+            box-sizing: border-box;
+            text-align: left;
+            position: relative;
+        }
+
+        .title {
+            position: absolute;
+            top: -60px;
+            left: 0;
+            font-size: 45px;
+            color: white;
+            font-weight: bold;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 35px;
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+
+        label {
+            font-size: 23px;
+            font-weight: bold;
+        }
+
+        .input-box {
+            width: 100%;
+            height: 45px;
+            background: #fff;
+            border: 2px solid #000;
+            border-radius: 10px;
+            font-size: 20px;
+            padding: 5px 10px;
+            margin-top: 5px;
+            margin-bottom: 25px;
+        }
+
+        .login-btn {
+            width: 100%;
+            height: 50px;
+            background: #4CAF50;
+            border: 2px solid #000;
+            border-radius: 15px;
+            font-size: 25px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .error-text {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="title">T-Stock</div>
+
+    <div class="login-container">
+        <div class="login-box">
+
+            <h2>LOGIN</h2>
+
+            <form asp-action="Login" method="post">
+
+                <label>Username</label>
+                <input asp-for="Username" class="input-box" />
+
+                <label>Password</label>
+                <input asp-for="Password" type="password" class="input-box" />
+
+                <button class="login-btn" type="submit">Login</button>
+            </form>
+
+            @if (ViewBag.Error != null)
+            {
+                <p class="error-text">@ViewBag.Error</p>
+            }
+
+        </div>
+    </div>
+
+</body>
+</html>

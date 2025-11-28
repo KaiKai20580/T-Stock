@@ -44,4 +44,5 @@ namespace T_Stock.Models
         [Required]
         public decimal Price { get; set; }
     }
+
 }
