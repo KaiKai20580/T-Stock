@@ -1,13 +1,11 @@
 ﻿@model T_Stock.Models.User
-@{
-    Layout = null;
-}
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <title>T-Stock Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet" />
 
     <style>
         body {
@@ -37,11 +35,21 @@
 
         .title {
             position: absolute;
-            top: -60px;
-            left: 0;
+            margin-left: 20px;
+            margin-top: 20px;
             font-size: 45px;
             color: white;
             font-weight: bold;
+            display: flex;
+            gap: 10px;
+        }
+
+        .title i {
+				position: relative;
+                color: white;
+				text-align: center;
+                display: flex;
+                bottom: 6px;
         }
 
         h2 {
@@ -90,7 +98,10 @@
 </head>
 
 <body>
-    <div class="title">T-Stock</div>
+    <div class="title">
+        <i class="ri-unsplash-fill"></i>
+        <h2>T-Stock</h2>
+    </div>
 
     <div class="login-container">
         <div class="login-box">
