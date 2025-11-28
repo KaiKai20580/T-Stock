@@ -16,7 +16,7 @@ settings.ServerApi = new ServerApi(ServerApiVersion.V1);
 
 var client = new MongoClient(settings);
 
-// Use the T-Stock database
+// Use the T-Stock database (Inventory)
 var database = client.GetDatabase("Inventory");
 
 // TEMP logger – works BEFORE Build()
@@ -33,6 +33,7 @@ catch (Exception ex)
     tempLogger.LogError("MongoDB connection failed: " + ex.Message);
 }
 
+// Register MongoDB services
 builder.Services.AddSingleton<IMongoDatabase>(database);
 builder.Services.AddSingleton<DB>();
 
@@ -42,12 +43,20 @@ builder.Services.AddSingleton<DB>();
 builder.Services.AddControllersWithViews();
 
 // ----------------------
+// Add SESSION (required for login)
+// ----------------------
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromHours(12);
+});
+
+// ----------------------
 // Build app
 // ----------------------
 var app = builder.Build();
 
 // ----------------------
-// Configure HTTP request pipeline
+// Configure middleware
 // ----------------------
 if (!app.Environment.IsDevelopment())
 {
@@ -57,11 +66,19 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 app.UseRouting();
+
+// Enable Session BEFORE Authorization
+app.UseSession();
+
 app.UseAuthorization();
 
+// ----------------------
+// Default Route
+// ----------------------
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Account}/{action=Login}/{id?}");
 
 app.Run();
