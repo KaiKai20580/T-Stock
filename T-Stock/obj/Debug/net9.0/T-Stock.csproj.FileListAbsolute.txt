@@ -214,8 +214,6 @@ C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\refint\T-Stock.dll
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\T-Stock.pdb
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\T-Stock.genruntimeconfig.cache
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\ref\T-Stock.dll
-C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\gzvvrwnjbb-mdv81kp8ah.gz
-C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\o0jyih2a7m-j1qlg3jlm1.gz
 C:\T-Stock\T-Stock\bin\Debug\net9.0\appsettings.Development.json
 C:\T-Stock\T-Stock\bin\Debug\net9.0\appsettings.json
 C:\T-Stock\T-Stock\bin\Debug\net9.0\T-Stock.staticwebassets.runtime.json
@@ -326,3 +324,5 @@ C:\T-Stock\T-Stock\obj\Debug\net9.0\T-Stock.pdb
 C:\T-Stock\T-Stock\obj\Debug\net9.0\T-Stock.genruntimeconfig.cache
 C:\T-Stock\T-Stock\obj\Debug\net9.0\ref\T-Stock.dll
 C:\T-Stock\T-Stock\obj\Debug\net9.0\compressed\a6efimi58p-{0}-a0omvsyq7r-a0omvsyq7r.gz
+C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\o0jyih2a7m-4oy2gsg9p4.gz
+C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\gzvvrwnjbb-q7ymiwq71v.gz

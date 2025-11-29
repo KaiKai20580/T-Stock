@@ -1,45 +1,63 @@
 ﻿@{
     ViewData["Title"] = "Create Product";
 }
-@model T_Stock.Models.Inventory
+<title>@ViewData["Title"]</title>
+@model T_Stock.Models.InventoryListVM
 
 <div class="CREATE">
     <h2>Add Inventory Item</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Item Name</th>
-                <th>Quantity</th>
-                <th>Category</th>
-                <th>Price</th>
-            </tr>
-        </thead>
-    </table>
-
     <form asp-action="Create" method="post">
-        <div class="form-group">
-            <label>Item Name</label>
-            <input type="text" name="ItemName" class="form-control" required />
-        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Item Name</th>
+                    <th>Category</th>
+                    <th>Qty</th>
+                    <th>Price (RM)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="item-rows">
+                @for (int i = 0; i < Model.Items.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            <input asp-for="Items[@i].ItemName" class="form-control" />
+                            <span asp-validation-for="Items[@i].ItemName" class="text-danger"></span>
+                        </td>
 
-        <div class="form-group">
-            <label>Quantity</label>
-            <input type="number" name="Quantity" class="form-control" required />
-        </div>
+                        <td>
+                            <input asp-for="Items[@i].Category" class="form-control" />
+                            <span asp-validation-for="Items[@i].Category" class="text-danger"></span>
+                        </td>
 
-        <div class="form-group">
-            <label>Category</label>
-            <input type="text" name="Category" class="form-control" required />
-        </div>
+                        <td>
+                            <input asp-for="Items[@i].Quantity" type="number" class="form-control" />
+                            <span asp-validation-for="Items[@i].Quantity" class="text-danger"></span>
+                        </td>
 
-        <div class="form-group">
-            <label>Price</label>
-            <input type="number" name="Price" class="form-control" step="0.01" required />
-        </div>
+                        <td>
+                            <input asp-for="Items[@i].Price" type="number" class="form-control" />
+                            <span asp-validation-for="Items[@i].Price" class="text-danger"></span>
+                        </td>
 
-        <br />
-        <button type="submit" class="btn btn-primary">Create Item</button>
+                        <td>
+                            <button type="button" onclick="removeRow(this)">Remove</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+
+        <button type="button" onclick="addRow()">+ Add Row</button>
+        <button type="submit" class="ajax-button" data-url="/Inventory/Index">Create</button>
     </form>
 
-    <a href="/Home/Index" class="btn btn-secondary">Home</a>
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+    <br />
+    <a href="/Home/Index" class="btn btn-secondary ajax-nav">Home</a>
 </div>

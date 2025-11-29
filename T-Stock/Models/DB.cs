@@ -28,20 +28,21 @@ namespace T_Stock.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
 
-        [BsonElement("ItemName")]
-        [Required]
+        [Required(ErrorMessage = "Item Name is required.")]
         public string? ItemName { get; set; }
 
-        [BsonElement("Category")]
-        [Required]
+        [Required(ErrorMessage = "Category is required.")]
         public string? Category { get; set; }
 
-        [BsonElement("Quantity")]
-        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "Quantity must be at least 1.")]
         public int Quantity { get; set; }
 
-        [BsonElement("Price")]
-        [Required]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0.")]
         public decimal Price { get; set; }
+    }
+
+    public class InventoryListVM
+    {
+        public List<Inventory> Items { get; set; } = new List<Inventory>();
     }
 }
