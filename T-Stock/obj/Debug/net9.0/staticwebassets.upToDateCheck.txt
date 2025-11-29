@@ -1,5 +1,6 @@
 wwwroot\css\site.css
 wwwroot\favicon.ico
+wwwroot\js\site.js
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css
@@ -61,8 +62,6 @@ wwwroot\lib\jquery\dist\jquery.slim.min.js
 wwwroot\lib\jquery\dist\jquery.slim.min.map
 wwwroot\lib\jquery\LICENSE.txt
 wwwroot\test.png
-wwwroot\js\site.js
-C:\TARUMT\Y2\S2\T-Stock\T-Stock\wwwroot\css\site.css
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\wwwroot\favicon.ico
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
@@ -123,4 +122,5 @@ C:\TARUMT\Y2\S2\T-Stock\T-Stock\wwwroot\lib\jquery\dist\jquery.slim.js
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\wwwroot\lib\jquery\dist\jquery.slim.min.js
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\wwwroot\lib\jquery\dist\jquery.slim.min.map
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\wwwroot\lib\jquery\LICENSE.txt
+C:\TARUMT\Y2\S2\T-Stock\T-Stock\wwwroot\css\site.css
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\wwwroot\js\site.js
