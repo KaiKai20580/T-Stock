@@ -41,8 +41,11 @@ namespace T_Stock.Models
         public decimal Price { get; set; }
     }
 
+<<<<<<< HEAD
     public class InventoryListVM
     {
         public List<Inventory> Items { get; set; } = new List<Inventory>();
     }
+=======
+>>>>>>> 99d3ba6f495f60444654042ad91e61f6fcc97875
 }
