@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Product";
+}
+<title>@ViewData["Title"]</title>
+@model List<T_Stock.Models.Inventory>
+
+
+<div class="INVENTORY">
+    <h2>Inventory</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Item Name</th>
+                <th>Quantity</th>
+                <th>Category</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Count > 0)
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.ItemName</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Category</td>
+                        <td>@item.Price</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3" class="text-center">No inventory items found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a class="ajax-nav btn btn-secondary" href="/Inventory/Create">
+        Create
+    </a>
+</div>

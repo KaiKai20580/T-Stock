@@ -14,7 +14,7 @@
 
     <div class="notitoggle">
         <div class="notification">
-            <a asp-controller="Notification" asp-action="Index">
+            <a class="ajax-nav" asp-controller="Notification" asp-action="Index">
                 <i class="ri-notification-4-fill"></i>
             </a>
         </div>
@@ -29,46 +29,53 @@
 <div class="dashboard">
     <h3>Overview</h3>
     <div class="info">
-        <div class="product">
-            <div class="i-dashboard">
-                <i class="ri-box-3-fill"></i>
+        <a class="ajax-nav" href="/Inventory/Index">
+            <div class="product">
+                <div class="i-dashboard">
+                    <i class="ri-box-3-fill"></i>
+                </div>
+                <div class="product-text">
+                    <h2>1000</h2>
+                    <p>Total Product</p>
+                </div>
             </div>
-            <div class="product-text">
-                <h2>1000</h2>
-                <p>Total Product</p>
-            </div>
-        </div>
+        </a>
 
-        <div class="order">
-            <div class="i-dashboard">
-                <i class="ri-file-list-fill"></i>
+        <a class="ajax-nav" href="/Inventory/Index">
+            <div class="order">
+                <div class="i-dashboard">
+                    <i class="ri-file-list-fill"></i>
+                </div>
+                <div class="order-text">
+                    <h2>1000</h2>
+                    <p>Orders</p>
+                </div>
             </div>
-            <div class="order-text">
-                <h2>1000</h2>
-                <p>Orders</p>
-            </div>
+            </a>
 
-        </div>
-        <div class="stock">
-            <div class="i-dashboard">
-                <i class="ri-increase-decrease-fill"></i>
+        <a class="ajax-nav" href="/Inventory/Index">
+            <div class="stock">
+                <div class="i-dashboard">
+                    <i class="ri-increase-decrease-fill"></i>
+                </div>
+                <div class="stock-text">
+                    <h2>1000</h2>
+                    <p>Total Stock</p>
+                </div>
             </div>
-            <div class="stock-text">
-                <h2>1000</h2>
-                <p>Total Stock</p>
-            </div>
+            </a>
 
-        </div>
-        <div class="out-of-stock">
-            <div class="i-dashboard-out">
-                <i class="ri-dropbox-fill"></i>
+        <a class="ajax-nav" href="/Inventory/Index">
+            <div class="out-of-stock">
+                <div class="i-dashboard-out">
+                    <i class="ri-dropbox-fill"></i>
+                </div>
+                <div class="outstock-text">
+                    <h2>0</h2>
+                    <p>Out Of Stock</p>
+                </div>
             </div>
-            <div class="outstock-text">
-                <h2>0</h2>
-                <p>Out Of Stock</p>
-            </div>
-
-        </div>
+            </a>
     </div>
 </div>
 

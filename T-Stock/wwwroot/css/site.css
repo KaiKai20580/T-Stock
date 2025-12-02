@@ -22,13 +22,12 @@
 }
 
 .sidebar:hover ~ #ajax-content .purchase-order {
-    left: 80px;
-    transform: scaleX(0.9);
+    transform: scaleX(0.91);
     transform-origin: right;
 }
 
 .sidebar:hover ~ #ajax-content .budget {
-    left: 80px;
+    left: 40px;
     transform: scaleX(0.9);
     transform-origin: right;
 }
@@ -38,6 +37,15 @@
     width: calc(100% - 800px);
 }
 
+.sidebar:hover ~ #ajax-content .NOTI {
+    left: 120px;
+    width: calc(100% - 800px);
+}
+
+.sidebar:hover ~ #ajax-content .INVENTORY {
+    left: 120px;
+    width: calc(100% - 800px);
+}
 
 .user-img {
     width: 50px;
@@ -241,9 +249,9 @@
     margin-left: 120px;
 }
 
-    .dashboard .info > .product:hover,
-    .dashboard .info > .order:hover,
-    .dashboard .info > .stock:hover {
+    .dashboard .info > a .product:hover,
+    .dashboard .info > a .order:hover,
+    .dashboard .info > a .stock:hover {
         box-shadow: rgba(0,0,0,0.4) 6px 6px;
         transform: translateY(-5px);
     }
@@ -261,7 +269,13 @@
         margin-top: 3px;
     }
 
-        .dashboard .info > div {
+    .dashboard .info a {
+        
+        text-decoration: none;
+        color: black;
+    }
+
+        .dashboard .info > a > div {
             background-color: #f0f0f0;
             padding: 30px;
             border-radius: 10px;
@@ -296,7 +310,7 @@
     border: 2px solid #ff7f7f;
 }
 
-.dashboard .info > .out-of-stock:hover {
+.dashboard .info > a .out-of-stock:hover {
     box-shadow: red 6px 6px;
     transform: translateY(-5px);
 }
@@ -536,9 +550,33 @@ body,
     margin: 0;
 }
 
+.NOTI {
+    margin-left: 100px;
+    padding: 20px;
+    position: relative;
+    background-color: #fff;
+    min-height: 10vh;
+    top: 0;
+    left: 0px;
+    transition: all 0.5s ease;
+    width: calc(100% - 1000px);
+}
 
+.NOTI p {
 
+}
 
+.INVENTORY {
+    margin-left: 100px;
+    padding: 20px;
+    position: relative;
+    background-color: #fff;
+    min-height: 10vh;
+    top: 0;
+    left: 0px;
+    transition: all 0.5s ease;
+    width: calc(100% - 1000px);
+}
 
 
 
@@ -625,14 +663,14 @@ body.dark-mode {
         background-color: black;
     }
 
-    body.dark-mode .dashboard .info > .product:hover,
-    body.dark-mode .dashboard .info > .order:hover,
-    body.dark-mode .dashboard .info > .stock:hover {
+    body.dark-mode .dashboard .info > a .product:hover,
+    body.dark-mode .dashboard .info > a .order:hover,
+    body.dark-mode .dashboard .info > a .stock:hover {
         box-shadow: #555 6px 6px;
         transform: translateY(-5px);
     }
 
-    body.dark-mode .dashboard .info > .out-of-stock:hover {
+    body.dark-mode .dashboard .info > a .out-of-stock:hover {
         box-shadow: red 6px 6px;
         transform: translateY(-5px);
     }
@@ -645,9 +683,22 @@ body.dark-mode {
         background-color: black;
     }
 
+    body.dark-mode .NOTI {
+        background-color: black;
+    }
+
+    body.dark-mode .INVENTORY {
+        background-color: black;
+    }
+
+    body.dark-mode .INVENTORY th {
+        background-color: darkgray;
+    }
+
     body.dark-mode .CREATE th {
         background-color: darkgray;
         border: 1px solid black;
+        color: black;
     }
 
 body.dark-mode .theme-toggle {
