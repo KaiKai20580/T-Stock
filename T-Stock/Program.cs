@@ -1,8 +1,10 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
 using T_Stock.Models;
+using T_Stock.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddScoped<MongoPagingService>();
 
 // Add console logging
 builder.Logging.AddConsole();

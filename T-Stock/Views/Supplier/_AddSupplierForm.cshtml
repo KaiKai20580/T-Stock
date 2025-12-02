@@ -1,0 +1,47 @@
+﻿@model T_Stock.Models.SupplierViewModel
+
+<h2>Add Supplier</h2>
+<form asp-action="AddSupplier" asp-controller="Supplier" method="post" id="addSupplierForm">
+    <div class="supplierDetail">
+      
+        <div asp-validation-summary="ModelOnly" class="text-danger" style="margin-bottom: 15px;"></div>
+        <label>Company Name</label>
+        <span asp-validation-for="Company" class="text-danger"></span>
+        <input asp-for="Company" class="form-control" />
+
+        <div class="supplierContact">
+
+        <div>
+        <label>Contact Person</label>
+        <span asp-validation-for="ContactPerson" class="text-danger"></span>
+        <input asp-for="ContactPerson" class="form-control" />
+        </div>
+
+        <div>
+        <label>Phone</label>
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        <input asp-for="PhoneNumber" class="form-control" />
+        </div>
+
+        <div>
+        <label>Email Address</label>
+        <span asp-validation-for="Email" class="text-danger"></span>
+        <input asp-for="Email" class="form-control" />
+        </div>
+       
+        </div>
+
+        <label>Address</label>
+        <span asp-validation-for="Address" class="text-danger"></span>
+        <input asp-for="Address" class="form-control" />
+
+        <h3>Product(s) Supplied</h3>
+        <div id="supplierProductList"></div>
+        <button type="button" id="addProductBtn" class="addProductBtn">Add Product</button>
+    </div>
+
+    <div class="decisionBtn">
+        <button type="button" class="cancelBtn">Cancel</button>
+        <button type="submit" class="submitBtn">Confirm</button>
+    </div>
+</form>
