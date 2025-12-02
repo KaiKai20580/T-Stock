@@ -655,6 +655,10 @@ body.dark-mode .theme-toggle {
 }
 
 /*KW CSS*/
+div.supplierPage {
+    margin-left: 100px;
+}
+
 i {
     font-size: 25px;
     margin-left: 6px;
@@ -662,10 +666,14 @@ i {
 
 div.heading {
     margin: 20px;
+    display: flex;
+    justify-content: space-between;
 }
 
     div.heading h3 {
-        font-weight: 700;
+        font-size: 3rem;
+        font-weight: 1000;
+        width: 70%;
     }
 
     div.heading input {
@@ -684,6 +692,15 @@ div.supplierManage {
         border-radius: 15px;
         padding: 7px;
         margin-right: 20px;
+        width: 200px;
+        height: 50px;
+        font-weight: 700;
+        font-size: 1.3rem;
+    }
+
+    div.supplierManage h2 {
+        font-size: 25px;
+        font-weight: 600;
     }
 
 select.filters option {
@@ -695,13 +712,25 @@ select.filters option {
 
 div.filter {
     display: flex;
+    gap: 30px;
 }
 
 div.supplierAdd {
+    margin-top: 40px;
     display: flex;
     border: 2px solid black;
     border-radius: 15px;
     background-color: limegreen;
+    box-shadow: rgba(0,0,0,0.1) -3px 2px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+div.supplierAdd:hover {
+    transform: translateY(-5px);
+    transition: all 0.3s ease;
+    background-color: green;
+    color:whitesmoke;
 }
 
     div.supplierAdd h3 {
@@ -710,21 +739,41 @@ div.supplierAdd {
         margin: 0;
     }
 
+div.supplierManage,div.pagination{
+    padding:20px;
+}
+
 table {
-    width: 100%;
+    width: 97.5%;
     padding: 0;
     border-collapse: separate;
     border-radius: 10px;
     border-spacing: 0;
-    margin-top: 50px;
+    margin: 20px 20px 20px 20px;
     border: 1px solid grey;
     overflow: hidden;
+    box-shadow: rgba(0,0,0,0.2) 1px 1px 6px 1px;
 }
 
 th {
     margin-top: 50px;
     background-color: lightgrey;
+    font-size: 1.5rem;
+    font-weight: 900;
 }
+
+td{
+    font-size:1.2rem;
+    font-weight:500;
+}
+
+    td > a {
+        text-decoration: none;
+        color: cornflowerblue;
+        font-weight: 700;
+        cursor:pointer;
+    }
+
 
 th, td {
     padding: 10px;
@@ -734,3 +783,225 @@ th, td {
 tr:hover {
     background-color: lightgrey;
 }
+
+div.pagination button {
+    border: solid 1px grey;
+    border-radius: 13px;
+    width: 70px;
+    height: 40px;
+    margin: 0 15px 0 0;
+    box-shadow: rgba(0,0,0,0.1) -3px 2px;
+    transition: all 0.3s ease;
+}
+
+    div.pagination button:hover:enabled {
+        background-color: darkgrey;
+        color: black;
+        transform: translateY(-5px);
+        transition: all 0.3s ease;
+        cursor:pointer;
+    }
+
+button[name="numbers"] {
+    width: 40px !important;
+    height: 30px;
+    margin: 0 15px 0 0;
+}
+
+    div.pagination button.active {
+        background-color: black;
+        color: white;
+    }
+
+div.pagination span {
+    font-weight:800;
+    margin: 15px 15px 0 0;
+}
+
+/* Background overlay */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(6px);
+}
+
+/* Popup box */
+.modal-content {
+    background-color: #e8e8e8;
+    height:min-content;
+    width: 80%;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+}
+
+div.modal-content h2 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom:50px;
+}
+
+div.modal-content h3 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 40px;
+    margin-top:50px;
+}
+
+
+div.supplierDetail label {
+    font-size: 1.3rem;
+    font-weight: 500;
+}
+
+div.supplierDetail input {
+    border-radius: 12px;
+    border-color: white;
+    border-width: 0;
+    height: 50px;
+    font-weight: 500;
+    font-size: 1.3rem;
+}
+
+div.supplierContact {
+    display: flex;
+    justify-content: space-between;
+}
+
+div.supplierContact div{
+    width:30%;
+}
+
+div.supplierDetail button.addProductBtn {
+    margin-left: 40%;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    border: 0.5px solid black;
+    background-color: lawngreen;
+    border-radius: 15px;
+    padding: 5px 40px 5px 40px;
+    box-shadow: rgba(0,0,0,0.3) 2px 2px 5px 1px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+div.productRow{
+    display:flex;
+    margin-bottom:20px;
+}
+
+div.productRow select {
+    border-radius: 12px;
+    border-width:0;
+    padding: 7px;
+    margin-right: 40px;
+    height: 50px;
+    font-weight: 700;
+    font-size: 1.3rem;
+}
+
+button.removeProductBtn {
+    margin-left: 30%;
+    border: none;
+    background: none;
+    padding-top: 20px;
+    transition: all 0.2s ease;
+}
+
+    button.removeProductBtn:hover {
+        transform: translateY(-3px);
+        transition: all 0.2s ease;
+    }
+
+
+        button.removeProductBtn i {
+            font-size: 3rem;
+            color: red;
+            cursor: pointer;
+            padding-top: 15px;
+        }
+
+            button.removeProductBtn i:hover {
+                color: #ef0000;
+            }
+
+
+        div.supplierDetail button.addProductBtn:hover {
+            background-color: greenyellow;
+            transform: translateY(-5px);
+            transition: all 0.2s ease;
+        }
+
+        div.decisionBtn {
+            display: flex;
+            margin-left: 77%
+        }
+
+            div.decisionBtn button.cancelBtn {
+                background-color: #ef0000;
+                border-radius: 25px;
+                border: 3px solid black;
+                padding: 5px 20px 5px 20px;
+                font-size: 1.5rem;
+                font-weight: 500;
+                margin-right: 20px;
+                box-shadow: rgba(0,0,0,0.3) 2px 2px 5px 1px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+                div.decisionBtn button.cancelBtn:hover {
+                    background-color: #fd0000;
+                    transform: translateY(-5px);
+                    transition: all 0.2s ease;
+                }
+
+            div.decisionBtn button.submitBtn {
+                background-color: limegreen;
+                border-radius: 25px;
+                border: 3px solid black;
+                padding: 5px 20px 5px 20px;
+                font-size: 1.5rem;
+                font-weight: 500;
+                box-shadow: rgba(0,0,0,0.3) 2px 2px 5px 1px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+                div.decisionBtn button.submitBtn:hover {
+                    background-color: #38f238;
+                    transform: translateY(-5px);
+                    transition: all 0.2s ease;
+                }
+
+            div.decisionBtn button.saveBtn {
+                background-color: limegreen;
+                border-radius: 25px;
+                border: 3px solid black;
+                padding: 5px 20px 5px 20px;
+                font-size: 1rem;
+                font-weight: 700;
+                box-shadow: rgba(0,0,0,0.3) 2px 2px 5px 1px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            div.decisionBtn button.saveBtn:hover {
+                background-color: #38f238;
+                transform: translateY(-5px);
+                transition: all 0.2s ease;
+            }
+
+        /* Form styling */
+        #addSupplierForm,#editSupplierForm input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 12px;
+        }
