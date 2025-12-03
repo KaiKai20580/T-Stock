@@ -24,7 +24,7 @@ namespace T_Stock.Controllers
         [HttpPost]
         public IActionResult Login(User model)
         {
-            var user = _users.Find(x => x.Username == model.Username && x.Password == model.Password).FirstOrDefault();
+            var user = _users.Find(x => x.Email == model.Email && x.Password == model.Password).FirstOrDefault();
 
             if (user == null)
             {
@@ -32,7 +32,7 @@ namespace T_Stock.Controllers
                 return View(model);
             }
 
-            HttpContext.Session.SetString("User", user.Username);
+            HttpContext.Session.SetString("User", user.Email);
             return RedirectToAction("Index", "Home");
         }
 

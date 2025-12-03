@@ -1,0 +1,37 @@
+﻿@model T_Stock.Models.User
+
+@{
+    ViewData["Title"] = "Edit Member";
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-dark">Edit Member</h2>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+
+    <div class="card shadow-sm p-4 border-0" style="max-width: 600px;">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="Id" />
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label fw-bold">User Email</label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="Role" class="form-label fw-bold">Role</label>
+                <select asp-for="Role" class="form-select">
+                    <option value="Supplier">Supplier</option>
+                    <option value="Admin">Admin</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+        </form>
+    </div>
+</div>
