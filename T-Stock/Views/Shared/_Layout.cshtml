@@ -20,9 +20,10 @@
         <div class="user">
             <img src="/test.png" alt="me" class="user-img" />
             @{
-                string email = Context.Session.GetString("User") ?? "Guest";
-                string role = Context.Session.GetString("Role") ?? "No Role";
+                string email = Context.Request.Cookies["User"] ?? "Guest";
+                string role = Context.Request.Cookies["Role"] ?? "No Role";
             }
+
             <div class="user-info">
                 <p class="bold">@email</p>
                 <p>@role</p>

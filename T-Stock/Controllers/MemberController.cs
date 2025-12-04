@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
+using System.Text.RegularExpressions;
 using T_Stock.Models;
 
 namespace T_Stock.Controllers
@@ -9,24 +10,54 @@ namespace T_Stock.Controllers
         private readonly IMongoCollection<User> _users;
 
         public MemberController()
-        { 
+        {
             var client = new MongoClient("mongodb+srv://t-stock-123:oczgaj7c8lnRa5fr@t-stock.dr8vmsk.mongodb.net/?appName=T-Stock");
             var db = client.GetDatabase("Inventory");
             _users = db.GetCollection<User>("User");
         }
 
         // 1. DISPLAY ALL MEMBERS
-        public IActionResult Index()
+        public IActionResult Index(string roleFilter, string searchTerm)
         {
-            var role = HttpContext.Session.GetString("Role");
-            if (role == null || role.ToLower() != "admin")
+            var role = Request.Cookies["Role"];
+            if (string.IsNullOrEmpty(role) || role.ToLower() != "admin")
             {
-                return RedirectToAction("Login", "Account"); 
+                return RedirectToAction("Login", "Account");
             }
 
-            var members = _users.Find(_ => true).ToList();
+            var filter = Builders<User>.Filter.Empty;
+
+            // Role filter
+            if (!string.IsNullOrEmpty(roleFilter))
+            {
+                filter &= Builders<User>.Filter.Regex(
+                    u => u.Role,
+                    new MongoDB.Bson.BsonRegularExpression($"^{roleFilter}$", "i")
+                );
+            }
+
+            // Search filter (partial match, case-insensitive)
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                // Only match the part before @
+                var regexPattern = $"^{Regex.Escape(searchTerm)}[^@]*@"; // match searchTerm at start of local-part
+                filter &= Builders<User>.Filter.Regex(
+                    u => u.Email,
+                    new MongoDB.Bson.BsonRegularExpression(regexPattern, "i")
+                );
+            }
+
+
+            var members = _users.Find(filter).ToList();
+
+
+            ViewBag.RoleFilter = roleFilter;
+            ViewBag.SearchTerm = searchTerm;
+
             return View(members);
         }
+
+
 
         // 2. DELETE MEMBER
         [HttpPost]
@@ -37,15 +68,13 @@ namespace T_Stock.Controllers
                 return NotFound();
             }
 
-            
             _users.DeleteOne(u => u.Id == id);
 
             TempData["SuccessMessage"] = "Member deleted successfully!";
             return RedirectToAction("Index");
         }
 
-
-        // 3. EDIT MEMBER (POST) - Saves the Data from the Modal
+        // 3. EDIT MEMBER (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(User user)
@@ -53,25 +82,42 @@ namespace T_Stock.Controllers
             var existingUser = _users.Find(u => u.Id == user.Id).FirstOrDefault();
             if (existingUser == null) return NotFound();
 
-            // Save original email for session check
+            // Check for duplicate email
+            if (!string.IsNullOrEmpty(user.Email))
+            {
+                var duplicate = _users.Find(u => u.Email == user.Email && u.Id != user.Id).FirstOrDefault();
+                if (duplicate != null)
+                {
+                    TempData["ErrorMessage"] = "Cannot save changes: This email already exists!";
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+
             var originalEmail = existingUser.Email;
 
-            // Update user fields
-            if (!string.IsNullOrEmpty(user.Email)) existingUser.Email = user.Email;
-            if (!string.IsNullOrEmpty(user.Role)) existingUser.Role = user.Role;
+            // Update editable fields
+            if (!string.IsNullOrEmpty(user.Email))
+                existingUser.Email = user.Email;
+
+            if (!string.IsNullOrEmpty(user.Role))
+                existingUser.Role = user.Role;
 
             _users.ReplaceOne(u => u.Id == user.Id, existingUser);
 
-            // Update session if editing current logged-in user
-            var currentEmail = HttpContext.Session.GetString("User");
+            // Update cookies if current user updated own data
+            var currentEmail = Request.Cookies["User"];
             if (currentEmail == originalEmail)
             {
-                HttpContext.Session.SetString("User", existingUser.Email);
-                HttpContext.Session.SetString("Role", existingUser.Role ?? "No Role");
+                var cookieOptions = new CookieOptions
+                {
+                    Expires = DateTimeOffset.UtcNow.AddHours(3),
+                };
+
+                Response.Cookies.Append("User", existingUser.Email, cookieOptions);
+                Response.Cookies.Append("Role", existingUser.Role ?? "No Role", cookieOptions);
             }
 
             TempData["SuccessMessage"] = "Member updated successfully!";
-
             return RedirectToAction(nameof(Index));
         }
 

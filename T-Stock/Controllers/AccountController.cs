@@ -41,14 +41,23 @@ namespace T_Stock.Controllers
                 return View(model);
             }
 
-            HttpContext.Session.SetString("User", user.Email);
-            HttpContext.Session.SetString("Role", user.Role);
+            Response.Cookies.Append("User", user.Email, new CookieOptions
+            {
+                Expires = DateTimeOffset.UtcNow.AddHours(3)
+            });
+
+            Response.Cookies.Append("Role", user.Role, new CookieOptions
+            {
+                Expires = DateTimeOffset.UtcNow.AddHours(3)
+            });
+
             return RedirectToAction("Index", "Home");
         }
 
         public IActionResult Logout()
         {
-            HttpContext.Session.Clear();
+            Response.Cookies.Delete("User");
+            Response.Cookies.Delete("Role");
             return RedirectToAction("Login");
         }
     }

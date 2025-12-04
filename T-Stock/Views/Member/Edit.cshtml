@@ -17,12 +17,7 @@
     </div>
 }
 
-<style>
-    body.dark-mode label.email {
-        color: black;
-        font-weight: bold;
-    }
-</style>
+
 
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -36,13 +31,13 @@
 
             <input type="hidden" asp-for="Id" />
 
-            <div class="form">
+            <div class="mb-3">
                 <label asp-for="Email" class="email">User Email</label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
-            <div class="form">
+            <div class="mb-3">
                 <label asp-for="Role" class="email">Role</label>
                 <select asp-for="Role" class="form-select">
                     <option value="Supplier">Supplier</option>

@@ -7,32 +7,44 @@
     ViewData["Title"] = "Member List";
 }
 
+
 @{
     var successMessage = TempData["SuccessMessage"] as string;
+    var errorMessage = TempData["ErrorMessage"] as string;
 }
 
 @if (!string.IsNullOrEmpty(successMessage))
 {
     <div class="alert alert-success alert-dismissible fade show" role="alert"
-         id="success-alert"
+         id="alert-message"
          style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
                     z-index: 1050; min-width: 250px; text-align: center;">
         @successMessage
     </div>
-
-    <script>
-        // Auto-hide after 3 seconds (3000 ms)
-        setTimeout(function () {
-            var alert = document.getElementById('success-alert');
-            if(alert){
-                alert.classList.remove('show');
-                alert.classList.add('hide');
-                // remove from DOM after transition (Bootstrap fade)
-                setTimeout(() => alert.remove(), 500);
-            }
-        }, 1500);
-    </script>
 }
+else if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert"
+         id="alert-message"
+         style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+                    z-index: 1050; min-width: 250px; text-align: center;">
+        @errorMessage
+    </div>
+}
+
+<script>
+    // Auto-hide after 3 seconds
+    setTimeout(function () {
+        var alert = document.getElementById('alert-message');
+        if(alert){
+            alert.classList.remove('show');
+            alert.classList.add('hide');
+            // remove from DOM after transition
+            setTimeout(() => alert.remove(), 500);
+        }
+    }, 1500);
+</script>
+
 
 
 
@@ -174,6 +186,29 @@
         </button>
     </div>
 
+    <!-- Search + Role Filter Form -->
+    <div class="d-flex justify-content-center my-4">
+        <form method="get" asp-action="Index" class="d-flex" style="max-width: 400px; width: 100%;">
+            <input type="text" name="searchTerm" class="form-control" placeholder="Search by email..."
+                   value="@(ViewBag.SearchTerm ?? "")" />
+            <button type="submit" class="btn btn-primary ms-2">Search</button>
+        </form>
+    </div>
+
+    <form method="get" asp-action="Index" class="mb-3" style="max-width: 300px;">
+        <div class="input-group">
+            <select name="roleFilter" class="form-select" onchange="this.form.submit()">
+                <option value="">All Roles</option>
+                <option value="admin" selected="@(ViewBag.RoleFilter == "admin" ? "selected" : null)">Admin</option>
+                <option value="staff" selected="@(ViewBag.RoleFilter == "staff" ? "selected" : null)">Staff</option>
+                <option value="supplier" selected="@(ViewBag.RoleFilter == "supplier" ? "selected" : null)">Supplier</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+    </form>
+
+
+
     <div class="card table-card bg-white">
         <div class="card-body">
             <table class="custom-table">
@@ -204,18 +239,32 @@
                                 </div>
                             </td>
                             <td>
-                                @if (!string.IsNullOrEmpty(user.Role) && user.Role.Trim().ToLower() == "admin")
+                                @if (!string.IsNullOrEmpty(user.Role))
                                 {
-                                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill">@user.Role</span>
-                                }
-                                else
-                                {
-                                    <span class="badge rounded-pill"
-                                          style="background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba;">
-                                        @user.Role
-                                    </span>
+                                    var role = user.Role.Trim().ToLower();
 
+                                    if (role == "admin")
+                                    {
+                                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill">
+                                            @user.Role
+                                        </span>
+                                    }
+                                    else if (role == "staff")
+                                    {
+                                        <span class="badge rounded-pill"
+                                              style="background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb;">
+                                            @user.Role
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge rounded-pill"
+                                              style="background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba;">
+                                            @user.Role
+                                        </span>
+                                    }
                                 }
+
                             </td>
                             <td class="text-center">
 
@@ -270,8 +319,9 @@
                     <div class="mb-3">
                         <label class="form-label fw-bold">Role</label>
                         <select class="form-select" name="Role" id="modalRole">
-                            <option value="Supplier">Supplier</option>
                             <option value="Admin">Admin</option>
+                            <option value="Staff">Staff</option>
+                            <option value="Supplier">Supplier</option>
                         </select>
                     </div>
 

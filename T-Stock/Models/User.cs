@@ -6,7 +6,7 @@ namespace T_Stock.Models
     public class User
     {
         [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)] // <-- important, avoids deserialization errors
+        [BsonRepresentation(BsonType.ObjectId)] 
         public string Id { get; set; }
 
         [BsonElement("email")]
