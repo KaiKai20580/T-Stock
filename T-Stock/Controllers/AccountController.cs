@@ -18,21 +18,31 @@ namespace T_Stock.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            return View(new User());
+            return View(new LoginViewModel());
         }
 
         [HttpPost]
-        public IActionResult Login(User model)
+        public IActionResult Login(LoginViewModel model)
         {
-            var user = _users.Find(x => x.Email == model.Email && x.Password == model.Password).FirstOrDefault();
+            
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = _users.Find(x => x.Email == model.Email && x.Password == model.Password)
+                             .FirstOrDefault();
 
             if (user == null)
             {
-                ViewBag.Error = "Invalid username or password.";
+                ModelState.AddModelError(string.Empty, "Invalid Email or Password.");
+
                 return View(model);
             }
 
             HttpContext.Session.SetString("User", user.Email);
+            HttpContext.Session.SetString("Role", user.Role);
             return RedirectToAction("Index", "Home");
         }
 

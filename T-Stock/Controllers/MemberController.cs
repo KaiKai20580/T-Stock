@@ -18,6 +18,12 @@ namespace T_Stock.Controllers
         // 1. DISPLAY ALL MEMBERS
         public IActionResult Index()
         {
+            var role = HttpContext.Session.GetString("Role");
+            if (role == null || role.ToLower() != "admin")
+            {
+                return RedirectToAction("Login", "Account"); 
+            }
+
             var members = _users.Find(_ => true).ToList();
             return View(members);
         }
@@ -34,7 +40,7 @@ namespace T_Stock.Controllers
             
             _users.DeleteOne(u => u.Id == id);
 
-            
+            TempData["SuccessMessage"] = "Member deleted successfully!";
             return RedirectToAction("Index");
         }
 
@@ -44,40 +50,31 @@ namespace T_Stock.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(User user)
         {
-            // 1. Check if ID is valid
-            if (user.Id == null)
-            {
-                return NotFound();
-            }
-
-            // 2. Fetch the EXISTING user from the database
-            // This holds the old Email, Role, and Password
             var existingUser = _users.Find(u => u.Id == user.Id).FirstOrDefault();
+            if (existingUser == null) return NotFound();
 
-            if (existingUser == null)
-            {
-                return NotFound();
-            }
+            // Save original email for session check
+            var originalEmail = existingUser.Email;
 
-            // 3. Update Email (Only if the user typed something)
-            if (!string.IsNullOrEmpty(user.Email))
-            {
-                existingUser.Email = user.Email;
-            }
+            // Update user fields
+            if (!string.IsNullOrEmpty(user.Email)) existingUser.Email = user.Email;
+            if (!string.IsNullOrEmpty(user.Role)) existingUser.Role = user.Role;
 
-            // 4. Update Role 
-            // Only update existingUser.Role if the new user.Role is NOT null and NOT empty.
-            // If user.Role is null, we skip this line, keeping the old Role.
-            if (!string.IsNullOrEmpty(user.Role))
-            {
-                existingUser.Role = user.Role;
-            }
-
-            // 5. Save back to database
-            // This saves the new data mixed with the preserved old data (like Password)
             _users.ReplaceOne(u => u.Id == user.Id, existingUser);
+
+            // Update session if editing current logged-in user
+            var currentEmail = HttpContext.Session.GetString("User");
+            if (currentEmail == originalEmail)
+            {
+                HttpContext.Session.SetString("User", existingUser.Email);
+                HttpContext.Session.SetString("Role", existingUser.Role ?? "No Role");
+            }
+
+            TempData["SuccessMessage"] = "Member updated successfully!";
 
             return RedirectToAction(nameof(Index));
         }
+
+
     }
 }

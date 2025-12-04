@@ -19,9 +19,13 @@
         </div>
         <div class="user">
             <img src="/test.png" alt="me" class="user-img" />
-            <div>
-                <p class="bold">Kai</p>
-                <p>Admin</p>
+            @{
+                string email = Context.Session.GetString("User") ?? "Guest";
+                string role = Context.Session.GetString("Role") ?? "No Role";
+            }
+            <div class="user-info">
+                <p class="bold">@email</p>
+                <p>@role</p>
             </div>
         </div>
         <ul>
@@ -55,12 +59,16 @@
                     <span class="nav-item">Reports</span>
                 </a>
             </li>
-            <li>
-                <a class="ajax-nav" href="/Member/Index">
-                    <i class="ri-team-fill"></i>
-                    <span class="nav-item">Member</span>
-                </a>
-            </li>
+
+            @if (!string.IsNullOrEmpty(role) && role.ToLower() == "admin")
+            {
+                <li>
+                    <a class="ajax-nav" href="/Member/Index">
+                        <i class="ri-team-fill"></i>
+                        <span class="nav-item">Member</span>
+                    </a>
+                </li>
+            }
         </ul>
         <a class="" asp-action="Logout" asp-controller="Account">
             <div class="logout">
@@ -69,6 +77,7 @@
             </div>
         </a>
     </div>
+
     <div id="ajax-content">
         @RenderBody()
     </div>
@@ -76,7 +85,6 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 

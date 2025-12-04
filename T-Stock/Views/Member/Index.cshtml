@@ -7,6 +7,38 @@
     ViewData["Title"] = "Member List";
 }
 
+@{
+    var successMessage = TempData["SuccessMessage"] as string;
+}
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert"
+         id="success-alert"
+         style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+                    z-index: 1050; min-width: 250px; text-align: center;">
+        @successMessage
+    </div>
+
+    <script>
+        // Auto-hide after 3 seconds (3000 ms)
+        setTimeout(function () {
+            var alert = document.getElementById('success-alert');
+            if(alert){
+                alert.classList.remove('show');
+                alert.classList.add('hide');
+                // remove from DOM after transition (Bootstrap fade)
+                setTimeout(() => alert.remove(), 500);
+            }
+        }, 1500);
+    </script>
+}
+
+
+
+
+
+
 <style>
     
     .sidebar:hover ~ #ajax-content .m-container{
@@ -122,6 +154,13 @@
         color: black;
 		font-weight: bold;
     }
+
+    
+    body.dark-mode div.mb-3 label.form-label {
+        color: black;
+        font-weight: bold;
+    }
+
 </style>
 
 <div class="m-container">
@@ -171,7 +210,11 @@
                                 }
                                 else
                                 {
-                                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill">@user.Role</span>
+                                    <span class="badge rounded-pill"
+                                          style="background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba;">
+                                        @user.Role
+                                    </span>
+
                                 }
                             </td>
                             <td class="text-center">

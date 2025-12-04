@@ -1,4 +1,4 @@
-﻿@model T_Stock.Models.User
+﻿@model T_Stock.Models.LoginViewModel
 
 <!DOCTYPE html>
 <html>
@@ -44,13 +44,13 @@
             gap: 10px;
         }
 
-        .title i {
-				position: relative;
+            .title i {
+                position: relative;
                 color: white;
-				text-align: center;
+                text-align: center;
                 display: flex;
                 bottom: 6px;
-        }
+            }
 
         h2 {
             text-align: center;
@@ -73,7 +73,7 @@
             font-size: 20px;
             padding: 5px 10px;
             margin-top: 5px;
-            margin-bottom: 25px;
+            margin-bottom: 5px;
         }
 
         .login-btn {
@@ -85,6 +85,7 @@
             font-size: 25px;
             font-weight: bold;
             cursor: pointer;
+            margin-top: 20px;
         }
 
         .error-text {
@@ -94,6 +95,11 @@
             font-size: 18px;
         }
 
+        .field-error {
+            color: red;
+            font-size: 15px;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 
@@ -108,24 +114,29 @@
 
             <h2>LOGIN</h2>
 
-            <form asp-action="Login" method="post">
-
+            <form asp-controller="Account" asp-action="Login" method="post">
                 <label>Email</label>
                 <input asp-for="Email" class="input-box" />
+                <span asp-validation-for="Email" class="field-error"></span>
 
                 <label>Password</label>
                 <input asp-for="Password" type="password" class="input-box" />
+                <span asp-validation-for="Password" class="field-error"></span>
 
                 <button class="login-btn" type="submit">Login</button>
             </form>
 
-            @if (ViewBag.Error != null)
+            <!-- Display login errors using ModelState instead of ViewBag -->
+            @if (!ViewData.ModelState.IsValid)
             {
-                <p class="error-text">@ViewBag.Error</p>
+                <div class="error-text">
+                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <p>@error.ErrorMessage</p>
+                    }
+                </div>
             }
-
         </div>
     </div>
-
 </body>
 </html>
