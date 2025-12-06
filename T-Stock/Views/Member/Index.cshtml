@@ -1,12 +1,10 @@
 ﻿@model IEnumerable<T_Stock.Models.User>
 
 @{
-    
     bool isAjax = Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
     Layout = isAjax ? null : "_Layout";
     ViewData["Title"] = "Member List";
 }
-
 
 @{
     var successMessage = TempData["SuccessMessage"] as string;
@@ -18,7 +16,7 @@
     <div class="alert alert-success alert-dismissible fade show" role="alert"
          id="alert-message"
          style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-                    z-index: 1050; min-width: 250px; text-align: center;">
+                        z-index: 1050; min-width: 250px; text-align: center;">
         @successMessage
     </div>
 }
@@ -27,33 +25,26 @@ else if (!string.IsNullOrEmpty(errorMessage))
     <div class="alert alert-danger alert-dismissible fade show" role="alert"
          id="alert-message"
          style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-                    z-index: 1050; min-width: 250px; text-align: center;">
+                        z-index: 1050; min-width: 250px; text-align: center;">
         @errorMessage
     </div>
 }
 
 <script>
-    // Auto-hide after 3 seconds
+    // Auto-hide after 1.5 seconds
     setTimeout(function () {
         var alert = document.getElementById('alert-message');
         if(alert){
             alert.classList.remove('show');
             alert.classList.add('hide');
-            // remove from DOM after transition
             setTimeout(() => alert.remove(), 500);
         }
     }, 1500);
 </script>
 
-
-
-
-
-
-
 <style>
-    
-    .sidebar:hover ~ #ajax-content .m-container{
+
+    .sidebar:hover ~ #ajax-content .m-container {
         margin-left: 240px;
         transition: all 0.5s ease;
         width: calc(100% - 320px);
@@ -62,18 +53,18 @@ else if (!string.IsNullOrEmpty(errorMessage))
     .m-container {
         width: calc(100% - 200px);
         margin-left: 120px;
-		margin-top: 20px;
-		transition: all 0.5s ease;
+        margin-top: 20px;
+        transition: all 0.5s ease;
     }
-    
+
     .table-card {
         border: 1px solid #888;
         border-radius: 12px;
         box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        overflow: visible; 
+        overflow: visible;
     }
 
-    
+
     .custom-table thead {
         background-color: #212529;
         color: black;
@@ -90,7 +81,7 @@ else if (!string.IsNullOrEmpty(errorMessage))
         border-bottom: 1px solid #4d5154;
     }
 
-    
+
     .custom-table td {
         padding: 15px;
         vertical-align: middle;
@@ -100,7 +91,7 @@ else if (!string.IsNullOrEmpty(errorMessage))
         transition: background-color 0.2s ease;
     }
 
-    
+
     .custom-table tbody tr:nth-child(odd) {
         background-color: #ffffff;
     }
@@ -109,7 +100,7 @@ else if (!string.IsNullOrEmpty(errorMessage))
         background-color: #e2e3e5;
     }
 
-    
+
     .custom-table th:last-child,
     .custom-table td:last-child {
         border-right: none;
@@ -119,19 +110,19 @@ else if (!string.IsNullOrEmpty(errorMessage))
         border-bottom: none;
     }
 
-    
+
     .custom-table tbody tr:hover {
         position: relative;
         z-index: 100;
         transform: scale(1.02);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.25); 
+        box-shadow: 0 10px 25px rgba(0,0,0,0.25);
         outline: 2px solid #0d6efd;
-        background-color: #ffffff !important; 
+        background-color: #ffffff !important;
         cursor: pointer;
-        transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-        
+
         .custom-table tbody tr:hover td {
             background-color: transparent !important;
             color: #000;
@@ -155,25 +146,26 @@ else if (!string.IsNullOrEmpty(errorMessage))
     }
 
     .custom-table {
-		width: 100%;
+        width: 100%;
     }
 
-    body.dark-mode .m-word h2 { 
+    body.dark-mode .m-word h2 {
         color: white;
     }
 
-    .m-word h2{
+    .m-word h2 {
         color: black;
-		font-weight: bold;
+        font-weight: bold;
     }
 
-    
+
     body.dark-mode div.mb-3 label.form-label {
         color: black;
         font-weight: bold;
     }
 
 </style>
+
 
 <div class="m-container">
 
@@ -207,8 +199,6 @@ else if (!string.IsNullOrEmpty(errorMessage))
         </div>
     </form>
 
-
-
     <div class="card table-card bg-white">
         <div class="card-body">
             <table class="custom-table">
@@ -225,56 +215,51 @@ else if (!string.IsNullOrEmpty(errorMessage))
                         int rowNo = 1;
                     }
 
-                    @foreach (var user in Model)
+                    @foreach (var user in Model ?? new List<T_Stock.Models.User>())
                     {
+                        if (user == null) continue;
+
                         <tr>
                             <td class="col-number">@(rowNo++)</td>
-
                             <td>
                                 <div class="d-flex align-items-center">
                                     <div class="rounded-circle bg-light text-primary d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; font-weight:bold; border: 1px solid #888;">
-                                        @user.Email.Substring(0, 1).ToUpper()
+                                        @(string.IsNullOrEmpty(user.Email) ? "?" : user.Email.Substring(0,1).ToUpper())
                                     </div>
-                                    @user.Email
+                                    @(user.Email ?? "No Email")
                                 </div>
                             </td>
                             <td>
-                                @if (!string.IsNullOrEmpty(user.Role))
-                                {
-                                    var role = user.Role.Trim().ToLower();
-
+                                @{
+                                    var role = (user.Role ?? "").Trim().ToLower();
                                     if (role == "admin")
                                     {
                                         <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill">
-                                            @user.Role
+                                            @(user.Role ?? "")
                                         </span>
                                     }
                                     else if (role == "staff")
                                     {
-                                        <span class="badge rounded-pill"
-                                              style="background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb;">
-                                            @user.Role
+                                        <span class="badge rounded-pill" style="background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb;">
+                                            @(user.Role ?? "")
                                         </span>
                                     }
-                                    else
+                                    else if (!string.IsNullOrEmpty(role))
                                     {
-                                        <span class="badge rounded-pill"
-                                              style="background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba;">
-                                            @user.Role
+                                        <span class="badge rounded-pill" style="background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba;">
+                                            @(user.Role ?? "")
                                         </span>
                                     }
                                 }
-
                             </td>
                             <td class="text-center">
-
                                 <button type="button"
                                         class="btn btn-action btn-outline-primary"
                                         data-bs-toggle="modal"
                                         data-bs-target="#editModal"
                                         data-id="@user.Id"
-                                        data-email="@user.Email"
-                                        data-role="@user.Role">
+                                        data-email="@(user.Email ?? "")"
+                                        data-role="@(user.Role ?? "")">
                                     <i class="ri-edit-line"></i>
                                 </button>
 
@@ -289,7 +274,6 @@ else if (!string.IsNullOrEmpty(errorMessage))
                                         <i class="ri-delete-bin-line"></i>
                                     </button>
                                 </form>
-
                             </td>
                         </tr>
                     }
@@ -308,12 +292,11 @@ else if (!string.IsNullOrEmpty(errorMessage))
             </div>
             <form asp-controller="Member" asp-action="Edit" method="post">
                 <div class="modal-body p-4">
-
                     <input type="hidden" name="Id" id="modalId">
 
                     <div class="mb-3">
                         <label class="form-label fw-bold">User Email</label>
-                        <input type="text" class="form-control" name="Email" id="modalEmail" required>
+                        <input type="text" class="form-control" name="Email" id="modalEmail" value="" required>
                     </div>
 
                     <div class="mb-3">
@@ -324,7 +307,6 @@ else if (!string.IsNullOrEmpty(errorMessage))
                             <option value="Supplier">Supplier</option>
                         </select>
                     </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -339,13 +321,14 @@ else if (!string.IsNullOrEmpty(errorMessage))
     var editModal = document.getElementById('editModal');
     editModal.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget;
+        if (!button) return;
 
         var id = button.getAttribute('data-id');
         var email = button.getAttribute('data-email');
         var role = button.getAttribute('data-role');
 
-        editModal.querySelector('#modalId').value = id;
-        editModal.querySelector('#modalEmail').value = email;
-        editModal.querySelector('#modalRole').value = role;
+        editModal.querySelector('#modalId').value = id ?? "";
+        editModal.querySelector('#modalEmail').value = email ?? "";
+        editModal.querySelector('#modalRole').value = role ?? "";
     });
 </script>

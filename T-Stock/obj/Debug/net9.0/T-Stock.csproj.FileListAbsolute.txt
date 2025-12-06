@@ -362,7 +362,7 @@ C:\Mini Project\T-Stock\T-Stock\obj\Debug\net9.0\rjimswa.dswa.cache.json
 C:\Mini Project\T-Stock\T-Stock\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
 C:\Mini Project\T-Stock\T-Stock\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
 C:\Mini Project\T-Stock\T-Stock\obj\Debug\net9.0\scopedcss\bundle\T-Stock.styles.css
-C:\Mini Project\T-Stock\T-Stock\obj\Debug\net9.0\compressed\o0jyih2a7m-a0omvsyq7r.gz
+C:\Mini Project\T-Stock\T-Stock\obj\Debug\net9.0\compressed\o0jyih2a7m-krqu5yj632.gz
 C:\Mini Project\T-Stock\T-Stock\obj\Debug\net9.0\compressed\cjqd5asw7m-61n19gt1b8.gz
 C:\Mini Project\T-Stock\T-Stock\obj\Debug\net9.0\compressed\gzvvrwnjbb-mdv81kp8ah.gz
 C:\Mini Project\T-Stock\T-Stock\obj\Debug\net9.0\compressed\isocmn0rfn-t1cqhe9u97.gz

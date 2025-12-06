@@ -17,14 +17,8 @@ namespace T_Stock.Controllers
         }
 
         // 1. DISPLAY ALL MEMBERS
-        public IActionResult Index(string roleFilter, string searchTerm)
+        public IActionResult Index(string searchTerm, string roleFilter)
         {
-            var role = Request.Cookies["Role"];
-            if (string.IsNullOrEmpty(role) || role.ToLower() != "admin")
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
             var filter = Builders<User>.Filter.Empty;
 
             // Role filter
@@ -36,26 +30,24 @@ namespace T_Stock.Controllers
                 );
             }
 
-            // Search filter (partial match, case-insensitive)
+            // Search filter
             if (!string.IsNullOrEmpty(searchTerm))
             {
-                // Only match the part before @
-                var regexPattern = $"^{Regex.Escape(searchTerm)}[^@]*@"; // match searchTerm at start of local-part
+                var regexPattern = $"^{Regex.Escape(searchTerm)}[^@]*@";
                 filter &= Builders<User>.Filter.Regex(
                     u => u.Email,
                     new MongoDB.Bson.BsonRegularExpression(regexPattern, "i")
                 );
             }
 
-
-            var members = _users.Find(filter).ToList();
-
+            var members = _users.Find(filter).ToList() ?? new List<User>(); // ✅ never null
 
             ViewBag.RoleFilter = roleFilter;
             ViewBag.SearchTerm = searchTerm;
 
             return View(members);
         }
+
 
 
 
