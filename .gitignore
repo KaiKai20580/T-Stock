@@ -9,6 +9,7 @@
 *.sln.docstates
 *.env
 *.userprefs
+*.obj
 
 # Mono
 mono_crash.*

@@ -1,0 +1,237 @@
+﻿@model IPagedResult<T_Stock.Models.Supplier>
+<div class="supplierPage">
+    <div class="heading">
+    <h3>Supplier Management</h3>
+        <div class="search-container">
+            <input type="text" id="search" placeholder="Search..." />
+            <i class="ri-search-line"></i>
+        </div>
+    </div>
+    <div class="supplierManage">
+        <div class="filter">
+            <div class="sorting">
+            <h2>Sort By</h2>
+            <select id ="sortKey" class ="filters" name="sorting">
+                <option value="none" selected>None</option>
+                <option value="supId">Supplier ID</option>
+                <option value="company">Company</option>
+                <option value="lastUpdate">Last Updated</option>   
+            </select>
+            </div>
+            <div class="orderBy">
+                <h2>Order By</h2>
+                <select id="sortOrder" class="filters" name="orderBy" disabled>
+                    <option value="true">Descending</option>
+                    <option value="false">Ascending</option>
+                </select>
+            </div>
+            <div class="productFilter">
+                <h2>Product</h2>
+                <select id="productFilter" name="productFilter">
+                    <option value="none" selected>All Products</option>
+                    @foreach (var p in ViewBag.Products)
+                    {
+                        <option value="@p.ProductId">@p.ProductId - @p.ProductName</option>
+                    }
+                </select>
+            </div>
+        </div>
+            <div class="supplierAdd">
+                <i class="ri-contacts-book-upload-line"></i>
+                <h3>Add Supplier</h3>
+            </div>
+    </div>
+      <div id="supplierList">
+        <partial name="_SupplierTable" model="Model" />
+    </div>
+</div>
+
+<div id="addSupplierModal" class="modal">
+    <div class="modal-content">
+        @await Html.PartialAsync("_AddSupplierForm", new SupplierViewModel() {
+        ProductItems = new List<SupplierProductItem>()
+                })
+    </div>
+</div>
+
+
+@section scripts {
+    <script>
+        
+        $('#sortKey').on('change', function() {
+            $('#sortOrder').prop('disabled', $(this).val() === 'none');
+            loadSuppliers();
+        });
+
+        function loadSuppliers(page = 1) {
+            const search = $('#search').val();
+            const sort = $('#sortKey').val();
+            const desc = $('#sortOrder').val();
+            const product = $('#productFilter').val();
+
+            $.ajax({
+                url: '@Url.Action("Index", "Supplier")',
+                type: 'GET',
+                data: { Search: search, Sort: sort, Desc: desc, Product: product, Page: page },
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                success: function(res) {
+                    $('#supplierList').html(res);
+                }
+            });
+        }
+
+        // search input
+        $('#search').on('input', () => loadSuppliers());
+
+        // filters
+        $('#sortKey, #sortOrder, #productFilter').on('change', () => loadSuppliers());
+
+        //Open Add Supplier Popup
+        $('.supplierAdd').on('click', function () {
+            $.ajax({
+                url: '@Url.Action("GetAddSupplierForm", "Supplier")',
+                type: 'GET',
+                success: function(res) {
+                    // Inject the Add Form
+                    $('#addSupplierModal .modal-content').html(res);
+
+                    // Change Title
+                    $('#addSupplierModal h2').text('Add New Supplier');
+
+                    // Show Modal
+                    $('#addSupplierModal').fadeIn(250);
+                }
+            });
+        });
+
+        // Add product row
+        $(document).on('click', '.addProductBtn', function(){
+            let productIndex = $('#supplierProductList .productRow').length;
+            let newRow = `
+                <div class="productRow">
+                <div>
+                <h5>Product</h5>
+                    <select name="ProductItems[${productIndex}].ProductID" class="productSelect">
+                        <option value="">Select Product</option>
+                        @foreach (var p in ViewBag.Products)
+                        {
+                                <option value="@p.ProductId">@p.ProductId - @p.ProductName</option>
+                        }
+                    </select>
+                    </div>
+                    <div>
+                    <label>Unit Price (RM)</label>
+                    <input type="number" name="ProductItems[${productIndex}].SupplierPrice" class="productPrice"/>
+                    </div>
+                    <button type="button" class="removeProductBtn"> <i class="ri-close-circle-line"></i> </button>
+                </div>
+            `;
+
+            $('#supplierProductList').append(newRow);
+            productIndex++;
+        });
+
+        //Delete product row
+        $(document).on('click', '.removeProductBtn', function () {
+            $(this).closest('.productRow').remove();
+
+                $('#supplierProductList .productRow').each(function(index) {
+                    // Update Select name
+                    $(this).find('select').attr('name', `ProductItems[${index}].ProductID`);
+                    // Update Input name
+                    $(this).find('input').attr('name', `ProductItems[${index}].SupplierPrice`);
+                });
+        });
+
+        // Close popup
+        $(document).on('click', '.cancelBtn', function () {
+            $('#addSupplierModal').fadeOut(250);
+        });
+
+        // Close when clicking outside the box
+        $(window).on('click', function (e) {
+            if ($(e.target).is('#addSupplierModal')) {
+                $('#addSupplierModal').fadeOut(250);
+            }
+        });
+        
+        //AJAX form submit
+        $(document).on('submit', '#addSupplierForm', function(e){
+            e.preventDefault(); // prevent normal form submit
+
+            const form = $(this);
+
+            $.ajax({
+            url: '@Url.Action("AddSupplier", "Supplier")',
+            type: 'POST',
+            data: form.serialize(),
+            success: function (res) {
+
+            if (res.success) {
+               alert("Supplier added successfully!");
+                // Note: For a nicer look, you can use a library like SweetAlert2 instead of alert()
+
+                // 2. Close Popup
+                $('#addSupplierModal').fadeOut(200);
+
+                // 3. Clear the Form
+                form[0].reset();
+
+                // B) Remove all dynamic product rows
+                $('#supplierProductList').empty();
+
+                // C) Clear any leftover validation error messages
+                form.find('.text-danger').html('');
+                form.find('.validation-summary-errors').html('');
+
+                // 4. Refresh the background table to show the new data
+                loadSuppliers();
+               
+            } else {
+                // server returned partial HTML with validation errors
+                $('#addSupplierModal .modal-content').html(res);
+            }
+            }
+        });
+            });
+
+        $(document).on('click', '.editSupplierBtn', function() {
+                var id = $(this).data('id');
+                $.ajax({
+                    url: '@Url.Action("EditSupplier", "Supplier")',
+                    type: 'GET',
+                    data: { id: id },
+                        success: function(res) {
+                $('#addSupplierModal .modal-content').html(res);
+                $('#addSupplierModal').fadeIn(250);
+                }
+            });
+        });
+
+        $(document).on('submit', '#editSupplierForm', function(e){
+            e.preventDefault();
+
+            const form = $(this);
+
+            $.ajax({
+                url: '@Url.Action("UpdateSupplier", "Supplier")',
+                type: 'POST',
+                data: form.serialize(),
+                success: function (res) {
+                    if (res.success) {
+                        
+                        alert("Supplier updated successfully!");
+                        $('#addSupplierModal').fadeOut(200);
+                        loadSuppliers(); 
+
+                    } else {
+         
+                        $('#addSupplierModal .modal-content').html(res);
+
+                    }
+                }
+            });
+        });
+            
+    </script>
+}

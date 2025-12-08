@@ -10,11 +10,66 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet" />
 </head>
 <body>
+<<<<<<< HEAD
     <div class="sidebar">
         <div class="top">
             <div class="logo">
                 <i class="ri-unsplash-fill"></i>
                 <span>T-Stock</span>
+=======
+            <div class="sidebar">
+                <div class="top">
+                    <div class="logo">
+                        <i class="ri-unsplash-fill"></i>
+                        <span>T-Stock</span>
+                    </div>
+                </div>
+                <div class="user">
+                    <img src="/test.png" alt="me" class="user-img" />
+                    <div>
+                        <p class="bold">Kai</p>
+                        <p>Admin</p>
+                    </div>
+                </div>
+                <ul>
+                    <li>
+                        <a class="ajax-nav" href="/Home/Index">
+                            <i class="ri-home-5-fill"></i>
+                            <span class="nav-item">Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="ajax-nav" href="/Inventory/Index">
+                            <i class="ri-clipboard-line"></i>
+                            <span class="nav-item">Inventory</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="ri-file-list-fill"></i>
+                            <span class="nav-item">Purchase <br /> Order</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Supplier" asp-action="Index">
+                            <i class="ri-caravan-line"></i>
+                            <span class="nav-item">Supplier</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="ri-file-chart-fill"></i>
+                            <span class="nav-item">Reports</span>
+                        </a>
+                    </li>
+                </ul>
+                <a class="" asp-action="Logout" asp-controller="Account">
+                <div class="logout">
+                    <i class="ri-shut-down-line"></i>
+                    <p>Logout</p>
+                </div>
+                </a>
+>>>>>>> main
             </div>
         </div>
         <div class="user">
@@ -83,10 +138,19 @@
         @RenderBody()
     </div>
 
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+<<<<<<< HEAD
     <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
+=======
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js"></script>
+>>>>>>> main
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)

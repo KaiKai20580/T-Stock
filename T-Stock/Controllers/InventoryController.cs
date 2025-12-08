@@ -13,10 +13,13 @@ namespace T_Stock.Controllers
             _db = db;
         }
 
-        //test
-        // Fetch all inventory items
         public IActionResult Index()
         {
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_IndexPartial", _db.InventoryCollection.Find(_ => true).ToList());
+            }
+
             var items = _db.InventoryCollection.Find(_ => true).ToList();
             return View(items);
         }
@@ -24,33 +27,51 @@ namespace T_Stock.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            var vm = new InventoryListVM();
+            vm.Items.Add(new Inventory());
+
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
-                return PartialView("_CreatePartial");
+                return PartialView("_CreatePartial", vm);
             }
 
-            return View();
+            return View(vm);
         }
 
         [HttpPost]
-        public IActionResult Create(Inventory model)
+        public IActionResult Create(InventoryListVM model)
         {
             if (!ModelState.IsValid)
             {
+                if (model.Items == null || model.Items.Count == 0)
+                    model.Items.Add(new Inventory());
+
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    return PartialView("_CreatePartial", model);
+
                 return View(model);
             }
 
             try
             {
-                _db.InventoryCollection.InsertOne(model);
-                return RedirectToAction("Create");
+                _db.InventoryCollection.InsertMany(model.Items);
+
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    return Json(new { success = true });
+
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                // Optionally log the exception
                 ViewBag.Error = ex.Message;
+
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    return PartialView("_CreatePartial", model);
+
                 return View(model);
             }
         }
+
+
     }
 }
