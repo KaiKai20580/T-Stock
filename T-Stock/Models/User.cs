@@ -21,7 +21,6 @@ namespace T_Stock.Models
         [BsonElement("role")]
         public string Role { get; set; }
 
-        // 🔹 Add these for password reset simulation
         public string ResetToken { get; set; }
         public DateTime? ResetTokenExpiry { get; set; }
     }
