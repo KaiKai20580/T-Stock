@@ -107,10 +107,10 @@ namespace T_Stock.Controllers
                 return RedirectToAction("ResetPassword", new { token = token });
             }
 
-            // Update password
+            
             user.Password = newPassword;
 
-            // Clear token
+            
             user.ResetToken = null;
             user.ResetTokenExpiry = null;
 

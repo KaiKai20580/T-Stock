@@ -101,7 +101,7 @@
             margin-bottom: 15px;
         }
 
-        /* Centered forgot password link with spacing */
+        
         .forgot-password {
             text-align: center;
             margin-top: 15px;
@@ -131,13 +131,13 @@
 
                 <button class="login-btn" type="submit">Login</button>
 
-                <!-- Centered Forgot Password link -->
+                
                 <div class="forgot-password">
                     <a href="/Account/ForgotPassword" class="text-primary">Forgot Password?</a>
                 </div>
             </form>
 
-            <!-- Display login errors using ModelState instead of ViewBag -->
+            
             @if (!ViewData.ModelState.IsValid)
             {
                 <div class="error-text">
