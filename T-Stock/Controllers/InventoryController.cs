@@ -32,7 +32,7 @@ namespace T_Stock.Controllers
 
             if (Request.Headers.XRequestedWith == "XMLHttpRequest")
             {
-                return PartialView("_CreatePartial", vm);
+                return PartialView("Create", vm);
             }
 
             return View(vm);
@@ -47,7 +47,7 @@ namespace T_Stock.Controllers
                     model.Items?.Add(new Inventory());
 
                 if (Request.Headers.XRequestedWith == "XMLHttpRequest")
-                    return PartialView("_CreatePartial", model);
+                    return PartialView("Create", model);
 
                 return View(model);
             }
@@ -66,7 +66,7 @@ namespace T_Stock.Controllers
                 ViewBag.Error = ex.Message;
 
                 if (Request.Headers.XRequestedWith == "XMLHttpRequest")
-                    return PartialView("_CreatePartial", model);
+                    return PartialView("Create", model);
 
                 return View(model);
             }
