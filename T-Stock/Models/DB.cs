@@ -141,6 +141,7 @@ namespace T_Stock.Models
         public double SupplierPrice { get; set; }
     }
 
+
     public class InventoryListVM
     {
         public List<Inventory> Items { get; set; } = new List<Inventory>();

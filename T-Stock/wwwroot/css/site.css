@@ -712,6 +712,8 @@ body.dark-mode .theme-toggle {
     background: #30343a;
 }
 
+<<<<<<< HEAD
+=======
 /*KW CSS*/
 div.supplierPage {
     margin-left: 100px;
@@ -1063,3 +1065,4 @@ button.removeProductBtn {
             padding: 8px;
             margin-bottom: 12px;
         }
+>>>>>>> main

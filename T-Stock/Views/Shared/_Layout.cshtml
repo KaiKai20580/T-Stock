@@ -7,68 +7,81 @@
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet" />
 </head>
 <body>
-            <div class="sidebar">
-                <div class="top">
-                    <div class="logo">
-                        <i class="ri-unsplash-fill"></i>
-                        <span>T-Stock</span>
-                    </div>
-                </div>
-                <div class="user">
-                    <img src="/test.png" alt="me" class="user-img" />
-                    <div>
-                        <p class="bold">Kai</p>
-                        <p>Admin</p>
-                    </div>
-                </div>
-                <ul>
-                    <li>
-                        <a class="ajax-nav" href="/Home/Index">
-                            <i class="ri-home-5-fill"></i>
-                            <span class="nav-item">Home</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="ajax-nav" href="/Inventory/Index">
-                            <i class="ri-clipboard-fill"></i>
-                            <span class="nav-item">Inventory</span>
-                        </a>
-                    </li>
+    <div class="sidebar">
+        <div class="top">
+            <div class="logo">
+                <i class="ri-unsplash-fill"></i>
+                <span>T-Stock</span>
+            </div>
+        </div>
+        <div class="user">
+            <img src="/test.png" alt="me" class="user-img" />
+            @{
+                string email = Context.Request.Cookies["User"] ?? "Guest";
+                string role = Context.Request.Cookies["Role"] ?? "No Role";
+                var displayName = email.Contains("@") ? email.Split('@')[0] : email;
+            }
+
+            <div class="user-info">
+                <p class="bold" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="@email">
+                    @displayName
+                </p>
+                <p>@role</p>
+            </div>
+        </div>
+        <ul>
             <li>
-                <a class="ajax-nav" href="/Inventory/Index">
-                    <i class="ri-archive-2-fill"></i>
-                    <span class="nav-item">Stock Management</span>
+                <a class="ajax-nav" href="/Home/Index">
+                    <i class="ri-home-5-fill"></i>
+                    <span class="nav-item">Home</span>
                 </a>
             </li>
-                    <li>
-                        <a href="#">
-                            <i class="ri-file-list-fill"></i>
-                            <span class="nav-item">Purchase <br /> Order</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-controller="Supplier" asp-action="Index">
-                            <i class="ri-caravan-fill"></i>
-                            <span class="nav-item">Supplier</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="ri-file-chart-fill"></i>
-                            <span class="nav-item">Reports</span>
-                        </a>
-                    </li>
-                </ul>
-                <a class="btnn" asp-action="Logout" asp-controller="Account">
-                <div class="logout">
-                    <i class="ri-shut-down-line"></i>
-                    <p>Logout</p>
-                </div>
+            <li>
+                <a class="ajax-nav" href="/Inventory/Create">
+                    <i class="ri-clipboard-line"></i>
+                    <span class="nav-item">Inventory</span>
                 </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="ri-file-list-fill"></i>
+                    <span class="nav-item">Purchase <br /> Order</span>
+                </a>
+            </li>
+            <li>
+                <a asp-controller="Supplier" asp-action="Index">
+                    <i class="ri-caravan-line"></i>
+                    <span class="nav-item">Supplier</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="ri-file-chart-fill"></i>
+                    <span class="nav-item">Reports</span>
+                </a>
+            </li>
+
+            @if (!string.IsNullOrEmpty(role) && role.ToLower() == "admin")
+            {
+                <li>
+                    <a class="ajax-nav" href="/Member/Index">
+                        <i class="ri-team-fill"></i>
+                        <span class="nav-item">Member</span>
+                    </a>
+                </li>
+            }
+        </ul>
+        <a class="" asp-action="Logout" asp-controller="Account">
+            <div class="logout">
+                <i class="ri-shut-down-line"></i>
+                <p>Logout</p>
             </div>
+        </a>
+    </div>
+
     <div id="ajax-content">
         @RenderBody()
     </div>
@@ -80,6 +93,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
