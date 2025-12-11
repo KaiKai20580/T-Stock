@@ -1,0 +1,22 @@
+﻿<form id="filterForm">
+    <input type="hidden" name="reportType" value="Exception" />
+
+    <label>Month</label>
+    <input type="month" name="startDate" />
+
+    <label>Category</label>
+    <select name="category">
+        <option value="">All</option>
+        <option>Food</option>
+        <option>Electronics</option>
+        <option>Clothing</option>
+    </select>
+
+    <label>Sort</label>
+    <select name="sort">
+        <option value="qty">By Quantity</option>
+        <option value="days">By Days</option>
+    </select>
+
+    <button type="button" onclick="previewReport()">Preview</button>
+</form>

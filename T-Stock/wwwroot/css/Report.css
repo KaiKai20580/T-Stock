@@ -1,0 +1,335 @@
+﻿.report-container {
+    margin-left: 110px;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.report-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.report-button-group button {
+    display: flex;
+    gap: 20px;
+    padding: 8px 16px;
+    margin-right: 10px;
+    border: 1px solid #0078ff;
+    background-color: #0078ff;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    .report-button-group button:hover {
+        background-color: #0056b3;
+    }
+
+.report-container {
+    display: flex;
+    gap: 20px;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+.left-nav {
+    width: 200px;
+    background: #f0f0f0;
+    padding: 15px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+    .left-nav h3 {
+        margin-bottom: 10px;
+    }
+
+    .left-nav button {
+        padding: 8px 12px;
+        border: 1px solid #0078ff;
+        background-color: #0078ff;
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .left-nav button:hover {
+            background-color: #0056b3;
+        }
+
+.right-panel {
+    flex: 1;
+}
+
+.report-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.filter-section {
+    background: #f7f7f7;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.filter-row {
+    display: flex;
+    gap: 20px;
+}
+
+    .filter-row div {
+        display: flex;
+        flex-direction: column;
+    }
+
+.preview-area {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    background: white;
+    min-height: 300px;
+}
+
+.filter-section {
+    background: #f7f7f7;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.filter-row {
+    display: flex;
+    gap: 20px;
+}
+
+    .filter-row div {
+        display: flex;
+        flex-direction: column;
+    }
+
+.preview-area {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    background: white;
+}
+/*=====================================Detail Report Css====================================*/
+
+.Dreport-header {
+    text-align: center;
+    position: relative;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #000;
+}
+
+.Dreport-logo {
+    font-size: 52px;
+    font-weight: bold;
+    color: #c00;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.Dreport-company {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.Dreport-address {
+    font-size: 13px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.Dreport-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 15px 0;
+}
+
+.Dreport-generated {
+    font-size: 14px;
+    color: #333;
+}
+
+.Dreport-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+    .Dreport-table th {
+        border-bottom: 2px solid #000;
+        padding: 10px 6px;
+        text-align: left;
+        font-weight: bold;
+        background: #fff;
+    }
+
+    .Dreport-table td {
+        padding: 8px 6px;
+        border-bottom: 1px solid #ccc;
+        vertical-align: top;
+    }
+
+.text-right {
+    text-align: right;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.font-bold {
+    font-weight: bold;
+}
+
+.text-red {
+    color: #c00;
+}
+
+.text-green {
+    color: #090;
+}
+
+.text-muted {
+    color: #666;
+}
+
+.status-inactive {
+    color: #c00;
+    font-weight: bold;
+}
+
+.Dreport-footer {
+    margin-top: 80px;
+    text-align: center;
+    color: #666;
+    font-size: 12px;
+}
+
+/* 打印优化 */
+@media print {
+    body {
+        margin: 15mm;
+    }
+
+    .report-header {
+        margin-bottom: 20mm;
+    }
+
+    .report-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+}
+
+/* Exception Report Styles */
+
+.ER-container {
+    width: 960px;
+    margin: 0 auto;
+    border: 4px solid black;
+    padding: 30px;
+    background: white;
+}
+
+.ER-title {
+}
+
+.ER-page {
+    text-align: right;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.ER-h1 {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    margin: 0 0 8px 0;
+    text-transform: uppercase;
+}
+
+.ER-date {
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+}
+
+.ER-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border: 2px solid black;
+}
+
+    .ER-table th, .ER-table td {
+        border: 1px solid black;
+        padding: 8px 10px;
+        text-align: left;
+    }
+
+    .ER-table th {
+        background: black;
+        color: white;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+.ER-right {
+    text-align: right;
+}
+
+.ER-double {
+    border-top: 4px double black !important;
+}
+
+.ER-thick {
+    border-top: 6px double black !important;
+}
+
+.ER-total-row {
+    font-weight: bold;
+    background: #e0e0e0 !important;
+    font-size: 14px;
+}
+
+.ER-grand-total {
+    font-weight: bold;
+    font-size: 16px;
+    background: #d0d0d0 !important;
+}
+
+.ER-footer {
+    margin-top: 60px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* Print Style */
+@media print {
+    body {
+        margin: 15mm;
+    }
+
+    .ER-container {
+        border: 4px solid black;
+    }
+}
