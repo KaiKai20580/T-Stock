@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "Reports";
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<link rel="stylesheet" href="~/css/report.css" />
+
+<div class="report-container">
+
+    <div class="left-nav">
+        <h3>Report Types</h3>
+        <button onclick="setReport('Summary')">Summary Report</button>
+        <button onclick="setReport('Exception')">Exception Report</button>
+        <button onclick="setReport('Detail')">Detail Report</button>
+        <button onclick="setReport('Supplier')">Supplier Report</button>
+    </div>
+
+    <div class="right-panel">
+        <h2 class="report-title">Reports</h2>
+
+        <!-- 动态 Filter UI -->
+        <div class="filter-section" id="filterContainer"></div>
+
+        <!-- 报表预览 -->
+        <div id="reportPreview" class="preview-area"></div>
+    </div>
+</div>
+
+<script>
+
+    // 切换报表类型 -> 加载不同 filter UI
+    function setReport(type) {
+        $.get("/Report/FilterUI?reportType=" + type, function (ui) {
+            $("#filterContainer").html(ui);
+        });
+    }
+
+    // previewReport 会由每个 Filter 的按钮触发
+    function previewReport() {
+        $.get("/Report/Preview", $("#filterForm").serialize(), function (data) {
+            $("#reportPreview").html(data);
+        });
+    }
+
+    // 页面加载时默认 Summary filter
+    $(document).ready(function () {
+        setReport("Summary");
+    });
+</script>

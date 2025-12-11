@@ -1,0 +1,38 @@
+﻿@model List<T_Stock.Models.Supplier>  
+
+<h3>Supplier Detail Report</h3>
+
+@if (Model == null || !Model.Any())
+{
+    <p>No Data</p>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Supplier ID</th>
+                <th>Company</th>
+                <th>Contact Person</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Address</th>
+                <th>Last Updated</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var s in Model)
+            {
+                <tr>
+                    <td>@s.SupplierID</td>
+                    <td>@s.Company</td>
+                    <td>@s.ContactPerson</td>
+                    <td>@s.Email</td>
+                    <td>@s.PhoneNumber</td>
+                    <td>@s.Address</td>
+                    <td>@(s.LastUpdated?.ToString("yyyy-MM-dd HH:mm"))</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
