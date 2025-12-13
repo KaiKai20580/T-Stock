@@ -28,11 +28,14 @@ $(document).on("click", ".ajax-nav", function (e) {
     });
 });
 
+//Test
+
+
 
 // AJAX for button
 $(document).on("click", ".ajax-button", function (e) {
     e.preventDefault();
-    var form = $(this).closest("form");
+    let form = $(this).closest("form");
 
     $.ajax({
         url: form.attr("action"),
@@ -70,6 +73,10 @@ function addRow() {
 }
 
 function removeRow(btn) {
+    const row = btn.closest("tr");
+    const table = document.getElementById("item-rows");
+
+    if (row === table.querySelector("tr:first-child")) return;
     btn.closest("tr").remove();
 }
 

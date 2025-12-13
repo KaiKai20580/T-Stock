@@ -15,9 +15,9 @@ namespace T_Stock.Controllers
 
         public IActionResult Index()
         {
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            if (Request.Headers.XRequestedWith == "XMLHttpRequest")
             {
-                return PartialView("_IndexPartial", _db.InventoryCollection.Find(_ => true).ToList());
+                return PartialView("Index", _db.InventoryCollection.Find(_ => true).ToList());
             }
 
             var items = _db.InventoryCollection.Find(_ => true).ToList();
@@ -30,9 +30,9 @@ namespace T_Stock.Controllers
             var vm = new InventoryListVM();
             vm.Items.Add(new Inventory());
 
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            if (Request.Headers.XRequestedWith == "XMLHttpRequest")
             {
-                return PartialView("_CreatePartial", vm);
+                return PartialView("Create", vm);
             }
 
             return View(vm);
@@ -44,10 +44,10 @@ namespace T_Stock.Controllers
             if (!ModelState.IsValid)
             {
                 if (model.Items == null || model.Items.Count == 0)
-                    model.Items.Add(new Inventory());
+                    model.Items?.Add(new Inventory());
 
-                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-                    return PartialView("_CreatePartial", model);
+                if (Request.Headers.XRequestedWith == "XMLHttpRequest")
+                    return PartialView("Create", model);
 
                 return View(model);
             }
@@ -56,7 +56,7 @@ namespace T_Stock.Controllers
             {
                 _db.InventoryCollection.InsertMany(model.Items);
 
-                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                if (Request.Headers.XRequestedWith == "XMLHttpRequest")
                     return Json(new { success = true });
 
                 return RedirectToAction("Index");
@@ -65,8 +65,8 @@ namespace T_Stock.Controllers
             {
                 ViewBag.Error = ex.Message;
 
-                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-                    return PartialView("_CreatePartial", model);
+                if (Request.Headers.XRequestedWith == "XMLHttpRequest")
+                    return PartialView("Create", model);
 
                 return View(model);
             }

@@ -86,7 +86,7 @@
     display: flex;
     height: 50px;
     width: 100%;
-    transform: translateX(25%);
+    transform: translateX(18%);
     align-items: center;
     opacity: 1;
     transition: all 0.3s ease;
@@ -168,7 +168,7 @@
 }
 
 .sidebar ul li a i {
-    min-width: 50px;
+    min-width: 40px;
     text-align: center;
     font-size: 1.5rem;
     position: relative;
@@ -423,14 +423,21 @@
     padding: 5px;
 }
 
+.btnn {
+    text-decoration: none;
+}
+
 .logout {
     display: flex;
     gap: 10px;
     color: red;
-    transform: translate(27px, 60px);
+    transform: translate(18px, 60px);
     cursor: pointer;
 }
 
+.logout p {
+    transform: translateY(6px);
+}
 
 .purchase-order {
     background-color: lightgray;
@@ -528,7 +535,7 @@ body,
     top: 0;
     left: 0px;
     transition: all 0.5s ease;
-    width: calc(100% - 1000px);
+    width: calc(100% - 700px);
 }
 
 .CREATE h2 {
@@ -536,7 +543,7 @@ body,
 }
 
 .CREATE table {
-    width: 500px;
+    width: 800px;
 }
 
 .CREATE .form-group {
@@ -575,7 +582,7 @@ body,
     top: 0;
     left: 0px;
     transition: all 0.5s ease;
-    width: calc(100% - 1000px);
+    width: calc(100% - 700px);
 }
 
 
@@ -705,6 +712,8 @@ body.dark-mode .theme-toggle {
     background: #30343a;
 }
 
+<<<<<<< HEAD
+=======
 /*KW CSS*/
 div.supplierPage {
     margin-left: 100px;

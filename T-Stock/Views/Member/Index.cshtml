@@ -1,0 +1,362 @@
+﻿@model IEnumerable<T_Stock.Models.User>
+
+@{
+    bool isAjax = Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+    Layout = isAjax ? null : "_Layout";
+    ViewData["Title"] = "Member List";
+}
+
+@{
+    var successMessage = TempData["SuccessMessage"] as string;
+    var errorMessage = TempData["ErrorMessage"] as string;
+}
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert"
+         id="alert-message"
+         style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+                    z-index: 1050; min-width: 250px; text-align: center;">
+        @successMessage
+    </div>
+}
+else if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert"
+         id="alert-message"
+         style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+                    z-index: 1050; min-width: 250px; text-align: center;">
+        @errorMessage
+    </div>
+}
+
+<script>
+    setTimeout(function () {
+        var alert = document.getElementById('alert-message');
+        if(alert){
+            alert.classList.remove('show');
+            alert.classList.add('hide');
+            setTimeout(() => alert.remove(), 500);
+        }
+    }, 1500);
+</script>
+
+<style>
+    
+    .sidebar:hover ~ #ajax-content .m-container {
+        margin-left: 240px;
+        transition: all 0.5s ease;
+        width: calc(100% - 320px);
+    }
+
+    .m-container {
+        width: calc(100% - 200px);
+        margin-left: 120px;
+        margin-top: 20px;
+        transition: all 0.5s ease;
+    }
+
+    .custom-table thead {
+        background-color: #212529;
+        color: black;
+    }
+
+    .custom-table th {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        padding: 15px;
+        background-color: lightgrey;
+        color: black;
+        border-right: 1px solid #4d5154;
+        border-bottom: 1px solid #4d5154;
+    }
+
+    .custom-table td {
+        padding: 15px;
+        vertical-align: middle;
+        color: #333;
+        border-right: 1px solid #888;
+        border-bottom: 1px solid #888;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .custom-table tbody tr:nth-child(odd) {
+        background-color: #ffffff;
+    }
+
+    .custom-table tbody tr:nth-child(even) {
+        background-color: #e2e3e5;
+    }
+
+    .custom-table th:last-child,
+    .custom-table td:last-child {
+        border-right: none;
+    }
+
+    .custom-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .custom-table tbody tr {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .custom-table tbody tr:hover {
+            transform: translateY(-5px); 
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); 
+            background-color: #f1f5f9 !important; 
+            cursor: pointer;
+        }
+
+            .custom-table tbody tr:hover td {
+                background-color: transparent !important;
+                color: #000;
+            }
+
+
+    .btn-action {
+        width: 35px;
+        height: 35px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+    }
+
+    .col-number {
+        font-weight: bold;
+        color: #555;
+        width: 60px;
+        text-align: center;
+    }
+
+    .custom-table {
+        width: 100%;
+    }
+
+    body.dark-mode .m-word h2 {
+        color: white;
+    }
+
+    .m-word h2 {
+        color: black;
+        font-weight: bold;
+    }
+
+    body.dark-mode div.mb-3 label.form-label {
+        color: black;
+        font-weight: bold;
+    }
+
+    
+    .modal {
+        z-index: 1055;
+    }
+
+    .modal-backdrop {
+        z-index: 1050;
+    }
+
+    
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #4e73df, #1cc88a);
+    }
+
+    
+    .modal-body .form-control,
+    .modal-body .form-select {
+        box-shadow: none;
+        font-size: 0.95rem;
+        padding: 10px 15px;
+    }
+
+    .modal-body .form-label {
+        font-size: 0.9rem;
+        color: #333;
+    }
+
+    
+    .modal-footer .btn {
+        min-width: 100px;
+    }
+
+    .modal-content {
+        overflow: hidden;
+        border-radius: 1rem;
+    }
+
+    
+    .modal-footer .btn-primary:hover {
+        background-color: #198754;
+        border-color: #198754;
+    }
+
+    .rounded-top-4 {
+        border-top-left-radius: 1rem !important;
+        border-top-right-radius: 1rem !important;
+    }
+
+    .rounded-4 {
+        border-radius: 1rem !important;
+    }
+
+    .rounded-pill {
+        border-radius: 50rem !important;
+    }
+</style>
+
+<div class="m-container">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="m-word">
+            <h2>Member List</h2>
+        </div>
+        <button class="btn btn-primary shadow-sm">
+            <i class="ri-user-add-line me-1"></i> Register
+        </button>
+    </div>
+
+    <!-- Search + Role Filter Form -->
+    <div class="d-flex justify-content-center my-4">
+        <form method="get" asp-action="Index" class="d-flex" style="max-width: 400px; width: 100%;">
+            <input type="text" name="searchTerm" class="form-control" placeholder="Search by email..."
+                   value="@(ViewBag.SearchTerm ?? "")" />
+            <button type="submit" class="btn btn-primary ms-2">Search</button>
+        </form>
+    </div>
+
+    <form method="get" asp-action="Index" class="mb-3" style="max-width: 300px;">
+        <div class="input-group">
+            <select name="roleFilter" class="form-select" onchange="this.form.submit()">
+                <option value="">All Roles</option>
+                <option value="admin" selected="@(ViewBag.RoleFilter == "admin" ? "selected" : null)">Admin</option>
+                <option value="staff" selected="@(ViewBag.RoleFilter == "staff" ? "selected" : null)">Staff</option>
+                <option value="supplier" selected="@(ViewBag.RoleFilter == "supplier" ? "selected" : null)">Supplier</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+    </form>
+
+    <!-- Member Table -->
+    <table class="custom-table">
+        <thead>
+            <tr>
+                <th class="col-number">No.</th>
+                <th>User Email</th>
+                <th>Role</th>
+                <th class="text-center" style="width:150px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int rowNo = 1;
+            }
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td class="col-number">@(rowNo++)</td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="rounded-circle bg-light text-primary d-flex align-items-center justify-content-center"
+                                 style="width: 40px; height: 40px; font-weight:bold; border: 1px solid #888;">
+                                @user.Email.Substring(0, 1).ToUpper()
+                            </div>
+                            @user.Email
+                        </div>
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(user.Role))
+                        {
+                            var role = user.Role.Trim().ToLower();
+
+                            if (role == "admin")
+                            {
+                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill">@user.Role</span>
+                            }
+                            else if (role == "staff")
+                            {
+                                <span class="badge rounded-pill" style="background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb;">@user.Role</span>
+                            }
+                            else
+                            {
+                                <span class="badge rounded-pill" style="background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba;">@user.Role</span>
+                            }
+                        }
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-action btn-outline-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#editModal"
+                                data-id="@user.Id"
+                                data-email="@user.Email"
+                                data-role="@user.Role">
+                            <i class="ri-edit-line"></i>
+                        </button>
+
+                        <form asp-controller="Member"
+                              asp-action="Delete"
+                              asp-route-id="@user.Id"
+                              method="post"
+                              style="display:inline-block;"
+                              onsubmit="return confirm('WARNING: Are you sure you want to delete this member? This action cannot be undone.');">
+                            <button type="submit" class="btn btn-action btn-outline-danger">
+                                <i class="ri-delete-bin-line"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Edit Modal moved OUTSIDE of .m-container -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content shadow-lg rounded-4">
+            <div class="modal-header bg-gradient-primary text-white rounded-top-4">
+                <h5 class="modal-title">Edit Member</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-controller="Member" asp-action="Edit" method="post">
+                <div class="modal-body p-4 bg-light">
+                    <input type="hidden" name="Id" id="modalId">
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">User Email</label>
+                        <input type="email" class="form-control rounded-pill border-primary" name="Email" id="modalEmail" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Role</label>
+                        <select class="form-select rounded-pill border-primary" name="Role" id="modalRole">
+                            <option value="Admin">Admin</option>
+                            <option value="Staff">Staff</option>
+                            <option value="Supplier">Supplier</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-footer justify-content-between px-4 pb-4">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    var editModal = document.getElementById('editModal');
+    editModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var id = button.getAttribute('data-id');
+        var email = button.getAttribute('data-email');
+        var role = button.getAttribute('data-role');
+        editModal.querySelector('#modalId').value = id;
+        editModal.querySelector('#modalEmail').value = email;
+        editModal.querySelector('#modalRole').value = role;
+    });
+</script>
