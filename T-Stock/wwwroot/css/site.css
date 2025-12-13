@@ -790,6 +790,30 @@ div.supplierAdd:hover {
         margin: 0;
     }
 
+div.poAdd {
+    margin-top: 40px;
+    display: flex;
+    border: 2px solid black;
+    border-radius: 15px;
+    background-color: limegreen;
+    box-shadow: rgba(0,0,0,0.1) -3px 2px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+    div.poAdd:hover {
+        transform: translateY(-5px);
+        transition: all 0.3s ease;
+        background-color: green;
+        color: whitesmoke;
+    }
+
+    div.poAdd h3 {
+        font-size: 20px;
+        padding: 6px;
+        margin: 0;
+    }
+
 div.supplierManage,div.pagination{
     padding:20px;
 }
@@ -833,6 +857,11 @@ th, td {
 
 tr:hover {
     background-color: lightgrey;
+}
+
+tfoot td {
+    border-top: 2px solid grey;
+    font-weight: 800;
 }
 
 div.pagination button {
@@ -906,6 +935,90 @@ div.modal-content h3 {
     margin-top:50px;
 }
 
+/* PO Background overlay */
+.poModal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(6px);
+}
+
+/* PO Popup box */
+.poModal-content {
+    background-color: #e8e8e8;
+    height: min-content;
+    max-height: 80%;
+    width: 80%;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 10px;
+    position: sticky;
+    overflow: scroll;
+    scrollbar-color: gray #e8e8e8;
+}
+
+div.poModal-content h2 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 50px;
+}
+
+div.poModal-content h3 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 40px;
+    margin-top: 50px;
+}
+
+div.poEditHead {
+    display: flex;
+    justify-content: space-between;
+}
+
+div.poStatus {
+    display: flex;
+
+    h5 {
+        margin-top:3%;
+        margin-right: 20px;
+        font-weight: 600;
+        font-size: 1.7rem;
+    }
+
+    select {
+        border-radius: 15px;
+        padding: 7px;
+        margin-right: 20px;
+        width: 200px;
+        height: 50px;
+        font-weight: 700;
+        font-size: 1.3rem;
+    }
+}
+
+div.remarksContainer {
+    display: block;
+
+    h5 {
+        margin-top: 3%;
+        margin-right: 20px;
+        font-weight: 600;
+        font-size: 1.7rem;
+    }
+
+    textarea {
+        width:50%;
+        padding: 7px;
+        margin-right: 40px;
+        background-color: white;
+        border-radius: 12px;
+    }
+}
 
 div.supplierDetail label {
     font-size: 1.3rem;
@@ -918,6 +1031,17 @@ div.supplierDetail input {
     border-width: 0;
     height: 50px;
     font-weight: 500;
+    font-size: 1.3rem;
+}
+
+div.dateFilters input {
+    border-radius: 15px;
+    border-width: 0.5px;
+    padding: 7px;
+    margin-right: 20px;
+    width: 200px;
+    height: 50px;
+    font-weight: 700;
     font-size: 1.3rem;
 }
 
@@ -983,6 +1107,54 @@ button.removeProductBtn {
                 color: #ef0000;
             }
 
+div.poProductRow {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+    div.poProductRow select {
+        border-radius: 12px;
+        border-width: 0;
+        padding: 7px;
+        margin-right: 40px;
+        height: 50px;
+        font-weight: 700;
+        font-size: 1.3rem;
+    }
+
+    div.poProductRow h4 {
+        margin-top: 100%;
+        font-weight: 600;
+    }
+
+div.itemNum {
+    margin-right: 2%;
+}
+
+button.removePOProductBtn {
+    margin-left: 5%;
+    border: none;
+    background: none;
+    padding-top: 20px;
+    transition: all 0.2s ease;
+}
+
+    button.removePOProductBtn:hover {
+        transform: translateY(-3px);
+        transition: all 0.2s ease;
+    }
+
+
+    button.removePOProductBtn i {
+        font-size: 3rem;
+        color: red;
+        cursor: pointer;
+        padding-top: 15px;
+    }
+
+        button.removePOProductBtn i:hover {
+            color: #ef0000;
+        }
 
         div.supplierDetail button.addProductBtn:hover {
             background-color: greenyellow;
@@ -1056,3 +1228,25 @@ button.removeProductBtn {
             padding: 8px;
             margin-bottom: 12px;
         }
+
+div input.quantity {
+    padding: 7px;
+    margin-right: 40px;
+    background-color: white;
+    border-radius: 12px;
+}
+
+div input.unitPrice {
+    padding: 7px;
+    margin-right: 40px;
+    background-color: white;
+    border-radius: 12px;
+}
+
+div input.rowTotal {
+    padding: 7px;
+    margin-right: 40px;
+    background-color: white;
+    border-radius: 12px;
+}
+

@@ -8,6 +8,8 @@ namespace T_Stock.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
+        [BsonElement("UserID")]
+        public string? UserId { get; set; }
         [BsonElement("username")]
         public string? Username { get; set; }
         [BsonElement("password")]

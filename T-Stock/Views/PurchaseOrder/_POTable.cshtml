@@ -1,0 +1,89 @@
+﻿@model IPagedResult<T_Stock.Models.PurchaseOrder>
+
+<table>
+    <thead>
+        <tr>
+            <th>PO ID</th>
+            <th>Supplier ID</th>
+            <th>Created By</th>
+            <th>Status</th>
+            <th>Created On</th>
+            <th>Last Updated</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var po in Model.Items)
+        {
+            <tr>
+                <td>@po.PO_Id</td>
+                <td>@po.SupplierId</td>
+                <td>@po.UserId</td>
+                <td>@po.Status</td>
+                <td>@po.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td>@po.LastUpdated.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td><a class="editPOBtn" data-id="@po.PO_Id"><i class="ri-edit-line"></i></a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    int current = Model.Page;
+    int total = Model.TotalPages;
+
+    int start = Math.Max(1, current - 1);
+    int end = Math.Min(total, start + 2);
+    if (end - start < 2)
+    {
+        start = Math.Max(1, end - 2);
+    }
+}
+<div class="pagination">
+
+    <!-- First -->
+    <button onclick="loadPO(1)" @(Model.Page == 1 ? "disabled" : "")>
+        First
+    </button>
+
+    <!-- Prev -->
+    <button onclick="loadPO(@(Math.Max(1, Model.Page - 1)))" @(Model.Page == 1 ? "disabled" : "")>
+        &lt; Prev
+    </button>
+
+    <!-- Middle 3 numbers -->
+    @for (int i = start; i <= end; i++)
+    {
+        <button name="numbers" onclick="loadPO(@i)"
+                class="@(i == Model.Page ? "active" : "")"
+                @(i == Model.Page ? "disabled" : null)>
+            @i
+        </button>
+    }
+
+    <!-- If there are pages between end and last, show ellipsis + last page -->
+    @if (end < total - 1)
+    {
+        <span class="dots">. . .</span>
+        <button name="numbers" onclick="loadPO(@total)" @(total == Model.Page ? "disabled" : "")>
+            @total
+        </button>
+    }
+    else if (end == total - 1 && total > end)
+    {
+        <button name="numbers" onclick="loadPO(@total)" @(total == Model.Page ? "disabled" : null)>
+            @total
+        </button>
+    }
+
+    <!-- Next -->
+    <button onclick="loadPO(@(Math.Min(total, Model.Page + 1)))" @(Model.Page == total ? "disabled" : null)>
+        Next &gt;
+    </button>
+
+    <!-- Last -->
+    <button onclick="loadPO(@total)" @(Model.Page == total ? "disabled" : null)>
+        Last
+    </button>
+</div>
+

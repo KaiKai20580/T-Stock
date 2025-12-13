@@ -1,0 +1,118 @@
+﻿@model T_Stock.Models.PurchaseOrderViewModel
+<input type="hidden" id="loadedProductMap" value='@Html.Raw(ViewBag.ProductSupplierMap ?? "[]")' />
+
+<form asp-action="UpdatePO" asp-controller="PurchaseOrder" method="post" id="editPOForm">
+<input type="hidden" value="@Model.PO_Id" asp-for="PO_Id"/>
+<div class="poEditHead">
+    <h2>@Model.PO_Id</h2>
+    <div class="poStatus">
+    <h5>Status: </h5>
+    <select asp-for="Status" id="statusDropdown">
+                @if (ViewBag.Status == "Pending")
+                        {
+                            <option value="Pending" selected>Pending</option>
+                            <option value="Cancelled">Cancelled</option>
+                        }
+                else if (ViewBag.Status == "Cancelled")
+                        {
+                            <option value="Cancelled" selected>Cancelled</option>
+                }
+                else if (ViewBag.Status == "Completed")
+                        {
+                            <option value="Completed" selected>Completed</option>
+                }
+                else if (ViewBag.Status == "Accepted")
+                        {
+                            <option value="Accepted" selected>Accepted</option>
+                            <option value="Completed" >Completed</option>
+                }
+                else if (ViewBag.Status == "Rejected")
+                        {
+                            <option value="Rejected" selected>Rejected</option>
+                }
+                else if (ViewBag.Status == "InDelivery")
+                        {
+                            <option value="InDelivery" selected>In Delivery</option>
+                            <option value="Completed">Completed</option>
+                }
+    </select>
+    </div>
+</div>
+
+    <div id="remarksContainer" class="remarksContainer">
+        <h5>Remarks</h5>
+        <textarea asp-for="Remarks" id="poRemarks" rows="3" placeholder="Please enter the reason here..."></textarea>
+    </div>
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="supplierDetail">
+        <h3>Supplier Company: @ViewBag.SupplierName</h3>
+
+        <table>
+            <thead>
+                <tr>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Unit Price (RM)</th>
+                <th>Total Price (RM)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var item in Model.POProductItems)
+                    {
+                    <tr>
+                        <td>@item.ProductName</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.UnitPrice.ToString("F2")</td>
+                        <td>@item.TotalPrice.ToString("F2")</td>
+                    </tr>
+                    }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>Grand Total:</td>
+                    <td>@Model.POProductItems.Sum(x => (x.UnitPrice) * x.Quantity).ToString("F2")</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="decisionBtn">
+        <button type="button" class="cancelBtn">Cancel</button>
+        <button type="submit" class="saveBtn">Save Changes</button>
+    </div>
+</form>
+
+<script>
+
+$(document).ready(function() {
+        const $dropdown = $('#statusDropdown');
+        const $remarksContainer = $('#remarksContainer');
+        const $remarksInput = $('#poRemarks');
+        const $errorMsg = $('#remarksError');
+
+        function toggleRemarks() {
+            const status = $dropdown.val();
+
+            // Check if the selected status requires remarks
+            if (status === 'Cancelled' || status === 'Rejected') {
+                $remarksContainer.slideDown();      // Show section
+                $remarksInput.prop('required', true);
+            } else {
+                $remarksContainer.slideUp();        // Hide section
+                $remarksInput.prop('required', false); // Remove requirement
+                $errorMsg.hide(); // Hide any error text
+            }
+        }
+
+        // Run immediately (in case page loads with Cancelled status)
+        toggleRemarks();
+
+        // Run whenever the dropdown changes
+        $dropdown.on('change', toggleRemarks);
+
+    });
+</script>
