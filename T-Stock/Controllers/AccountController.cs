@@ -62,6 +62,11 @@ namespace T_Stock.Controllers
                 Expires = DateTimeOffset.UtcNow.AddHours(3)
             });
 
+            Response.Cookies.Append("UID", user.UserId, new CookieOptions
+            {
+                Expires = DateTimeOffset.UtcNow.AddHours(3)
+            });
+
             return RedirectToAction("Index", "Home");
         }
 
@@ -244,6 +249,7 @@ namespace T_Stock.Controllers
         {
             Response.Cookies.Delete("User");
             Response.Cookies.Delete("Role");
+            Response.Cookies.Delete("UID");
             return RedirectToAction("Login");
         }
     }

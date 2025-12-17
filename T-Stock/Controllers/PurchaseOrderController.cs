@@ -51,13 +51,13 @@ namespace T_Stock.Controllers
                 {
                     // Append the SupplierId filter using AND (&)
                     // This ensures they ONLY see their own rows, even if they try to search for others
-                    filter &= Builders<PurchaseOrder>.Filter.Eq(p => p.SupplierId, currentUser.SupplierId);
+                    filter &= Builders<PurchaseOrder>.Filter.Eq(p => p.SupplierID, currentUser.SupplierId);
                 }
                 else
                 {
                     // Edge Case: User is a "Supplier" but has no mapped SupplierId in DB.
                     // Force the query to return nothing for security.
-                    filter &= Builders<PurchaseOrder>.Filter.Eq(p => p.PO_Id, "RESTRICTED_ACCESS");
+                    filter &= Builders<PurchaseOrder>.Filter.Eq(p => p.PO_ID, "RESTRICTED_ACCESS");
                 }
 
             }
@@ -102,12 +102,12 @@ namespace T_Stock.Controllers
                 var sortBuilder = Builders<PurchaseOrder>.Sort;
                 SortDefinition<PurchaseOrder> sortDef = q.Sort switch
                 {
-                    "poId" => q.Desc ? sortBuilder.Descending(p => p.PO_Id) : sortBuilder.Ascending(p => p.PO_Id),
-                    "supplierId" => q.Desc ? sortBuilder.Descending(p => p.SupplierId) : sortBuilder.Ascending(p => p.SupplierId),
+                    "poId" => q.Desc ? sortBuilder.Descending(p => p.PO_ID) : sortBuilder.Ascending(p => p.PO_ID),
+                    "supplierId" => q.Desc ? sortBuilder.Descending(p => p.SupplierID) : sortBuilder.Ascending(p => p.SupplierID),
                     "status" => q.Desc ? sortBuilder.Descending(p => p.Status) : sortBuilder.Ascending(p => p.Status),
                     "created" => q.Desc ? sortBuilder.Descending(p => p.CreatedDate) : sortBuilder.Ascending(p => p.CreatedDate),
                     "lastUpdate" => q.Desc ? sortBuilder.Descending(p => p.LastUpdated) : sortBuilder.Ascending(p => p.LastUpdated),
-                    _ => sortBuilder.Ascending(p => p.PO_Id)
+                    _ => sortBuilder.Ascending(p => p.PO_ID)
                 };
 
                 // 4) Paging via MongoPagingService
@@ -154,7 +154,7 @@ namespace T_Stock.Controllers
         public async Task<IActionResult> AddPO(PurchaseOrderViewModel model)
         {
 
-            ModelState.Remove("PO_Id"); 
+            ModelState.Remove("PO_ID"); 
             ModelState.Remove("Status");
 
             // Basic Validation
@@ -165,25 +165,26 @@ namespace T_Stock.Controllers
 
             if (!ModelState.IsValid)
             {
+                ModelState.AddModelError("", "Invalid field entered, failed to create purchase order.");
                 return PartialView("_AddPOForm", model);
             }
 
-            // Identify the Current User
-            string currentUserId = User.Identity?.Name ?? "U0001";
+            // Identify the Current
+            var currentUserId = Request.Cookies["UID"];
 
             var lastPO = await _purchaseOrder
             .Find(_ => true) // Find ALL
-            .SortByDescending(p => p.PO_Id) // Sort Z -> A (e.g., PR0002 before PR0001)
+            .SortByDescending(p => p.PO_ID) // Sort Z -> A (e.g., PR0002 before PR0001)
             .Limit(1)
             .FirstOrDefaultAsync();
 
             int nextSeq = 1; // Default if DB is empty
 
-            if (lastPO != null && !string.IsNullOrEmpty(lastPO.PO_Id))
+            if (lastPO != null && !string.IsNullOrEmpty(lastPO.PO_ID))
             {
                 // Remove "PR" prefix and parse the number
                 // Example: "PR0005" -> "0005" -> 5
-                string numericPart = lastPO.PO_Id.Substring(2);
+                string numericPart = lastPO.PO_ID.Substring(2);
                 if (int.TryParse(numericPart, out int lastNumber))
                 {
                     nextSeq = lastNumber + 1;
@@ -196,7 +197,7 @@ namespace T_Stock.Controllers
             // Loop through each group and create a PO
             var supplierGroups = model.POProductItems
             .Where(p => !string.IsNullOrEmpty(p.ProductId) && p.Quantity > 0)
-            .GroupBy(x => x.SupplierId)
+            .GroupBy(x => x.SupplierID)
             .ToList();
 
             foreach (var group in supplierGroups)
@@ -207,9 +208,9 @@ namespace T_Stock.Controllers
                 // Create Header
                 var order = new PurchaseOrder
                 {
-                    PO_Id = currentPoId,
-                    SupplierId = group.Key,        
-                    UserId = currentUserId,        
+                    PO_ID = currentPoId,
+                    SupplierID = group.Key,        
+                    UserID = currentUserId,        
                     Status = "Pending",            
                     CreatedDate = DateTime.Now,
                     LastUpdated = DateTime.Now,
@@ -222,9 +223,9 @@ namespace T_Stock.Controllers
                 {
                     newOrderItems.Add(new PurchaseOrderItem
                     {
-                        PO_Id = currentPoId,
+                        PO_ID = currentPoId,
                         ProductId = item.ProductId,
-                        Quantity = item.Quantity, 
+                        QuantityOrdered = item.Quantity, 
                         UnitPrice = item.UnitPrice,
                         TotalPrice = (item.UnitPrice) * item.Quantity
                     });
@@ -245,8 +246,8 @@ namespace T_Stock.Controllers
         [HttpGet]
         public async Task<IActionResult> EditPO(string poId)
         {
-            var po = await _purchaseOrder.Find(p => p.PO_Id == poId).FirstOrDefaultAsync();
-            var items = await _purchaseOrderItems.Find(p => p.PO_Id == poId).ToListAsync();
+            var po = await _purchaseOrder.Find(p => p.PO_ID == poId).FirstOrDefaultAsync();
+            var items = await _purchaseOrderItems.Find(p => p.PO_ID == poId).ToListAsync();
             var userRole = Request.Cookies["Role"];
             ViewBag.Role = userRole;
             ViewBag.Status = po.Status;
@@ -254,17 +255,17 @@ namespace T_Stock.Controllers
             // Fetch suppliers so we can look up names
             var allSuppliers = await _suppliers.Find(_ => true).ToListAsync();
             var allProducts = await _products.Find(_ => true).ToListAsync();
-            ViewBag.SupplierName = allSuppliers.FirstOrDefault(s => s.SupplierId == po.SupplierId)?.Company ?? "Unknown";
+            ViewBag.SupplierName = allSuppliers.FirstOrDefault(s => s.SupplierId == po.SupplierID)?.Company ?? "Unknown";
 
             var model = new PurchaseOrderViewModel
             {
-                PO_Id = po.PO_Id,
+                PO_ID = po.PO_ID,
                 Status = po.Status,
                 Remarks = po.Remarks,
                 POProductItems = items.Select(i => new POItemViewModel
                 {
                     ProductName = allProducts.FirstOrDefault(p => p.ProductId == i.ProductId)?.ProductName ?? "Unknown Product",
-                    Quantity = i.Quantity,
+                    Quantity = i.QuantityOrdered,
                     UnitPrice = i.UnitPrice,
                     TotalPrice = i.TotalPrice
                 }).ToList()
@@ -280,8 +281,8 @@ namespace T_Stock.Controllers
             if ((model.Status == "Cancelled" || model.Status == "Rejected") && (string.IsNullOrWhiteSpace(model.Remarks) || model.Remarks.Trim() == "NULL"))
             {
                 // Fetch the original Header
-                var originalPO = await _purchaseOrder.Find(p => p.PO_Id == model.PO_Id).FirstOrDefaultAsync();
-                var items = await _purchaseOrderItems.Find(p => p.PO_Id == model.PO_Id).ToListAsync();
+                var originalPO = await _purchaseOrder.Find(p => p.PO_ID == model.PO_ID).FirstOrDefaultAsync();
+                var items = await _purchaseOrderItems.Find(p => p.PO_ID == model.PO_ID).ToListAsync();
 
                 if (originalPO != null)
                 {
@@ -290,17 +291,17 @@ namespace T_Stock.Controllers
                     // Fetch suppliers so we can look up names
                     var allSuppliers = await _suppliers.Find(_ => true).ToListAsync();
                     var allProducts = await _products.Find(_ => true).ToListAsync();
-                    ViewBag.SupplierName = allSuppliers.FirstOrDefault(s => s.SupplierId == originalPO.SupplierId)?.Company ?? "Unknown";
+                    ViewBag.SupplierName = allSuppliers.FirstOrDefault(s => s.SupplierId == originalPO.SupplierID)?.Company ?? "Unknown";
 
                     model = new PurchaseOrderViewModel
                     {
-                        PO_Id = originalPO.PO_Id,
+                        PO_ID = originalPO.PO_ID,
                         Status = originalPO.Status,
                         Remarks = originalPO.Remarks,
                         POProductItems = items.Select(i => new POItemViewModel
                         {
                             ProductName = allProducts.FirstOrDefault(p => p.ProductId == i.ProductId)?.ProductName ?? "Unknown Product",
-                            Quantity = i.Quantity,
+                            Quantity = i.QuantityOrdered,
                             UnitPrice = i.UnitPrice,
                             TotalPrice = i.TotalPrice
                         }).ToList()
@@ -317,8 +318,8 @@ namespace T_Stock.Controllers
             if (!ModelState.IsValid)
             {
                 // Fetch the original Header
-                var originalPO = await _purchaseOrder.Find(p => p.PO_Id == model.PO_Id).FirstOrDefaultAsync();
-                var items = await _purchaseOrderItems.Find(p => p.PO_Id == model.PO_Id).ToListAsync();
+                var originalPO = await _purchaseOrder.Find(p => p.PO_ID == model.PO_ID).FirstOrDefaultAsync();
+                var items = await _purchaseOrderItems.Find(p => p.PO_ID == model.PO_ID).ToListAsync();
 
                 if (originalPO != null)
                 {
@@ -327,17 +328,17 @@ namespace T_Stock.Controllers
                     // Fetch suppliers so we can look up names
                     var allSuppliers = await _suppliers.Find(_ => true).ToListAsync();
                     var allProducts = await _products.Find(_ => true).ToListAsync();
-                    ViewBag.SupplierName = allSuppliers.FirstOrDefault(s => s.SupplierId == originalPO.SupplierId)?.Company ?? "Unknown";
+                    ViewBag.SupplierName = allSuppliers.FirstOrDefault(s => s.SupplierId == originalPO.SupplierID)?.Company ?? "Unknown";
 
                     model = new PurchaseOrderViewModel
                     {
-                        PO_Id = originalPO.PO_Id,
+                        PO_ID = originalPO.PO_ID,
                         Status = originalPO.Status,
                         Remarks = originalPO.Remarks,
                         POProductItems = items.Select(i => new POItemViewModel
                         {
                             ProductName = allProducts.FirstOrDefault(p => p.ProductId == i.ProductId)?.ProductName ?? "Unknown Product",
-                            Quantity = i.Quantity,
+                            Quantity = i.QuantityOrdered,
                             UnitPrice = i.UnitPrice,
                             TotalPrice = i.TotalPrice
                         }).ToList()
@@ -348,7 +349,7 @@ namespace T_Stock.Controllers
                 return PartialView("_EditPOForm", model);
             }
 
-           var oriPO = await _purchaseOrder.Find(p => p.PO_Id == model.PO_Id).FirstOrDefaultAsync();
+           var oriPO = await _purchaseOrder.Find(p => p.PO_ID == model.PO_ID).FirstOrDefaultAsync();
 
             bool isNewlyCompleted = (model.Status == "Completed" && oriPO.Status != "Completed");
 
@@ -363,7 +364,7 @@ namespace T_Stock.Controllers
                 // STOCK UPDATE LOGIC 
                 if (isNewlyCompleted)
                 {
-                    var items = await _purchaseOrderItems.Find(p => p.PO_Id == model.PO_Id).ToListAsync();
+                    var items = await _purchaseOrderItems.Find(p => p.PO_ID == model.PO_ID).ToListAsync();
 
                     // Generate ID
                     string newTransId = await GenerateNextTransactionId();
@@ -377,7 +378,7 @@ namespace T_Stock.Controllers
                         TransactionID = newTransId,
                         UserID = currentUserId,
                         Date = DateTime.Now,
-                        Reason = $"Purchase Order #{model.PO_Id} - Received",
+                        Reason = $"Purchase Order #{model.PO_ID} - Received",
                         transactionType = "IN"
                     };
 
@@ -392,13 +393,13 @@ namespace T_Stock.Controllers
                         {
                             TransactionID = newTransId,
                             ProductID = item.ProductId,
-                            QtyChange = item.Quantity,
+                            QtyChange = item.QuantityOrdered,
                             Remarks = "PO Received"
                         });
 
                         // Prepare Product Stock Update (The Cache)
                         var filter = Builders<Product>.Filter.Eq(p => p.ProductId, item.ProductId);
-                        var update = Builders<Product>.Update.Inc(p => p.Quantity, item.Quantity);
+                        var update = Builders<Product>.Update.Inc(p => p.Quantity, item.QuantityOrdered);
                         productUpdates.Add(new UpdateOneModel<Product>(filter, update));
                     }
 
@@ -419,7 +420,7 @@ namespace T_Stock.Controllers
                     .Set(p => p.Remarks, model.Remarks)
                     .Set(p => p.LastUpdated, DateTime.Now);
 
-                await _purchaseOrder.UpdateOneAsync(p => p.PO_Id == model.PO_Id, updatePO);
+                await _purchaseOrder.UpdateOneAsync(p => p.PO_ID == model.PO_ID, updatePO);
 
                 return Json(new { success = true, message = "Order updated successfully!" });
             }
@@ -449,6 +450,48 @@ private async Task<string> GenerateNextTransactionId()
             }
 
             return "T" + Guid.NewGuid().ToString().Substring(0, 4);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> PrintPO(string id)
+        {
+            // Fetch the PO Header
+            var po = await _purchaseOrder.Find(p => p.PO_ID == id).FirstOrDefaultAsync();
+            if (po == null) return NotFound();
+
+            // Fetch the PO Items
+            var items = await _purchaseOrderItems.Find(p => p.PO_ID == id).ToListAsync();
+
+            // Fetch Supplier Info (to display Name/Address instead of just ID)
+            var supplier = await _suppliers.Find(s => s.SupplierId == po.SupplierID).FirstOrDefaultAsync();
+
+            // Fetch Product Info (to get names for the items)
+            //    Optimization: Only fetch products that are in this order
+            var productIds = items.Select(i => i.ProductId).ToList();
+            var products = await _products.Find(p => productIds.Contains(p.ProductId)).ToListAsync();
+
+            // Construct the ViewModel
+            var model = new PurchaseOrderViewModel
+            {
+                PO_ID = po.PO_ID,
+                Status = po.Status,
+                Remarks = po.Remarks,
+                POProductItems = items.Select(i => new POItemViewModel
+                {
+                    ProductId = i.ProductId,
+                    ProductName = products.FirstOrDefault(p => p.ProductId == i.ProductId)?.ProductName ?? "Unknown Item",
+                    Quantity = i.QuantityOrdered,
+                    UnitPrice = i.UnitPrice,
+                    TotalPrice = i.TotalPrice
+                }).ToList()
+            };
+
+            // Pass supplier details via ViewBag for simplicity
+            ViewBag.SupplierName = supplier?.Company ?? "Unknown Supplier";
+            ViewBag.SupplierAddress = supplier?.Address ?? "";
+            ViewBag.DateCreated = po.CreatedDate.ToString("dd MMM yyyy");
+
+            return View("PrintPO", model);
         }
     }
     }

@@ -109,7 +109,7 @@ namespace T_Stock.Controllers
 
                 foreach (var po in validPOs)
                 {
-                    if (!po.LastUpdated.HasValue) continue;
+                    if (po.LastUpdated != DateTime.MinValue) continue;
 
                     
                     var items = allItems.Where(i => i.PO_ID == po.PO_ID);
@@ -119,9 +119,9 @@ namespace T_Stock.Controllers
                         if (string.IsNullOrEmpty(item.ProductId)) continue;
 
                         if (!lastPurchaseDict.ContainsKey(item.ProductId) ||
-                            po.LastUpdated.Value > lastPurchaseDict[item.ProductId])
+                            po.LastUpdated > lastPurchaseDict[item.ProductId])
                         {
-                            lastPurchaseDict[item.ProductId] = po.LastUpdated.Value;
+                            lastPurchaseDict[item.ProductId] = po.LastUpdated;
                             lastPriceDict[item.ProductId] = item.UnitPrice;
                         }
                     }

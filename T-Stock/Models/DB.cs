@@ -134,6 +134,10 @@ namespace T_Stock.Models
         [BsonElement("ReorderLevel")]
         [Required]
         public int ReorderLevel { get; set; }
+
+        [BsonElement("Price")]
+        [Required]
+        public int Price { get; set; }
     }
 
     public class SupplierProduct
@@ -153,68 +157,6 @@ namespace T_Stock.Models
         [BsonElement("SupplierPrice")]
         [Required]
         public double SupplierPrice { get; set; }
-    }
-
-    public class PurchaseOrder
-    {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
-        
-        [BsonElement("PO_ID")]
-        [Required]
-        public string PO_Id { get; set; }
-
-        [BsonElement("SupplierID")]
-        [Required]
-        public string SupplierId { get; set; }
-
-        [BsonElement("UserID")]
-        [Required]
-        public string UserId { get; set; }
-
-        [BsonElement("Status")]
-        [Required]
-        public string Status { get; set; }
-
-        [BsonElement("CreatedDate")]
-        [Required]
-        public DateTime CreatedDate { get; set; }
-
-        [BsonElement("LastUpdated")]
-        [Required]
-        public DateTime LastUpdated { get; set; }
-
-        [BsonElement("Remarks")]
-        public string? Remarks { get; set; }
-
-    }
-
-    public class PurchaseOrderItem
-    {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
-
-        [BsonElement("PO_ID")]
-        [Required]
-        public string PO_Id { get; set; }
-
-        [BsonElement("ProductID")]
-        [Required]
-        public string ProductId { get; set; }
-
-        [BsonElement("QuantityOrdered")]
-        [Required]
-        public int Quantity { get; set; }
-
-        [BsonElement("UnitPrice")]
-        [Required]
-        public decimal UnitPrice { get; set; }
-
-        [BsonElement("TotalPrice")]
-        [Required]
-        public decimal TotalPrice { get; set; }
     }
 
     public class StockTransaction
@@ -274,18 +216,18 @@ namespace T_Stock.Models
         [BsonElement("UserID")]
         public string? UserID { get; set; }
         [BsonElement("Status")]
-        public string Status { get; set; } = null!;    // Pending, Approved, Completed...
+        public string Status { get; set; } = null!;    
         [BsonElement("CreatedDate")]
-        public DateTime? CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
         [BsonElement("LastUpdated")]
-        public DateTime? LastUpdated {  get; set; }
+        public DateTime LastUpdated {  get; set; }
     public string? Remarks { get; set; }
 }
     public class PurchaseOrderItem
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string? Id { get; set; }              // test1 
+        public string? Id { get; set; }               
        
         [BsonElement("PO_ID")] 
         public string PO_ID { get; set; } = null!;     
@@ -297,7 +239,7 @@ namespace T_Stock.Models
         [BsonElement("UnitPrice")]
         public decimal UnitPrice { get; set; }
         [BsonElement("TotalPrice")]
-        public decimal TotalPrice { get; set; }       // QuantityOrdered × UnitPrice
+        public decimal TotalPrice { get; set; }       
     }
 
 }

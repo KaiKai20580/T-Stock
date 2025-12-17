@@ -714,8 +714,14 @@ body.dark-mode .theme-toggle {
 
 
 /*KW CSS*/
+.sidebar:hover ~ #ajax-content .supplierPage {
+    margin-left: 13%;
+    transition: all 0.5s ease;
+}
+
 div.supplierPage {
     margin-left: 100px;
+    transition: all 0.5s ease;
 }
 
 i {
@@ -1057,6 +1063,11 @@ div.remarksContainer {
     }
 }
 
+div.supplierDetail table{
+    width:100%;
+    margin-bottom:5%;
+}
+
 div.supplierDetail label {
     font-size: 1.3rem;
     font-weight: 500;
@@ -1203,6 +1214,27 @@ button.removePOProductBtn {
             display: flex;
             margin-left: 77%
         }
+
+            div.decisionBtn a.printBtn {
+                background-color: #8a8a8a;
+                color: black;
+                border-radius: 25px;
+                border: 3px solid black;
+                padding: 10px 20px 5px 20px;
+                font-size: 1.5rem;
+                font-weight: 500;
+                margin-right: 20px;
+                box-shadow: rgba(0,0,0,0.3) 2px 2px 5px 1px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                text-decoration: none;
+            }
+
+            div.decisionBtn a.printBtn:hover {
+                background-color: #a2a2a2;
+                transform: translateY(-5px);
+                transition: all 0.2s ease;
+            }
 
             div.decisionBtn button.cancelBtn {
                 background-color: #ef0000;

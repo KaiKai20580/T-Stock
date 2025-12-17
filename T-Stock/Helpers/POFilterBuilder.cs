@@ -14,9 +14,9 @@ namespace T_Stock.Helpers
             if (!string.IsNullOrWhiteSpace(q.Search))
             {
                 filter &= f.Or(
-                    f.Regex(p => p.PO_Id, new BsonRegularExpression(q.Search, "i")),
-                    f.Regex(p => p.SupplierId, new BsonRegularExpression(q.Search, "i")),
-                    f.Regex(p => p.UserId, new BsonRegularExpression(q.Search, "i")),
+                    f.Regex(p => p.PO_ID, new BsonRegularExpression(q.Search, "i")),
+                    f.Regex(p => p.SupplierID, new BsonRegularExpression(q.Search, "i")),
+                    f.Regex(p => p.UserID, new BsonRegularExpression(q.Search, "i")),
                     f.Regex(p => p.Status, new BsonRegularExpression(q.Search, "i"))
                 );
             }

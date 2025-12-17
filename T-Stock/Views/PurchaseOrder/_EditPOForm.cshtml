@@ -2,9 +2,9 @@
 <input type="hidden" id="loadedProductMap" value='@Html.Raw(ViewBag.ProductSupplierMap ?? "[]")' />
 
 <form asp-action="UpdatePO" asp-controller="PurchaseOrder" method="post" id="editPOForm">
-<input type="hidden" value="@Model.PO_Id" asp-for="PO_Id"/>
+<input type="hidden" value="@Model.PO_ID" asp-for="PO_ID"/>
 <div class="poEditHead">
-    <h2>@Model.PO_Id</h2>
+    <h2>@Model.PO_ID</h2>
     <div class="poStatus">
     <h5>Status: </h5>
     @if(ViewBag.Role == "Supplier"){
@@ -115,6 +115,11 @@
     </div>
 
     <div class="decisionBtn">
+        <a href="@Url.Action("PrintPO", "PurchaseOrder", new { id = Model.PO_ID })"
+           target="_blank"
+           class="printBtn">
+           Print
+        </a>
         <button type="button" class="cancelBtn">Cancel</button>
         <button type="submit" class="saveBtn">Save Changes</button>
     </div>

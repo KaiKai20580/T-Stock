@@ -44,10 +44,13 @@
                 <input type="date" id="dateTo" class="POdate" min="2023-01-01" max="@(DateTime.Today)" disabled/>
             </div>
         </div>
-        <div class="poAdd">
-            <i class="ri-article-line"></i>
-            <h3>Create PO</h3>
-        </div>
+        @if (Context.Request.Cookies["Role"] != "Supplier")
+        {
+            <div class="poAdd">
+                <i class="ri-article-line"></i>
+                <h3>Create PO</h3>
+            </div>
+        }
     </div>
    <div id="POList">
         <partial name="_POTable" model="Model" />
@@ -163,7 +166,7 @@
 
                     <div>
                     <h5>Total Price (RM)<h5>
-                    <input type="number" name="POProductItems[${poProductIndex}].Total" class="rowTotal" readonly value="0.00"/>
+                    <input type="number" name="POProductItems[${poProductIndex}].TotalPrice" class="rowTotal" readonly value="0.00"/>
                     </div>
 
                     <button type="button" class="removePOProductBtn"> <i class="ri-close-circle-line"></i> </button>
