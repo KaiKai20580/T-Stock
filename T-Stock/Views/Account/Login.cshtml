@@ -12,7 +12,6 @@
             margin: 0;
             background: black;
             font-family: Arial, sans-serif;
-            color: #000;
         }
 
         .login-container {
@@ -47,16 +46,13 @@
             .title i {
                 position: relative;
                 color: white;
-                text-align: center;
-                display: flex;
                 bottom: 6px;
             }
 
         h2 {
             text-align: center;
             font-size: 35px;
-            margin-top: 0;
-            margin-bottom: 25px;
+            margin: 0 0 25px 0;
         }
 
         label {
@@ -88,20 +84,12 @@
             margin-top: 20px;
         }
 
-        .error-text {
-            color: red;
-            text-align: center;
-            margin-top: 10px;
-            font-size: 18px;
-        }
-
         .field-error {
             color: red;
             font-size: 15px;
             margin-bottom: 15px;
         }
 
-        
         .forgot-password {
             text-align: center;
             margin-top: 15px;
@@ -117,30 +105,31 @@
 
     <div class="login-container">
         <div class="login-box">
-
             <h2>LOGIN</h2>
 
-            <form asp-controller="Account" asp-action="Login" method="post">
-                <label>Email</label>
-                <input asp-for="Email" class="input-box" />
-                <span asp-validation-for="Email" class="field-error"></span>
+            <form id="login-form" asp-controller="Account" asp-action="Login" method="post">
+                <div id="step-email">
+                    <label>Email</label>
+                    <input asp-for="Email" class="input-box" id="email-input" />
+                    <span id="email-error" class="field-error"></span>
+                    <button type="button" class="login-btn" onclick="nextStep()">Next</button>
+                </div>
 
-                <label>Password</label>
-                <input asp-for="Password" type="password" class="input-box" />
-                <span asp-validation-for="Password" class="field-error"></span>
+                <div id="step-password" style="display:none;">
+                    <label>Password</label>
+                    <input asp-for="Password" type="password" class="input-box" />
+                    <span asp-validation-for="Password" class="field-error"></span>
+                    <button type="submit" class="login-btn">Login</button>
+                </div>
 
-                <button class="login-btn" type="submit">Login</button>
-
-                
                 <div class="forgot-password">
                     <a href="/Account/ForgotPassword" class="text-primary">Forgot Password?</a>
                 </div>
             </form>
 
-            
             @if (!ViewData.ModelState.IsValid)
             {
-                <div class="error-text">
+                <div class="field-error">
                     @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
                     {
                         <p>@error.ErrorMessage</p>
@@ -149,5 +138,44 @@
             }
         </div>
     </div>
+
+  <script>
+    function nextStep() {
+        const emailInput = document.getElementById('email-input');
+        const email = emailInput.value.trim();
+        const errorBox = document.getElementById('email-error');
+
+        errorBox.textContent = "";
+
+        if (!email) {
+            errorBox.textContent = "Email is required.";
+            return;
+        }
+
+        if (!email.includes("@@")) {
+            errorBox.textContent = "Email must contain '@@'.";
+            return;
+        }
+
+        fetch('@Url.Action("CheckEmail", "Account")', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "error") {
+                errorBox.textContent = data.message;
+            } else if (data.status === "setpassword") {
+                window.location.href = data.redirectUrl;
+            } else {
+                document.getElementById('step-email').style.display = 'none';
+                document.getElementById('step-password').style.display = 'block';
+            }
+        })
+        .catch(err => console.error(err));
+    }
+</script>
+
 </body>
 </html>
