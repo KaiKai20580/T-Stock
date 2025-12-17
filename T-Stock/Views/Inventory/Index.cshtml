@@ -1,6 +1,15 @@
 ﻿@{
-    ViewData["Title"] = "Product";
+    bool isAjax = false;
+    if (Context?.Request?.Headers != null &&
+        Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+    {
+        isAjax = true;
+    }
+
+    Layout = isAjax ? null : "_Layout";
 }
+
+
 <title>@ViewData["Title"]</title>
 @model List<T_Stock.Models.Inventory>
 
@@ -11,8 +20,8 @@
         <thead>
             <tr>
                 <th>Item Name</th>
-                <th>Quantity</th>
                 <th>Category</th>
+                <th>Quantity</th>
                 <th>Price</th>
             </tr>
         </thead>
@@ -23,8 +32,8 @@
                 {
                     <tr>
                         <td>@item.ItemName</td>
-                        <td>@item.Quantity</td>
                         <td>@item.Category</td>
+                        <td>@item.Quantity</td>
                         <td>@item.Price</td>
                     </tr>
                 }
