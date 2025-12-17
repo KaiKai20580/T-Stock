@@ -2,6 +2,7 @@
 using MongoDB.Driver;
 using T_Stock.Helpers;
 using T_Stock.Models;
+using System.Web;
 
 namespace T_Stock.Controllers
 {
@@ -12,17 +13,23 @@ namespace T_Stock.Controllers
         private readonly IMongoCollection<Product> _products;
         private readonly IMongoCollection<PurchaseOrder> _purchaseOrder;
         private readonly IMongoCollection<PurchaseOrderItem> _purchaseOrderItems;
+        private readonly IMongoCollection<StockTransaction> _stockTransaction;
+        private readonly IMongoCollection<StockTransactionItem> _stockTransactionItems;
+        private readonly IMongoClient _client;
         private readonly IMongoCollection<User> _user;
         private readonly MongoPagingService _paging;
 
-        public PurchaseOrderController(IMongoDatabase db, MongoPagingService paging)
+        public PurchaseOrderController(IMongoDatabase db, MongoPagingService paging, IMongoClient client)
         {
             _suppliers = db.GetCollection<Supplier>("Supplier");
             _supplierProducts = db.GetCollection<SupplierProduct>("SupplierProduct");
             _products = db.GetCollection<Product>("Product");
             _purchaseOrder = db.GetCollection<PurchaseOrder>("PurchaseOrder");
             _purchaseOrderItems = db.GetCollection<PurchaseOrderItem>("PurchaseOrderItem");
+            _stockTransaction = db.GetCollection<StockTransaction>("StockTransaction");
+            _stockTransactionItems = db.GetCollection<StockTransactionItem>("StockTransactionItem");
             _user = db.GetCollection<User>("User");
+            _client = client;
             _paging = paging;
         }
 
@@ -31,6 +38,29 @@ namespace T_Stock.Controllers
             // 1) Base filter (search)
             var filter = POFilterBuilder.Build(q);
 
+            var userRole = Request.Cookies["Role"];
+            var userEmail = Request.Cookies["User"]; // Or User.FindFirst(ClaimTypes.Email)?.Value;
+            // If the user is a Supplier, restrict the query
+            if (userRole == "Supplier" && !string.IsNullOrEmpty(userEmail))
+            {
+                // Find the User or Supplier record to get the ID
+                // Assuming your '_user' collection links Email -> SupplierId
+                var currentUser = await _suppliers.Find(s => s.Email == userEmail).FirstOrDefaultAsync();
+
+                if (currentUser != null && !string.IsNullOrEmpty(currentUser.SupplierId))
+                {
+                    // Append the SupplierId filter using AND (&)
+                    // This ensures they ONLY see their own rows, even if they try to search for others
+                    filter &= Builders<PurchaseOrder>.Filter.Eq(p => p.SupplierId, currentUser.SupplierId);
+                }
+                else
+                {
+                    // Edge Case: User is a "Supplier" but has no mapped SupplierId in DB.
+                    // Force the query to return nothing for security.
+                    filter &= Builders<PurchaseOrder>.Filter.Eq(p => p.PO_Id, "RESTRICTED_ACCESS");
+                }
+
+            }
             // 2) Date filter
             if (!string.IsNullOrWhiteSpace(q.DateType) && q.DateType != "none")
             {
@@ -217,6 +247,8 @@ namespace T_Stock.Controllers
         {
             var po = await _purchaseOrder.Find(p => p.PO_Id == poId).FirstOrDefaultAsync();
             var items = await _purchaseOrderItems.Find(p => p.PO_Id == poId).ToListAsync();
+            var userRole = Request.Cookies["Role"];
+            ViewBag.Role = userRole;
             ViewBag.Status = po.Status;
 
             // Fetch suppliers so we can look up names
@@ -316,21 +348,107 @@ namespace T_Stock.Controllers
                 return PartialView("_EditPOForm", model);
             }
 
-            // If Valid, Proceed with Update
-            var updateDef = Builders<PurchaseOrder>.Update
-                .Set(p => p.Status, model.Status)
-                .Set(p => p.Remarks, model.Remarks)
-                .Set(p => p.LastUpdated, DateTime.Now);
+           var oriPO = await _purchaseOrder.Find(p => p.PO_Id == model.PO_Id).FirstOrDefaultAsync();
 
-            var result = await _purchaseOrder.UpdateOneAsync(p => p.PO_Id == model.PO_Id, updateDef);
+            bool isNewlyCompleted = (model.Status == "Completed" && oriPO.Status != "Completed");
 
-            if (result.ModifiedCount > 0)
+            // If it was ALREADY Completed, and they are changing it to something else
+            if (oriPO.Status == "Completed" && model.Status != "Completed")
             {
-                return Json(new { success = true, message = "Order updated successfully!" });
+                return Json(new { success = false, message = "Error: Cannot revert an order once completed." });
             }
 
-            // Even if no data changed, return success to close modal
-            return Json(new { success = true, message = "No changes were made." });
+            try
+            {
+                // STOCK UPDATE LOGIC 
+                if (isNewlyCompleted)
+                {
+                    var items = await _purchaseOrderItems.Find(p => p.PO_Id == model.PO_Id).ToListAsync();
+
+                    // Generate ID
+                    string newTransId = await GenerateNextTransactionId();
+
+                    // Get User ID safely
+                    string currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "U001";
+
+                    // Create Header
+                    var transHeader = new StockTransaction
+                    {
+                        TransactionID = newTransId,
+                        UserID = currentUserId,
+                        Date = DateTime.Now,
+                        Reason = $"Purchase Order #{model.PO_Id} - Received",
+                        transactionType = "IN"
+                    };
+
+                    // Prepare Items & Product Updates
+                    var transItems = new List<StockTransactionItem>();
+                    var productUpdates = new List<WriteModel<Product>>();
+
+                    foreach (var item in items)
+                    {
+                        // Create Transaction Item
+                        transItems.Add(new StockTransactionItem
+                        {
+                            TransactionID = newTransId,
+                            ProductID = item.ProductId,
+                            QtyChange = item.Quantity,
+                            Remarks = "PO Received"
+                        });
+
+                        // Prepare Product Stock Update (The Cache)
+                        var filter = Builders<Product>.Filter.Eq(p => p.ProductId, item.ProductId);
+                        var update = Builders<Product>.Update.Inc(p => p.Quantity, item.Quantity);
+                        productUpdates.Add(new UpdateOneModel<Product>(filter, update));
+                    }
+
+                    // WRITE TO DB 
+                    await _stockTransaction.InsertOneAsync(transHeader);
+
+                    if (transItems.Any())
+                    {
+                        await _stockTransactionItems.InsertManyAsync(transItems);
+                        // Update the product quantities
+                        await _products.BulkWriteAsync(productUpdates);
+                    }
+                }
+
+                // UPDATE PO STATUS 
+                var updatePO = Builders<PurchaseOrder>.Update
+                    .Set(p => p.Status, model.Status)
+                    .Set(p => p.Remarks, model.Remarks)
+                    .Set(p => p.LastUpdated, DateTime.Now);
+
+                await _purchaseOrder.UpdateOneAsync(p => p.PO_Id == model.PO_Id, updatePO);
+
+                return Json(new { success = true, message = "Order updated successfully!" });
+            }
+            catch (Exception ex)
+            {
+                // Log the error
+                return Json(new { success = false, message = "System Error: " + ex.Message });
+            }
+        }
+private async Task<string> GenerateNextTransactionId()
+        {
+            // Find the latest transaction directly
+            var lastTransaction = await _stockTransaction.Find(_ => true)
+                .SortByDescending(t => t.TransactionID)
+                .FirstOrDefaultAsync();
+
+            if (lastTransaction == null)
+            {
+                return "T0001";
+            }
+
+            // Extract number and increment
+            string numericPart = lastTransaction.TransactionID.Substring(1);
+            if (int.TryParse(numericPart, out int currentId))
+            {
+                return "T" + (currentId + 1).ToString("D4");
+            }
+
+            return "T" + Guid.NewGuid().ToString().Substring(0, 4);
         }
     }
     }

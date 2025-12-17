@@ -38,6 +38,7 @@ catch (Exception ex)
 // Register MongoDB services
 builder.Services.AddSingleton<IMongoDatabase>(database);
 builder.Services.AddSingleton<DB>();
+builder.Services.AddSingleton<IMongoClient>(s =>new MongoClient("mongodb://localhost:5275"));
 
 // ----------------------
 // Add MVC services

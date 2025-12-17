@@ -7,42 +7,76 @@
     <h2>@Model.PO_Id</h2>
     <div class="poStatus">
     <h5>Status: </h5>
-    <select asp-for="Status" id="statusDropdown">
-                @if (ViewBag.Status == "Pending")
-                        {
-                            <option value="Pending" selected>Pending</option>
-                            <option value="Cancelled">Cancelled</option>
-                        }
-                else if (ViewBag.Status == "Cancelled")
-                        {
-                            <option value="Cancelled" selected>Cancelled</option>
+    @if(ViewBag.Role == "Supplier"){
+                    if (ViewBag.Status == "Pending" || ViewBag.Status == "Accepted")
+                    {
+                    <select asp-for="Status" id="statusDropdown" class="statusDropdown">
+                            @if (ViewBag.Status == "Pending")
+                                {
+                                    <option value="Pending" selected>Pending</option>
+                                    <option value="Approved">Approved</option>
+                                    <option value="Rejected">Rejected</option>
+                                }
+                                else if (ViewBag.Status == "Accepted")
+                                {
+                                    <option value="Accepted" selected>Accepted</option>
+                                    <option value="InDelivery" >In Delivery</option>
+                                }
+                            </select>
+                    }
+                    else
+                    {
+                    <select asp-for="Status" id="statusDropdown" class="statusDropdown" disabled>
+                        <option value="@ViewBag.Status" selected>@ViewBag.Status</option>
+                        </select>
+                    }
                 }
-                else if (ViewBag.Status == "Completed")
-                        {
-                            <option value="Completed" selected>Completed</option>
+    else{
+                    if (ViewBag.Status == "Pending" || ViewBag.Status == "Accepted" || ViewBag.Status == "InDelivery")
+                    {
+                        <select asp-for="Status" id="statusDropdown" class="statusDropdown">
+                            @if (ViewBag.Status == "Pending")
+                                {
+                                    <option value="Pending" selected>Pending</option>
+                                    <option value="Cancelled">Cancelled</option>
+                                }
+                                else if (ViewBag.Status == "Accepted")
+                                {
+                                    <option value="Accepted" selected>Accepted</option>
+                                    <option value="Completed" >Completed</option>
+                                }
+                                else if (ViewBag.Status == "InDelivery")
+                                {
+                                    <option value="InDelivery" selected>In Delivery</option>
+                                    <option value="Completed">Completed</option>
+                                }
+                            </select>
+                    }
+                    else
+                    {
+                    <select asp-for="Status" id="statusDropdown" class="statusDropdown" disabled>
+                        <option value="@ViewBag.Status" selected>@ViewBag.Status</option>
+                    </select>
+                    }
                 }
-                else if (ViewBag.Status == "Accepted")
-                        {
-                            <option value="Accepted" selected>Accepted</option>
-                            <option value="Completed" >Completed</option>
-                }
-                else if (ViewBag.Status == "Rejected")
-                        {
-                            <option value="Rejected" selected>Rejected</option>
-                }
-                else if (ViewBag.Status == "InDelivery")
-                        {
-                            <option value="InDelivery" selected>In Delivery</option>
-                            <option value="Completed">Completed</option>
-                }
-    </select>
     </div>
 </div>
 
     <div id="remarksContainer" class="remarksContainer">
         <h5>Remarks</h5>
-        <textarea asp-for="Remarks" id="poRemarks" rows="3" placeholder="Please enter the reason here..."></textarea>
-    </div>
+            @if (ViewBag.Role == "Supplier" && ViewBag.Status == "Cancelled")
+            {
+                <textarea asp-for="Remarks" id="poRemarks" rows="3" disabled></textarea>
+            }
+            else if (ViewBag.Role != "Supplier" && ViewBag.Status == "Rejected")
+            {
+                <textarea asp-for="Remarks" id="poRemarks" rows="3" disabled></textarea>
+            }
+            else
+            {
+                <textarea asp-for="Remarks" id="poRemarks" rows="3" placeholder="Please enter the reason here..."></textarea>
+            }
+        </div>
 
     <div asp-validation-summary="All" class="text-danger"></div>
 

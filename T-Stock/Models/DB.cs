@@ -34,6 +34,11 @@ namespace T_Stock.Models
 
         public IMongoCollection<PurchaseOrderItem> PurchaseOrderItemCollection =>
             _db.GetCollection<PurchaseOrderItem>("PurchaseOrderItem");
+        public IMongoCollection<StockTransaction> StockTransaction =>
+            _db.GetCollection<StockTransaction>("StockTransaction");
+
+        public IMongoCollection<StockTransactionItem> StockTransactionItemCollection =>
+            _db.GetCollection<StockTransactionItem>("StockTransactionItem");
 
         public IMongoCollection<User> User =>
            _db.GetCollection<User>("User");
@@ -212,6 +217,45 @@ namespace T_Stock.Models
         public decimal TotalPrice { get; set; }
     }
 
+    public class StockTransaction
+    {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
+        [BsonElement("TransactionID")]
+        [Required]
+        public string TransactionID { get; set; }
+        [BsonElement("UserID")]
+        [Required]
+        public string UserID { get; set; }
+        [BsonElement("Date")]
+        [Required]
+        public DateTime Date { get; set; }
+        [BsonElement("Reason")]
+        [Required]
+        public string Reason{ get; set; }
+        [BsonElement("transactionType")]
+        [Required]
+        public string transactionType { get; set; }
+    }
+
+    public class StockTransactionItem
+    {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
+        [BsonElement("TransactionID")]
+        [Required]
+        public string TransactionID { get; set; }
+        [BsonElement("ProductID")]
+        [Required]
+        public string ProductID { get; set; }
+        [BsonElement("QtyChange")]
+        [Required]
+        public int QtyChange { get; set; }
+        [BsonElement("Remarks")]
+        public string? Remarks { get; set; }
+    }
     public class InventoryListVM
     {
         public List<Inventory> Items { get; set; } = new List<Inventory>();
