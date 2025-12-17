@@ -826,7 +826,7 @@ div.supplierManage,div.pagination{
     padding:20px;
 }
 
-table {
+.supplierPage table {
     width: 97.5%;
     padding: 0;
     border-collapse: separate;

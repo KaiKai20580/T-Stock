@@ -261,4 +261,43 @@ namespace T_Stock.Models
         public List<Inventory> Items { get; set; } = new List<Inventory>();
     }
 
+    public class PurchaseOrder
+    {
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string? Id { get; set; }
+
+        [BsonElement("PO_ID")]
+        public string PO_ID { get; set; } = null!;
+        [BsonElement("SupplierID")]
+        public string SupplierID { get; set; } = null!;
+        [BsonElement("UserID")]
+        public string? UserID { get; set; }
+        [BsonElement("Status")]
+        public string Status { get; set; } = null!;    // Pending, Approved, Completed...
+        [BsonElement("CreatedDate")]
+        public DateTime? CreatedDate { get; set; }
+        [BsonElement("LastUpdated")]
+        public DateTime? LastUpdated {  get; set; }
+    public string? Remarks { get; set; }
+}
+    public class PurchaseOrderItem
+    {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string? Id { get; set; }              // test1 
+       
+        [BsonElement("PO_ID")] 
+        public string PO_ID { get; set; } = null!;     
+        
+        [BsonElement("ProductID")]
+        public string ProductId { get; set; } = null!;
+        [BsonElement("QuantityOrdered")]
+        public int QuantityOrdered { get; set; }
+        [BsonElement("UnitPrice")]
+        public decimal UnitPrice { get; set; }
+        [BsonElement("TotalPrice")]
+        public decimal TotalPrice { get; set; }       // QuantityOrdered × UnitPrice
+    }
+
 }

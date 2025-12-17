@@ -6,11 +6,13 @@ namespace T_Stock.Models
     [BsonIgnoreExtraElements]
     public class User
     {
-        
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
+
         
+        [BsonElement("userid")]
+        public string UserId { get; set; }
 
         [BsonElement("email")]
         public string Email { get; set; }
@@ -23,5 +25,9 @@ namespace T_Stock.Models
 
         public string ResetToken { get; set; }
         public DateTime? ResetTokenExpiry { get; set; }
+
+        
+
+
     }
 }
