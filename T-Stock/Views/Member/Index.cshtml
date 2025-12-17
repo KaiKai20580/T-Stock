@@ -16,7 +16,7 @@
     <div class="alert alert-success alert-dismissible fade show" role="alert"
          id="alert-message"
          style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-                    z-index: 1050; min-width: 250px; text-align: center;">
+                            z-index: 1050; min-width: 250px; text-align: center;">
         @successMessage
     </div>
 }
@@ -25,7 +25,7 @@ else if (!string.IsNullOrEmpty(errorMessage))
     <div class="alert alert-danger alert-dismissible fade show" role="alert"
          id="alert-message"
          style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-                    z-index: 1050; min-width: 250px; text-align: center;">
+                            z-index: 1050; min-width: 250px; text-align: center;">
         @errorMessage
     </div>
 }
@@ -38,11 +38,10 @@ else if (!string.IsNullOrEmpty(errorMessage))
             alert.classList.add('hide');
             setTimeout(() => alert.remove(), 500);
         }
-    }, 1500);
+    }, 3000); 
 </script>
 
 <style>
-    
     .sidebar:hover ~ #ajax-content .m-container {
         margin-left: 240px;
         transition: all 0.5s ease;
@@ -103,9 +102,9 @@ else if (!string.IsNullOrEmpty(errorMessage))
     }
 
         .custom-table tbody tr:hover {
-            transform: translateY(-5px); 
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); 
-            background-color: #f1f5f9 !important; 
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            background-color: #f1f5f9 !important;
             cursor: pointer;
         }
 
@@ -150,7 +149,7 @@ else if (!string.IsNullOrEmpty(errorMessage))
         font-weight: bold;
     }
 
-    
+
     .modal {
         z-index: 1055;
     }
@@ -159,12 +158,12 @@ else if (!string.IsNullOrEmpty(errorMessage))
         z-index: 1050;
     }
 
-    
+
     .bg-gradient-primary {
         background: linear-gradient(135deg, #4e73df, #1cc88a);
     }
 
-    
+
     .modal-body .form-control,
     .modal-body .form-select {
         box-shadow: none;
@@ -177,7 +176,7 @@ else if (!string.IsNullOrEmpty(errorMessage))
         color: #333;
     }
 
-    
+
     .modal-footer .btn {
         min-width: 100px;
     }
@@ -187,7 +186,7 @@ else if (!string.IsNullOrEmpty(errorMessage))
         border-radius: 1rem;
     }
 
-    
+
     .modal-footer .btn-primary:hover {
         background-color: #198754;
         border-color: #198754;
@@ -213,12 +212,14 @@ else if (!string.IsNullOrEmpty(errorMessage))
         <div class="m-word">
             <h2>Member List</h2>
         </div>
-        <button class="btn btn-primary shadow-sm">
+        <a asp-controller="Member"
+           asp-action="Add"
+           class="btn btn-primary shadow-sm">
             <i class="ri-user-add-line me-1"></i> Register
-        </button>
+        </a>
+
     </div>
 
-    <!-- Search + Role Filter Form -->
     <div class="d-flex justify-content-center my-4">
         <form method="get" asp-action="Index" class="d-flex" style="max-width: 400px; width: 100%;">
             <input type="text" name="searchTerm" class="form-control" placeholder="Search by email..."
@@ -239,11 +240,11 @@ else if (!string.IsNullOrEmpty(errorMessage))
         </div>
     </form>
 
-    <!-- Member Table -->
     <table class="custom-table">
         <thead>
             <tr>
                 <th class="col-number">No.</th>
+                <th>User ID</th>
                 <th>User Email</th>
                 <th>Role</th>
                 <th class="text-center" style="width:150px;">Actions</th>
@@ -257,15 +258,22 @@ else if (!string.IsNullOrEmpty(errorMessage))
             {
                 <tr>
                     <td class="col-number">@(rowNo++)</td>
+
+                    <td>
+                        @(string.IsNullOrEmpty(user.UserId) ? "-" : user.UserId)
+                    </td>
+
                     <td>
                         <div class="d-flex align-items-center">
                             <div class="rounded-circle bg-light text-primary d-flex align-items-center justify-content-center"
                                  style="width: 40px; height: 40px; font-weight:bold; border: 1px solid #888;">
                                 @user.Email.Substring(0, 1).ToUpper()
                             </div>
-                            @user.Email
+                            <span class="ms-2">@user.Email</span>
                         </div>
                     </td>
+
+
                     <td>
                         @if (!string.IsNullOrEmpty(user.Role))
                         {
@@ -301,6 +309,7 @@ else if (!string.IsNullOrEmpty(errorMessage))
                               method="post"
                               style="display:inline-block;"
                               onsubmit="return confirm('WARNING: Are you sure you want to delete this member? This action cannot be undone.');">
+                            @Html.AntiForgeryToken() 
                             <button type="submit" class="btn btn-action btn-outline-danger">
                                 <i class="ri-delete-bin-line"></i>
                             </button>
@@ -312,7 +321,6 @@ else if (!string.IsNullOrEmpty(errorMessage))
     </table>
 </div>
 
-<!-- Edit Modal moved OUTSIDE of .m-container -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content shadow-lg rounded-4">
@@ -320,7 +328,10 @@ else if (!string.IsNullOrEmpty(errorMessage))
                 <h5 class="modal-title">Edit Member</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+
             <form asp-controller="Member" asp-action="Edit" method="post">
+                @Html.AntiForgeryToken() 
+
                 <div class="modal-body p-4 bg-light">
                     <input type="hidden" name="Id" id="modalId">
 
@@ -355,8 +366,11 @@ else if (!string.IsNullOrEmpty(errorMessage))
         var id = button.getAttribute('data-id');
         var email = button.getAttribute('data-email');
         var role = button.getAttribute('data-role');
+
         editModal.querySelector('#modalId').value = id;
         editModal.querySelector('#modalEmail').value = email;
-        editModal.querySelector('#modalRole').value = role;
+
+        var roleSelect = editModal.querySelector('#modalRole');
+        roleSelect.value = role; 
     });
 </script>
