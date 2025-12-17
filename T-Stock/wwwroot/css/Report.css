@@ -1,85 +1,82 @@
-﻿.report-container {
-    margin-left: 110px;
-    padding: 20px;
+﻿body {
     font-family: Arial, sans-serif;
+    background-color: #f4f6f9; 
 }
-
-.report-title {
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
-.report-button-group button {
-    display: flex;
-    gap: 20px;
-    padding: 8px 16px;
-    margin-right: 10px;
-    border: 1px solid #0078ff;
-    background-color: #0078ff;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-    .report-button-group button:hover {
-        background-color: #0056b3;
-    }
 
 .report-container {
     display: flex;
     gap: 20px;
-    font-family: Arial, sans-serif;
     padding: 20px;
+    margin-left: 0; 
 }
 
 .left-nav {
-    width: 200px;
-    background: #f0f0f0;
-    padding: 15px;
+    width: 220px;
+    background: #ffffff;
+    padding: 20px;
     border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
     gap: 10px;
+    height: fit-content; 
+
 }
 
     .left-nav h3 {
-        margin-bottom: 10px;
+        margin-top: 0;
+        margin-bottom: 15px;
+        font-size: 18px;
+        color: #333;
     }
 
     .left-nav button {
-        padding: 8px 12px;
-        border: 1px solid #0078ff;
-        background-color: #0078ff;
-        color: white;
-        border-radius: 4px;
+        padding: 10px 15px;
+        border: 1px solid #e0e0e0;
+        background-color: #fff;
+        color: #333;
+        border-radius: 6px;
         cursor: pointer;
+        text-align: left;
+        transition: all 0.2s;
     }
 
-        .left-nav button:hover {
-            background-color: #0056b3;
+        .left-nav button:hover, .left-nav button.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
         }
 
+
 .right-panel {
-    flex: 1;
+    flex: 1; 
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .report-title {
-    font-size: 24px;
+    font-size: 26px;
     font-weight: bold;
-    margin-bottom: 15px;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
 }
 
 .filter-section {
-    background: #f7f7f7;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+    margin-bottom: 25px;
 }
 
 .filter-row {
     display: flex;
     gap: 20px;
+    align-items: flex-end; 
 }
 
     .filter-row div {
@@ -87,39 +84,24 @@
         flex-direction: column;
     }
 
-.preview-area {
-    border: 1px solid #ddd;
-    padding: 20px;
-    border-radius: 8px;
-    background: white;
-    min-height: 300px;
-}
-
-.filter-section {
-    background: #f7f7f7;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-}
-
-.filter-row {
-    display: flex;
-    gap: 20px;
-}
-
-    .filter-row div {
-        display: flex;
-        flex-direction: column;
+    .filter-row label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        font-size: 14px;
+        color: #555;
     }
 
+
 .preview-area {
     border: 1px solid #ddd;
-    padding: 20px;
-    border-radius: 8px;
+    padding: 40px;
+    border-radius: 4px;
     background: white;
+    min-height: 500px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.05); 
 }
-/*=====================================Detail Report Css====================================*/
 
+/* ================= 2. Detail Report  ================= */
 .Dreport-header {
     text-align: center;
     position: relative;
@@ -155,11 +137,6 @@
     margin: 15px 0;
 }
 
-.Dreport-generated {
-    font-size: 14px;
-    color: #333;
-}
-
 .Dreport-table {
     width: 100%;
     border-collapse: collapse;
@@ -180,6 +157,78 @@
         vertical-align: top;
     }
 
+/* ================= 3. Exception Report  ================= */
+.ER-container {
+    width: 100%;
+    border: 4px solid black;
+    padding: 20px;
+    background: white;
+    box-sizing: border-box;
+}
+
+.ER-h1 {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 10px 0;
+}
+
+.ER-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border: 2px solid black;
+}
+
+    .ER-table th, .ER-table td {
+        border: 1px solid black;
+        padding: 6px 8px;
+        text-align: left;
+        font-size: 12px;
+    }
+
+    .ER-table th {
+        background: black;
+        color: white;
+        text-transform: uppercase;
+    }
+
+/* ================= 4. Summary Report  ================= */
+.sreport-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.sreport-title {
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: underline;
+    margin: 10px 0;
+}
+
+.sreport-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    border: 1px solid #000;
+}
+
+    .sreport-table th {
+        background: #fff;
+        padding: 8px;
+        border-bottom: 2px solid #000;
+        font-weight: bold;
+        text-align: left;
+    }
+
+    .sreport-table td {
+        padding: 6px;
+        border-bottom: 1px solid #999;
+    }
+
+/* ================= support ================= */
 .text-right {
     text-align: right;
 }
@@ -196,140 +245,47 @@
     color: #c00;
 }
 
-.text-green {
-    color: #090;
-}
-
 .text-muted {
     color: #666;
 }
-
-.status-inactive {
-    color: #c00;
-    font-weight: bold;
-}
-
-.Dreport-footer {
-    margin-top: 80px;
-    text-align: center;
-    color: #666;
-    font-size: 12px;
-}
-
-/* 打印优化 */
+/* for printting */
 @media print {
-    body {
-        margin: 15mm;
+   
+    body * {
+        visibility: hidden;
     }
 
-    .report-header {
-        margin-bottom: 20mm;
+    #reportPreview, #reportPreview * {
+        visibility: visible;
     }
 
-    .report-footer {
-        position: fixed;
-        bottom: 0;
+    #reportPreview {
+        position: absolute;
         left: 0;
-        right: 0;
-    }
-}
-
-/* Exception Report Styles */
-
-.ER-container {
-    width: 960px;
-    margin: 0 auto;
-    border: 4px solid black;
-    padding: 30px;
-    background: white;
-}
-
-.ER-title {
-}
-
-.ER-page {
-    text-align: right;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.ER-h1 {
-    text-align: center;
-    font-size: 28px;
-    font-weight: bold;
-    letter-spacing: 3px;
-    margin: 0 0 8px 0;
-    text-transform: uppercase;
-}
-
-.ER-date {
-    text-align: center;
-    font-weight: bold;
-    font-size: 16px;
-    margin-bottom: 30px;
-    letter-spacing: 1px;
-}
-
-.ER-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    border: 2px solid black;
-}
-
-    .ER-table th, .ER-table td {
-        border: 1px solid black;
-        padding: 8px 10px;
-        text-align: left;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background: white; 
+        border: none; 
+        box-shadow: none;
     }
 
-    .ER-table th {
-        background: black;
-        color: white;
-        font-weight: bold;
-        text-transform: uppercase;
-        letter-spacing: 1px;
+    .left-nav,
+    .filter-section,
+    .sidebar,
+    header, nav, aside, footer,
+    .btn, button {
+        display: none !important;
     }
 
-.ER-right {
-    text-align: right;
-}
-
-.ER-double {
-    border-top: 4px double black !important;
-}
-
-.ER-thick {
-    border-top: 6px double black !important;
-}
-
-.ER-total-row {
-    font-weight: bold;
-    background: #e0e0e0 !important;
-    font-size: 14px;
-}
-
-.ER-grand-total {
-    font-weight: bold;
-    font-size: 16px;
-    background: #d0d0d0 !important;
-}
-
-.ER-footer {
-    margin-top: 60px;
-    text-align: center;
-    font-size: 11px;
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-
-/* Print Style */
-@media print {
-    body {
-        margin: 15mm;
+    @page {
+        margin: 10mm; 
+        size: auto;
     }
 
-    .ER-container {
-        border: 4px solid black;
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
     }
 }

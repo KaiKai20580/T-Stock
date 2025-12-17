@@ -1,49 +1,126 @@
 ﻿@{
     ViewData["Title"] = "Reports";
 }
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <link rel="stylesheet" href="~/css/report.css" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <div class="report-container">
 
     <div class="left-nav">
         <h3>Report Types</h3>
-        <button onclick="setReport('Summary')">Summary Report</button>
-        <button onclick="setReport('Exception')">Exception Report</button>
-        <button onclick="setReport('Detail')">Detail Report</button>
-        <button onclick="setReport('Supplier')">Supplier Report</button>
+        <div class="nav flex-column nav-pills">
+            <button class="nav-link active" onclick="setReport('Summary', this)">Summary Report</button>
+            <button class="nav-link" onclick="setReport('Exception', this)">Exception Report</button>
+            <button class="nav-link" onclick="setReport('Detail', this)">Detail Report</button>
+        </div>
     </div>
 
     <div class="right-panel">
-        <h2 class="report-title">Reports</h2>
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 class="report-title">Reports</h2>
+            <button class="btn btn-secondary no-print" onclick="window.print()">
+                <i class="fa fa-print"></i> Print / Save PDF
+            </button>
+        </div>
 
-        <!-- 动态 Filter UI -->
-        <div class="filter-section" id="filterContainer"></div>
+        <div class="filter-section mb-4 no-print" id="filterContainer">
+            <div class="text-muted">Loading filters...</div>
+        </div>
 
-        <!-- 报表预览 -->
-        <div id="reportPreview" class="preview-area"></div>
+        <hr class="no-print" />
+
+        <div id="reportPreview" class="preview-area mt-4">
+            <div class="text-center text-muted p-5">
+                Select a report type and click Generate.
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
+    var currentReportType = "Summary";
 
-    // 切换报表类型 -> 加载不同 filter UI
-    function setReport(type) {
+    function setReport(type, btnElement) {
+        currentReportType = type;
+
+        $('.left-nav button').removeClass('active');
+        if(btnElement){
+            $(btnElement).addClass('active');
+        }
+
+        
+        $("#reportPreview").html('<div class="text-center text-muted p-5">Click "Generate" to view data.</div>');
+        $("#filterContainer").html('<div class="spinner-border text-primary" role="status"></div> Loading filters...');
+
         $.get("/Report/FilterUI?reportType=" + type, function (ui) {
             $("#filterContainer").html(ui);
         });
     }
 
-    // previewReport 会由每个 Filter 的按钮触发
-    function previewReport() {
-        $.get("/Report/Preview", $("#filterForm").serialize(), function (data) {
-            $("#reportPreview").html(data);
+    function loadReport(typeOverride) {
+        
+        var type = typeOverride || currentReportType;
+
+        var start = null;
+        var end = null;
+        var category = "All"; // default
+        var sortBy = "Name";  // default
+
+        // Summary
+        if (type === 'Summary') {
+            // get month
+            var monthVal = $('#summaryMonth').val();
+
+            if (monthVal) {
+                var parts = monthVal.split('-'); 
+                var year = parseInt(parts[0]);
+                var month = parseInt(parts[1]);
+
+
+                var lastDayObj = new Date(year, month, 0);
+
+                start = year + '-' + String(month).padStart(2, '0') + '-01';
+                end = year + '-' + String(month).padStart(2, '0') + '-' + lastDayObj.getDate();
+            }
+            
+        }
+
+        
+        else if (type === 'Exception') {
+            category = $('#categoryFilter').val();
+            sortBy = $('#sortByFilter').val();
+            
+            start = $('#startDate').val();
+        }
+
+        else {
+            start = $('#startDate').val();
+            end = $('#endDate').val();
+        }
+
+        $("#reportPreview").html('<div class="text-center mt-5"><div class="spinner-border text-primary"></div><br>Generating Report...</div>');
+
+        $.ajax({
+            url: "/Report/Preview",
+            type: "GET",
+            data: {
+                reportType: type,
+                startDate: start,
+                endDate: end,
+                category: category,
+                sortBy: sortBy
+            },
+            success: function (data) {
+                $("#reportPreview").html(data);
+            },
+            error: function (xhr) {
+                $("#reportPreview").html('<div class="alert alert-danger">Error loading report: ' + xhr.responseText + '</div>');
+            }
         });
     }
 
-    // 页面加载时默认 Summary filter
     $(document).ready(function () {
-        setReport("Summary");
+        $('.left-nav button').first().trigger('click');
     });
 </script>

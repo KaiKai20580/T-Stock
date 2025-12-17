@@ -1,22 +1,41 @@
-﻿<form id="filterForm">
-    <input type="hidden" name="reportType" value="Exception" />
+﻿<div class="card p-3 mb-3 bg-light border-danger">
+    <h5 class="text-danger"><i class="fa fa-exclamation-triangle"></i> Exception Report</h5>
 
-    <label>Month</label>
-    <input type="month" name="startDate" />
+    <div class="row g-3">
+        <div class="col-md-3">
+            <label>Category</label>
+            <select id="categoryFilter" class="form-select">
+                <option value="All">-- All Categories --</option>
+                @if (ViewBag.Categories != null)
+                {
+                    foreach (var cat in ViewBag.Categories as List<string>)
+                    {
+                        <option value="@cat">@cat</option>
+                    }
+                }
+            </select>
+        </div>
 
-    <label>Category</label>
-    <select name="category">
-        <option value="">All</option>
-        <option>Food</option>
-        <option>Electronics</option>
-        <option>Clothing</option>
-    </select>
+        <div class="col-md-3">
+            <label>Sort By</label>
+            <select id="sortByFilter" class="form-select">
+                <option value="Name">Product Name (A-Z)</option>
+                <option value="ID">Product ID</option>
+                <option value="Quantity">Quantity (Low to High)</option>
+                <option value="Value">Total Value (High to Low)</option>
+            </select>
+        </div>
 
-    <label>Sort</label>
-    <select name="sort">
-        <option value="qty">By Quantity</option>
-        <option value="days">By Days</option>
-    </select>
+        <div class="col-md-3">
+            <label>History Ref Date</label>
+            <input type="date" id="startDate" class="form-control" />
+            <small class="text-muted" style="font-size:10px">For Dead Stock calc</small>
+        </div>
 
-    <button type="button" onclick="previewReport()">Preview</button>
-</form>
+        <div class="col-md-3 d-flex align-items-end">
+            <button class="btn btn-danger w-100" onclick="loadReport('Exception')">
+                Generate Report
+            </button>
+        </div>
+    </div>
+</div>

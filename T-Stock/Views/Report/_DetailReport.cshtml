@@ -5,7 +5,7 @@
 }
 
 @{
-    ViewBag.Title = "Supplier Detail Report";
+    ViewBag.Title = "Detail Report";
     var poCounts = ViewBag.POCounts as Dictionary<string, int> ?? new();
     var poAmounts = ViewBag.SupplierTotalAmount as Dictionary<string, decimal> ?? new();
     var lastPO = ViewBag.LastPODate as Dictionary<string, DateTime?> ?? new();
@@ -29,7 +29,7 @@
  
 }
 
-    <link rel="stylesheet" href="~/css/report.css" />
+    <link rel="stylesheet" href="~/css/Report.css" />
 <div class="right-panel">
     <h2 class="report-title">Reports</h2>
 
@@ -61,7 +61,7 @@
        
     @foreach (var s in Model)
         {
-            var supplierId = s.SupplierID ?? "UNKNOWN";
+            var supplierId = s.SupplierId ?? "UNKNOWN";
             var count = poCounts.GetValueOrDefault(supplierId, 0);
             var amount = poAmounts.GetValueOrDefault(supplierId, 0m);
             var lastDate = lastPO.GetValueOrDefault(supplierId);
@@ -75,7 +75,7 @@
             if (monthsAgo < 0) monthsAgo += 12;
 
             <tr>
-                <td class="font-bold">@s.SupplierID</td>
+                <td class="font-bold">@s.SupplierId</td>
                 <td>@s.Company</td>
                 <td>@s.ContactPerson</td>
                 <td>
