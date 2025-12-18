@@ -2,19 +2,20 @@
     ViewData["Title"] = "Create Product";
 }
 <title>@ViewData["Title"]</title>
-@model T_Stock.Models.InventoryListVM
+@model T_Stock.Models.ProductListVM
 
 <div class="CREATE">
-    <h2>Add Inventory Item</h2>
-    <form asp-action="Create" method="post">
+    <h2>Add Product</h2>
+    <form asp-controller="Inventory" asp-action="Create" method="post" id="createProductForm">
         <table class="table">
             <thead>
                 <tr>
-                    <th>Item Name</th>
+                    <th>Product Name</th>
                     <th>Category</th>
-                    <th>Qty</th>
-                    <th>Price (RM)</th>
-                    <th></th>
+                    <th>Quantity</th>
+                    <th>Reorder Level</th>
+                    <th>Price</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody id="item-rows">
@@ -22,12 +23,17 @@
                 {
                     <tr>
                         <td>
-                            <input asp-for="Items[@i].ItemName" class="form-control" />
-                            <span asp-validation-for="Items[@i].ItemName" class="text-danger"></span>
+                            <input asp-for="Items[@i].ProductName" class="form-control" value="" />
+                            <span asp-validation-for="Items[@i].ProductName" class="text-danger"></span>
                         </td>
 
                         <td>
-                            <input asp-for="Items[@i].Category" class="form-control" />
+                            <select asp-for="Items[@i].Category" class="form-control">
+                                @* CHANGED: added 'disabled selected' so it acts as a placeholder *@
+                                <option value="" disabled selected>-- Select --</option>
+                                <option value="Food">Food</option>
+                                <option value="Drink">Drink</option>
+                            </select>
                             <span asp-validation-for="Items[@i].Category" class="text-danger"></span>
                         </td>
 
@@ -37,28 +43,162 @@
                         </td>
 
                         <td>
+                            <input asp-for="Items[@i].ReorderLevel" type="number" class="form-control" />
+                            <span asp-validation-for="Items[@i].ReorderLevel" class="text-danger"></span>
+                        </td>
+
+                        <td>
                             <input asp-for="Items[@i].Price" type="number" class="form-control" />
                             <span asp-validation-for="Items[@i].Price" class="text-danger"></span>
                         </td>
 
                         <td>
-                            <button type="button" onclick="removeRow(this)">Remove</button>
+                            @if (i > 0)
+                            {
+                                <button type="button" onclick="removeRow(this)" class="btn-custom button btn-remove">Remove</button>
+                            }
                         </td>
                     </tr>
                 }
             </tbody>
-
         </table>
 
-        <button type="button" onclick="addRow()">+ Add Row</button>
-        <button type="submit" class="ajax-button" data-url="/Inventory/Index">Create</button>
+        @* Add Row Button *@
+        <button type="button" onclick="addRow()" class="button btn-custom btn-add-row">
+            + Add Row
+        </button>
+
+        @* Create Button *@
+        <button type="submit" class="ajax-button button btn-custom btn-create" data-url="/Inventory/Index">
+            Create
+        </button>
+
     </form>
 
-    @section Scripts {
-        <partial name="_ValidationScriptsPartial" />
+    <br />
+    <a href="/Home/Index" class="btn btn-secondary ajax-nav" data-ajax="page">Home</a>
+    <a href="/Inventory/Index" class="btn btn-secondary ajax-nav" data-ajax="page">Back</a>
+</div>
+
+<style>
+    .btn-custom {
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
-    <br />
-    <a href="/Home/Index" class="btn btn-secondary ajax-nav">Home</a>
-    <a href="/Inventory/Index" class="btn btn-secondary ajax-nav">Back</a>
-</div>
+        .btn-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        }
+
+    .btn-add-row {
+        background-color: lightgray;
+        color: #333;
+        padding: 8px 16px;
+        margin-right: 5px;
+        font-weight: 500;
+    }
+
+        .btn-add-row:hover {
+            background-color: #bfbfbf;
+        }
+
+    .btn-create {
+        background-color: #28a745;
+        color: white;
+        padding: 8px 16px;
+        font-weight: 500;
+    }
+
+        .btn-create:hover {
+            background-color: #218838;
+        }
+
+    .btn-remove {
+        background-color: #dc3545;
+        color: white;
+        padding: 6px 12px;
+    }
+
+        .btn-remove:hover {
+            background-color: #c82333;
+        }
+</style>
+
+    <script>
+        function addRow() {
+            var tbody = document.getElementById('item-rows');
+            var firstRow = tbody.rows[0];
+            var newRow = firstRow.cloneNode(true);
+
+            // 1. Clear INPUT values
+            var inputs = newRow.getElementsByTagName('input');
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].value = "";
+                inputs[i].classList.remove("input-validation-error");
+            }
+
+            // 2. Clear SELECT values
+            var selects = newRow.getElementsByTagName('select');
+            for (var k = 0; k < selects.length; k++) {
+                selects[k].selectedIndex = 0;
+                selects[k].options[0].disabled = true;
+                selects[k].options[0].selected = true;
+
+                selects[k].classList.remove("input-validation-error");
+            }
+
+            // 3. Clear validation messages
+            var spans = newRow.getElementsByTagName('span');
+            for (var j = 0; j < spans.length; j++) {
+                spans[j].innerHTML = "";
+                spans[j].classList.remove("field-validation-error");
+                spans[j].classList.add("field-validation-valid");
+            }
+
+            // 4. Inject Remove Button
+            var lastCell = newRow.cells[newRow.cells.length - 1];
+            lastCell.innerHTML = `<button type="button" onclick="removeRow(this)" class="btn-custom btn-remove">Remove</button>`;
+
+            // 5. Append
+            tbody.appendChild(newRow);
+
+            // 6. Re-index and Re-parse
+            updateRowIndices();
+
+            var form = $("#createProductForm");
+            form.removeData("validator");
+            form.removeData("unobtrusiveValidation");
+            $.validator.unobtrusive.parse(form);
+        }
+
+        function removeRow(btn) {
+            var tbody = document.getElementById('item-rows');
+            var row = btn.closest('tr');
+            if (tbody.rows.length > 1) {
+                row.remove();
+                updateRowIndices();
+            }
+        }
+
+        function updateRowIndices() {
+            var rows = document.querySelectorAll('#item-rows tr');
+            rows.forEach((row, index) => {
+                var inputs = row.querySelectorAll('input, select');
+                var spans = row.querySelectorAll('span');
+
+                inputs.forEach(input => {
+                    if (input.name) input.name = input.name.replace(/Items\[\d+\]/, `Items[${index}]`);
+                    if (input.id) input.id = input.id.replace(/Items_\d+__/, `Items_${index}__`);
+                });
+
+                spans.forEach(span => {
+                    var valFor = span.getAttribute('data-valmsg-for');
+                    if (valFor) span.setAttribute('data-valmsg-for', valFor.replace(/Items\[\d+\]/, `Items[${index}]`));
+                });
+            });
+        }
+    </script>

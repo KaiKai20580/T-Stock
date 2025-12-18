@@ -5,14 +5,36 @@
     font-family: Arial, sans-serif;
 }
 
+body {
+    bottom: 2000px;
+}
+
+/*.sidebar:hover ~ #ajax-content .supplierPage {
+    left: 120px;
+    width: calc(100% - 320px);
+    transition: all 0.4s ease;
+}*/
+
 .sidebar:hover ~ #ajax-content .main-content {
     left: 120px;
     width: calc(100% - 320px);
 }
 
+.sidebar:hover ~ #ajax-content .stockAction {
+    width: 15rem;
+}
+
+.sidebar:hover ~ #ajax-content .stock-table {
+    width: 50rem;
+}
+
+.sidebar:hover ~ #ajax-content .inven-table {
+    width: 73.8rem;
+}
+
 .sidebar:hover ~ #ajax-content .dashboard {
     left: 120px;
-    width: calc(100% - 320px);
+    width: calc(100% - 260px);
 }
 
 .sidebar:hover ~ #ajax-content .sales {
@@ -43,6 +65,11 @@
 }
 
 .sidebar:hover ~ #ajax-content .INVENTORY {
+    left: 120px;
+    width: calc(100% - 800px);
+}
+
+.sidebar:hover ~ #ajax-content .STOCK {
     left: 120px;
     width: calc(100% - 800px);
 }
@@ -197,20 +224,60 @@
     padding: 1rem;
 }
 
+#searchBox {
+    outline: none;
+}
+
+.inven-search-container {
+    position: relative;
+    display: flex;
+    left: 300px;
+    top: -55px;
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+    width: calc(100% - 1px);
+    transform: scaleX(0.8);
+    transition: all 0.4s ease;
+}
+
+    .inven-search-container:hover {
+        width: calc(100% - 1px);
+        transform: scaleX(0.9);
+    }
+
+    .inven-search-container input {
+        width: 100%;
+        padding: 10px 40px 10px 20px;
+        border-radius: 25px;
+        border: none;
+        box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+        font-size: 18px;
+    }
+
+    .inven-search-container i {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #555;
+    }
+
 .search-container {
     position: relative;
     display: flex;
-    height: 50px;
+    right: 150px;
+    top: 0.4rem;
+    z-index: 999;
     align-items: center;
     justify-content: center;
-    width: calc(100% - 10px);
+    width: calc(100% - 1px);
     transform: scaleX(0.8);
     transition: all 0.4s ease;
-    margin-right: 100px;
 }
 
     .search-container:hover {
-        width: calc(100% - 90px);
+        width: calc(100% - 1px);
         transform: scaleX(0.9);
     }
 
@@ -239,7 +306,7 @@
 
 .dashboard {
     position: relative;
-    width: calc(110% - 350px);
+    width: calc(100% - 160px);
     transition: all 0.4s ease;
     border-radius: 20px;
     background-color: lightgray;
@@ -262,11 +329,13 @@
 
     .dashboard .info {
         display: flex;
-        justify-content: space-evenly;
+        justify-content: space-between;
         flex-wrap: wrap;
         gap: 20px;
         padding-left: 20px;
+        padding-right: 20px; 
         margin-top: 3px;
+        width: 100%;
     }
 
     .dashboard .info a {
@@ -279,7 +348,7 @@
             background-color: #f0f0f0;
             padding: 30px;
             border-radius: 10px;
-            width: 250px;
+            width: 300px;
             min-width: 150px;
             height: 130px;
             transition: all 0.2s ease;
@@ -287,11 +356,10 @@
 
         .dashboard .info p {
             margin: 0;
-            margin-top: 10px;
-            gap: 20px;
-            width: 150px;
-            height: 50px;
-            transform: translate(8px, 5px);
+            margin-top: 5px; 
+            font-size: 14px;
+            line-height: 1.5; 
+            color: #555;
         }
 
 .product,
@@ -322,6 +390,9 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    flex: 1;
+    padding-left: 10px;
+    overflow: hidden;
 }
 
 .i-dashboard {
@@ -354,9 +425,8 @@
 .outstock-text h2 {
     width: fit-content;
     margin: 0;
-    padding: 3px 8px;
-    border-radius: 5px;
-    transform: translate(-5px, 10px);
+    padding: 0;
+    font-size: 2rem;
 }
 
 .sales {
@@ -569,10 +639,6 @@ body,
     width: calc(100% - 1000px);
 }
 
-.NOTI p {
-
-}
-
 .INVENTORY {
     margin-left: 100px;
     padding: 20px;
@@ -585,135 +651,292 @@ body,
     width: calc(100% - 700px);
 }
 
-
-
-
-
-
-
-
-/* Dark Mode */
-body.dark-mode {
-    background-color: black;
-    color: #eee;
+.INVENTORY h3 {
+    font-size: 3rem;
+    font-weight: 1000;
+    width: 100%;
 }
 
-    body.dark-mode .main-content {
-        background-color: black;
-        opacity: 1;
-    }
-
-    body.dark-mode .sidebar {
-        background-color: #1a1a1a;
-        opacity: 0.85;
-    }
-
-    body.dark-mode .dashboard,
-    body.dark-mode .sales,
-    body.dark-mode .budget,
-    body.dark-mode .purchase-order {
-        background-color: #2a2a2a;
-        color: #ddd;
-    }
-
-    body.dark-mode .i-dashboard {
-        background-color: #3a7f3a;
-        color: #fff;
-    }
-
-
-    body.dark-mode .product-text h2,
-    body.dark-mode .order-text h2,
-    body.dark-mode .stock-text h2,
-    body.dark-mode .outstock-text h2 {
-        color: black;
-    }
-
-    body.dark-mode .product-text p,
-    body.dark-mode .order-text p,
-    body.dark-mode .stock-text p,
-    body.dark-mode .outstock-text p {
-        color: black;
-    }
-
-    body.dark-mode .product,
-    body.dark-mode .order,
-    body.dark-mode .stock {
-        border-color: #555;
-    }
-
-    body.dark-mode .search-container input {
-        background-color: #333;
-        color: #eee;
-        box-shadow: 0px 2px 5px rgba(0,0,0,0.5);
-    }
-
-    body.dark-mode .sales p {
-        color: #eee;
-    }
-
-    body.dark-mode .notification a {
-        color: #eee;
-    }
-
-    body.dark-mode .logout {
-        color: #ff6666;
-    }
-
-    body.dark-mode .button a {
-        background-color: #555;
-        color: #fff;
-        border-color: #888;
-    }
-
-    body.dark-mode .test {
-        background-color: black;
-    }
-
-    body.dark-mode .dashboard .info > a .product:hover,
-    body.dark-mode .dashboard .info > a .order:hover,
-    body.dark-mode .dashboard .info > a .stock:hover {
-        box-shadow: #555 6px 6px;
-        transform: translateY(-5px);
-    }
-
-    body.dark-mode .dashboard .info > a .out-of-stock:hover {
-        box-shadow: red 6px 6px;
-        transform: translateY(-5px);
-    }
-
-    body.dark-mode .i-dashboard-out {
-        background-color: red;
-    }
-
-    body.dark-mode .CREATE {
-        background-color: black;
-    }
-
-    body.dark-mode .NOTI {
-        background-color: black;
-    }
-
-    body.dark-mode .INVENTORY {
-        background-color: black;
-    }
-
-    body.dark-mode .INVENTORY th {
-        background-color: darkgray;
-    }
-
-    body.dark-mode .CREATE th {
-        background-color: darkgray;
-        border: 1px solid black;
-        color: black;
-    }
-
-body.dark-mode .theme-toggle {
-    background: #30343a;
+.STOCK {
+    margin-left: 100px;
+    padding: 20px;
+    position: relative;
+    background-color: #fff;
+    min-height: 10vh;
+    top: 0;
+    left: 0px;
+    transition: all 0.5s ease;
+    width: calc(100% - 700px);
 }
 
-<<<<<<< HEAD
-=======
+#search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    border-top: none;
+    max-height: 200px;
+    overflow-y: auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    display: none;
+    z-index: 99999; 
+}
+
+    #search-results ul {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    #search-results li {
+        padding: 8px 12px;
+        cursor: pointer;
+    }
+
+        #search-results li:hover {
+            background: #f5f5f5;
+        }
+
+    #search-results a {
+        text-decoration: none;
+        color: black;
+        display: block;
+    }
+
+#item-rows tr {
+    transition: all 0.3s ease;
+    transform-origin: top;
+}
+
+    #item-rows tr.removing {
+        opacity: 0;
+        transform: scaleY(0);
+    }
+
+    #item-rows tr.adding {
+        opacity: 0;
+        transform: scaleY(0);
+    }
+
+        #item-rows tr.adding.show {
+            opacity: 1;
+            transform: scaleY(1);
+        }
+
+.button {
+    background-color: lightgray;
+    border-radius: 20px;
+    border: none;
+    padding: 6px;
+}
+
+.no-result {
+    padding: 10px;
+    color: #888;
+    font-style: italic;
+    text-align: center;
+}
+
+div.stock-heading {
+    position: relative;
+}
+
+div.stock-heading .search-container {
+    position: relative;
+    display: flex;
+    top: -60px;
+    left: 35rem;
+    width: calc(100% - 1px);
+    transform: scaleX(0.8);
+    transition: all 0.4s ease;
+}
+
+div.stock-heading .search-container:hover {
+    width: calc(100% - 1px);
+    transform: scaleX(0.9);
+}
+
+div.stock-heading .search-container input {
+    width: 100%;
+    padding: 10px 40px 10px 20px;
+    border-radius: 25px;
+    border: none;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+    font-size: 18px;
+}
+
+div.stock-heading .search-container i {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #555;
+}
+
+div.stock-heading h3 {
+    font-size: 3rem;
+    font-weight: 1000;
+    width: 100%;
+}
+
+.stockManage {
+    display: flex;
+
+}
+
+/* ===== Filters ===== */
+.filter {
+    display: flex;
+    gap: 20px;
+
+}
+
+    .filter h2 {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: #718093;
+    }
+
+.filters {
+    width: 180px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #dcdde1;
+    font-size: 14px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+/* ===== Action Button ===== */
+.stockAction {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #40739e, #273c75);
+    color: #fff;
+    border-radius: 10px;
+    cursor: pointer;
+    width: max-content;
+    transition: all 0.4s ease;
+}
+
+    .stockAction:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .stockAction i {
+        font-size: 22px;
+    }
+
+    .stockAction h3 {
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+.stock-table {
+    width: 73.8rem;
+    border-collapse: collapse;
+    transition: all 0.4s ease;
+}
+
+
+.inven-table {
+    width: 80rem;
+    border-collapse: collapse;
+    transition: all 0.4s ease;
+}
+
+td {
+    background-color: white; 
+    transition: background-color 0.5s ease-in-out; 
+}
+
+.highlight td {
+    background-color: yellow; 
+}
+
+/* AJAX Pagin and Sorting*/
+.sortable {
+    cursor: pointer;
+}
+
+.pagination {
+    margin-top: 10px;
+}
+
+.page-btn {
+    padding: 5px 10px;
+    margin-right: 5px;
+}
+
+.page-btn.active {
+    background: #333;
+    color: white;
+}
+
+.inventory-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    margin: 12px 0;
+}
+
+.sort-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sort-group label {
+    font-size: 14px;
+    color: #555;
+}
+
+.sort-group select {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.sort-dir {
+    border: 1px solid #ccc;
+    background: white;
+    padding: 6px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.sort-dir:hover {
+    background: #f5f5f5;
+}
+
+#sortDirBtn {
+    position: relative;
+    width: 40px;
+    height: 40px;
+}
+
+    #sortDirBtn i {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-70%, -50%);
+    }
+
+    #sortDirBtn:hover {
+        background-color: #f0f0f0;
+    }
+
+
+
+
+
+
 /*KW CSS*/
 div.supplierPage {
     margin-left: 100px;
@@ -733,14 +956,44 @@ div.heading {
     div.heading h3 {
         font-size: 3rem;
         font-weight: 1000;
-        width: 70%;
+        width: 100%;
     }
 
-    div.heading input {
-        border-radius: 100px;
-        font-size: 30px;
-        padding: 10px 170px 10px 8px;
+    div.heading .search-container {
+        position: relative;
+        display: flex;
+        right: 100px;
+        height: 60px;
+        z-index: 999;
+        align-items: center;
+        justify-content: center;
+        width: calc(100% - 1px);
+        transform: scaleX(0.8);
+        transition: all 0.4s ease;
     }
+
+    div.heading .search-container:hover {
+    width: calc(100% - 1px);
+    transform: scaleX(0.9);
+}
+
+    div.heading .search-container input {
+    width: 100%;
+    padding: 10px 40px 10px 20px;
+    border-radius: 25px;
+    border: none;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+    font-size: 18px;
+}
+
+    div.heading .search-container i {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #555;
+}
+
 
 div.supplierManage {
     display: flex;
@@ -1065,4 +1318,286 @@ button.removeProductBtn {
             padding: 8px;
             margin-bottom: 12px;
         }
->>>>>>> main
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Dark Mode */
+body.dark-mode {
+    background-color: black;
+    color: #eee;
+}
+
+    body.dark-mode .main-content {
+        background-color: black;
+        opacity: 1;
+    }
+
+    body.dark-mode .sidebar {
+        background-color: #1a1a1a;
+        opacity: 0.85;
+    }
+
+    body.dark-mode .dashboard,
+    body.dark-mode .sales,
+    body.dark-mode .budget,
+    body.dark-mode .purchase-order {
+        background-color: #2a2a2a;
+        color: #ddd;
+    }
+
+    body.dark-mode .i-dashboard {
+        background-color: #3a7f3a;
+        color: #fff;
+    }
+
+
+    body.dark-mode .product-text h2,
+    body.dark-mode .order-text h2,
+    body.dark-mode .stock-text h2,
+    body.dark-mode .outstock-text h2 {
+        color: black;
+    }
+
+    body.dark-mode .product-text p,
+    body.dark-mode .order-text p,
+    body.dark-mode .stock-text p,
+    body.dark-mode .outstock-text p {
+        color: black;
+    }
+
+    body.dark-mode .product,
+    body.dark-mode .order,
+    body.dark-mode .stock {
+        border-color: #555;
+    }
+
+    body.dark-mode .search-container input {
+        background-color: #333;
+        color: #eee;
+        box-shadow: 0px 2px 5px rgba(0,0,0,0.5);
+    }
+
+    body.dark-mode #search-results li {
+        background-color: black;
+    }
+
+        body.dark-mode #search-results li:hover {
+            background-color: darkgray;
+            color: white;
+        }
+
+        body.dark-mode #search-results li > a {
+            color: white;
+        }
+
+    body.dark-mode .no-result {
+        background-color: black;
+        color: white;
+    }
+
+    body.dark-mode .sales p {
+        color: #eee;
+    }
+
+    body.dark-mode .notification a {
+        color: #eee;
+    }
+
+    body.dark-mode .logout {
+        color: #ff6666;
+    }
+
+    body.dark-mode .button a {
+        background-color: #555;
+        color: #fff;
+        border-color: #888;
+    }
+
+    body.dark-mode .test {
+        background-color: black;
+    }
+
+    body.dark-mode .dashboard .info > a .product:hover,
+    body.dark-mode .dashboard .info > a .order:hover,
+    body.dark-mode .dashboard .info > a .stock:hover {
+        box-shadow: #555 6px 6px;
+        transform: translateY(-5px);
+    }
+
+    body.dark-mode .dashboard .info > a .out-of-stock:hover {
+        box-shadow: red 6px 6px;
+        transform: translateY(-5px);
+    }
+
+    body.dark-mode .i-dashboard-out {
+        background-color: red;
+    }
+
+    body.dark-mode .CREATE {
+        background-color: black;
+    }
+
+    body.dark-mode .NOTI {
+        background-color: black;
+    }
+
+
+        body.dark-mode .INVENTORY th {
+            background-color: darkgray;
+        }
+
+    body.dark-mode .STOCK {
+        background-color: black;
+    }
+
+        body.dark-mode .STOCK th {
+            background-color: darkgray;
+        }
+
+    body.dark-mode .CREATE th {
+        background-color: darkgray;
+        border: 1px solid black;
+        color: black;
+    }
+
+    body.dark-mode .theme-toggle {
+        background: #30343a;
+    }
+
+    /* =========================================
+   DARK MODE - INVENTORY SPECIFIC STYLES
+   ========================================= */
+
+    /* 1. Main Container Background */
+    body.dark-mode .INVENTORY {
+        background-color: #1e1e1e; /* Darker charcoal, better than pure black */
+        color: #e0e0e0;
+        border-radius: 15px; /* Optional: adds softness */
+    }
+
+        /* 2. Heading */
+        body.dark-mode .INVENTORY h3 {
+            color: #ffffff;
+        }
+
+    /* 3. Search Bar */
+    body.dark-mode .inven-search-container input {
+        background-color: #2d2d2d;
+        color: #ffffff;
+        border: 1px solid #444;
+        box-shadow: none;
+    }
+
+    body.dark-mode .inven-search-container i {
+        color: #bbb;
+    }
+
+    /* 4. Toolbar & Sorting */
+    body.dark-mode .sort-group label {
+        color: #bbb;
+    }
+
+    body.dark-mode .sort-group select {
+        background-color: #2d2d2d;
+        color: #ffffff;
+        border: 1px solid #444;
+    }
+
+    body.dark-mode .sort-dir {
+        background-color: #2d2d2d;
+        border: 1px solid #444;
+    }
+
+        body.dark-mode .sort-dir i {
+            color: #ffffff;
+        }
+
+        body.dark-mode .sort-dir:hover {
+            background-color: #444;
+        }
+
+    /* 5. Inventory Table */
+    body.dark-mode .inven-table {
+        box-shadow: 0 4px 10px rgba(0,0,0,0.5); /* Darker shadow */
+        border: 1px solid #333;
+    }
+
+    /* Table Header */
+    body.dark-mode .INVENTORY th {
+        background-color: #2c3e50; /* Professional Dark Blue-Grey */
+        color: #ffffff;
+        border-bottom: 2px solid #444;
+    }
+
+    /* Table Cells (Overrides the light mode 'white' background) */
+    body.dark-mode .INVENTORY td {
+        background-color: #1e1e1e;
+        color: #cccccc;
+        border-bottom: 1px solid #333;
+    }
+
+    /* Table Row Hover Effect */
+    body.dark-mode .INVENTORY tr:hover td {
+        background-color: #333333; /* Highlights row on hover */
+        color: #ffffff;
+    }
+
+    /* 6. Pagination Buttons */
+    body.dark-mode .page-btn {
+        background-color: #2d2d2d;
+        color: #ffffff;
+        border: 1px solid #444;
+    }
+
+        body.dark-mode .page-btn:hover {
+            background-color: #444;
+        }
+
+        body.dark-mode .page-btn.active {
+            background-color: #3a7f3a; /* Match your sidebar green or use blue */
+            border-color: #3a7f3a;
+            color: white;
+        }
+
+    /* 7. Action Buttons */
+    /* Create Button */
+    body.dark-mode .INVENTORY a.btn-secondary {
+        background-color: #2d2d2d;
+        color: white;
+        border: 1px solid #555;
+    }
+
+        body.dark-mode .INVENTORY a.btn-secondary:hover {
+            background-color: #444;
+        }
+
+    /* Delete Button (Keep red but adjust border/hover) */
+    body.dark-mode .delete-btn {
+        background-color: #8a1c1c; /* Slightly darker red for dark mode eyes */
+        color: #ddd;
+    }
+
+        body.dark-mode .delete-btn:hover {
+            background-color: #cc0000;
+            color: #fff;
+        }
+
+    /* 8. Highlight Row (Overrides yellow) */
+    body.dark-mode .highlight td {
+        background-color: #635d00 !important; /* Dark Gold/Olive */
+        color: #fff;
+    }

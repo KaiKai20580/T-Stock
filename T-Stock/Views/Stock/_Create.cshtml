@@ -1,0 +1,462 @@
+﻿@model T_Stock.Models.StockTransactionListVM
+
+@{
+    ViewData["Title"] = "Create Stock Transactions";
+
+    // Detect if this is a direct browser load or an AJAX partial load
+    bool isAjax = Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+
+    // If AJAX, disable Layout. If Normal, use default Layout.
+    Layout = isAjax ? null : "_Layout";
+}
+
+<style>
+    /* ===== General Styles ===== */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    /* ===== TABLE CONTAINER STYLE ===== */
+    .stock-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+        .stock-table th, .stock-table td {
+            width: 200px;
+            padding: 10px;
+            font-size: 1rem;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .stock-table th {
+            background-color: lightgrey;
+            font-weight: 900;
+            font-size: 1.1rem;
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        .stock-table td {
+            background-color: white;
+            font-weight: 500;
+        }
+
+            /* ===== ACTION COLUMN ===== */
+            .stock-table th:last-child,
+            .stock-table td:last-child {
+                width: 200px;
+                min-width: 200px;
+                text-align: center;
+                vertical-align: middle;
+            }
+
+    /* ===== Input & Select Styling ===== */
+    .form-control {
+        width: 100%;
+        padding: 6px 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+        background-color: white;
+    }
+
+    select.form-control {
+        cursor: pointer;
+    }
+
+    /* ===== Button Styles ===== */
+    .btn-common {
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: 15px;
+        border: none;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    /* Standardized Action Button Style */
+    .btn-action {
+        padding: 10px 20px;
+        border-radius: 15px;
+        border: none;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        min-width: 120px;
+        text-decoration: none;
+    }
+
+    .btn-nav {
+        background-color: #eee;
+        color: black;
+    }
+
+        .btn-nav:hover {
+            background-color: #ccc;
+        }
+
+    .btn-add-row {
+        background-color: #87CEEB;
+        color: black;
+    }
+
+        .btn-add-row:hover {
+            background-color: #5FB6D9;
+        }
+
+    .btn-create {
+        background-color: #90EE90;
+        color: black;
+    }
+
+        .btn-create:hover {
+            background-color: #76c976;
+        }
+
+    /* ===== REMOVE BUTTON ===== */
+    .removeProductBtn {
+        background: #ff4d4d !important;
+        color: white !important;
+        border: none;
+        border-radius: 15px;
+        padding: 8px 16px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 0.9rem;
+        display: flex;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+        .removeProductBtn:hover {
+            background: #d90000 !important;
+        }
+
+    /* ===== Row Animations ===== */
+    #item-rows tr {
+        transition: transform 0.3s ease, opacity 0.3s ease;
+        transform-origin: top;
+    }
+
+        #item-rows tr.adding {
+            opacity: 0;
+            transform: scaleY(0);
+        }
+
+            #item-rows tr.adding.show {
+                opacity: 1;
+                transform: scaleY(1);
+            }
+
+        #item-rows tr.removing {
+            opacity: 0;
+            transform: scaleY(0);
+        }
+
+    .down_container {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .navigation-buttons {
+        margin-top: 15px;
+        display: flex;
+        gap: 15px;
+    }
+
+    .text-danger {
+        color: red;
+        font-size: 0.8rem;
+    }
+
+    .field-validation-error {
+        color: red;
+        font-size: 0.8rem;
+        display: block;
+        margin-top: 5px;
+    }
+
+    select.input-validation-error {
+        border: 1px solid red;
+    }
+</style>
+
+<div class="CREATE">
+    <h2>Add Stock Transactions</h2>
+
+    <form id="createTransactionForm" asp-controller="Stock" asp-action="CreateTransaction" method="post">
+        <table class="stock-table">
+            <thead>
+                <tr>
+                    <th>Reason</th>
+                    <th>Type</th>
+                    <th>Quantity</th>
+                    <th>Product Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="item-rows">
+                @if (Model != null && Model.Items != null && Model.Items.Count > 0)
+                {
+                    @for (int i = 0; i < Model.Items.Count; i++)
+                    {
+                        <tr class="adding show">
+                            <td>
+                                <input asp-for="Items[i].Reason" class="form-control js-reason" required />
+                                <span asp-validation-for="Items[i].Reason" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <select asp-for="Items[i].TransactionType" class="form-control">
+                                    <option value="IN">IN</option>
+                                    <option value="OUT">OUT</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input asp-for="Items[i].Quantity" type="number" class="form-control js-qty" min="1" required />
+                                <span asp-validation-for="Items[i].Quantity" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <select asp-for="Items[i].ProductName" class="form-control product-select js-product">
+                                    <option value="" disabled selected>-- Select Product --</option>
+                                    @if (Model.Products != null)
+                                    {
+                                        foreach (var prod in Model.Products)
+                                        {
+                                            <option value="@prod.ProductName">@prod.ProductName</option>
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="Items[i].ProductName" class="text-danger error-span"></span>
+                            </td>
+                            <td>
+                                @if (i > 0)
+                                {
+                                    <button type="button" class="removeProductBtn">Remove</button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr class="adding show">
+                        <td>
+                            <input name="Items[0].Reason" class="form-control js-reason" required />
+                            <span class="text-danger field-validation-valid"></span>
+                        </td>
+                        <td>
+                            <select name="Items[0].TransactionType" class="form-control">
+                                <option value="IN">IN</option>
+                                <option value="OUT">OUT</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input name="Items[0].Quantity" type="number" class="form-control js-qty" value="0" min="1" required />
+                            <span class="text-danger field-validation-valid"></span>
+                        </td>
+                        <td>
+                            <select name="Items[0].ProductName" class="form-control product-select js-product">
+                                <option value="" disabled selected>-- Select Product --</option>
+                                @if (Model != null && Model.Products != null)
+                                {
+                                    foreach (var prod in Model.Products)
+                                    {
+                                        <option value="@prod.ProductName">@prod.ProductName</option>
+                                    }
+                                }
+                            </select>
+                            <span class="text-danger error-span"></span>
+                        </td>
+                        <td></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="down_container">
+            <button type="button" onclick="addRow()" class="btn-action btn-add-row">
+                <i class="fas fa-plus" style="margin-right: 5px;"></i> Add Row
+            </button>
+
+            <button type="button" id="btnSubmit" class="btn-action btn-create ajax-nav" data-ajax="page">
+                Create
+            </button>
+        </div>
+    </form>
+
+    <div class="navigation-buttons">
+        <a href="/Home/Index" class="btn-common btn-nav ajax-nav" data-ajax="page">Home</a>
+        <a href="/Stock/Index" class="btn-common btn-nav ajax-nav" data-ajax="page">Back</a>
+    </div>
+</div>
+
+@* SCRIPT SECTION: 
+   This script block will be executed whether the page is loaded normally OR via AJAX.
+*@
+<script>
+    // Self-executing function to avoid global scope pollution if loaded multiple times via AJAX
+    (function() {
+        // Validation scripts if needed
+        @if (isAjax)
+        {
+                 // If AJAX, we might need to manually trigger validation parsing if the library isn't loaded
+                 // usually _ValidationScriptsPartial handles this
+        }
+
+        var availableProducts = @Html.Raw(Json.Serialize(Model?.Products ?? new List<T_Stock.Models.Product>()));
+
+        // --- 1. Helper Functions ---
+        function showError(input, span, message) {
+            input.addClass("input-validation-error");
+            span.text(message);
+            span.removeClass("field-validation-valid");
+            span.addClass("field-validation-error");
+        }
+
+        function clearError(input, span) {
+            input.removeClass("input-validation-error");
+            span.text("");
+            span.removeClass("field-validation-error");
+            span.addClass("field-validation-valid");
+        }
+
+        // --- 2. Row Adding Logic ---
+        // Attached to window so the onclick="addRow()" in HTML can find it
+        window.addRow = function () {
+            var table = document.getElementById("item-rows");
+            if(!table) return; // Safety check
+
+            var rowIndex = table.rows.length;
+            var newRow = document.createElement("tr");
+            newRow.classList.add("adding");
+
+            let optionsHtml = '<option value="" disabled selected>-- Select Product --</option>';
+            if(availableProducts){
+                availableProducts.forEach(prod => {
+                    optionsHtml += `<option value="${prod.productName}">${prod.productName}</option>`;
+                });
+            }
+
+            newRow.innerHTML = `
+                <td>
+                    <input name="Items[${rowIndex}].Reason" class="form-control js-reason" required />
+                    <span class="text-danger field-validation-valid"></span>
+                </td>
+                <td>
+                    <select name="Items[${rowIndex}].TransactionType" class="form-control">
+                        <option value="IN">IN</option>
+                        <option value="OUT">OUT</option>
+                    </select>
+                </td>
+                <td>
+                    <input name="Items[${rowIndex}].Quantity" type="number" class="form-control js-qty" value="0" min="1" required />
+                    <span class="text-danger field-validation-valid"></span>
+                </td>
+                <td>
+                    <select name="Items[${rowIndex}].ProductName" class="form-control product-select js-product">
+                        ${optionsHtml}
+                    </select>
+                    <span class="text-danger error-span"></span>
+                </td>
+                <td>
+                    <button type="button" class="removeProductBtn">Remove</button>
+                </td>`;
+
+            table.appendChild(newRow);
+            requestAnimationFrame(() => {
+                newRow.classList.add("show");
+            });
+        };
+
+        // --- 3. Remove Logic ---
+        // Use event delegation on body or a static parent to handle dynamically added buttons
+        $(document).off('click', '.removeProductBtn').on('click', '.removeProductBtn', function () {
+            var row = $(this).closest('tr');
+            row.addClass('removing');
+            setTimeout(() => row.remove(), 30);
+        });
+
+        // --- 4. SUBMIT LOGIC ---
+        // Unbind previous click events to prevent double submission if partial is reloaded
+        $("#btnSubmit").off("click").on("click", function (e) {
+            e.preventDefault();
+
+            var $form = $("#createTransactionForm");
+            let isValid = true;
+
+            // Loop through every row
+            $("#item-rows tr").each(function () {
+                var row = $(this);
+                var reasonInput = row.find(".js-reason");
+                var quantityInput = row.find(".js-qty");
+                var productSelect = row.find(".js-product");
+
+                var reasonSpan = reasonInput.next("span");
+                var quantitySpan = quantityInput.next("span");
+                var productSpan = productSelect.next("span");
+
+                // --- VALIDATE REASON ---
+                if (!reasonInput.val() || reasonInput.val().trim() === "") {
+                    isValid = false;
+                    showError(reasonInput, reasonSpan, "Reason is required");
+                } else {
+                    clearError(reasonInput, reasonSpan);
+                }
+
+                // --- VALIDATE QUANTITY ---
+                var qtyVal = parseFloat(quantityInput.val());
+                if (isNaN(qtyVal) || qtyVal <= 0) {
+                    isValid = false;
+                    showError(quantityInput, quantitySpan, "Quantity must be > 0");
+                } else {
+                    clearError(quantityInput, quantitySpan);
+                }
+
+                // --- VALIDATE PRODUCT ---
+                if (!productSelect.val() || productSelect.val() === "") {
+                    isValid = false;
+                    showError(productSelect, productSpan, "Product is required");
+                } else {
+                    clearError(productSelect, productSpan);
+                }
+            });
+
+            if (!isValid) {
+                return;
+            }
+
+            $.ajax({
+                url: "/Stock/CreateTransaction",
+                type: "POST",
+                data: $form.serialize(),
+                success: function (result) {
+                    if (result.success) {
+                        window.location.href = "/Stock/Index";
+                    } else {
+                        $(".CREATE").parent().html(result);
+                    }
+                },
+                error: function (xhr) {
+                    console.error(xhr.responseText);
+                    alert("Server error.");
+                }
+            });
+        });
+    })();
+</script>

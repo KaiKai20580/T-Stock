@@ -1,17 +1,23 @@
 ﻿@{
     ViewData["Title"] = "Home";
+    string email = Context.Request.Cookies["User"] ?? "Guest";
+    string role = Context.Request.Cookies["Role"] ?? "No Role";
+    var displayName = email.Contains("@") ? email.Split('@')[0] : email;
 }
 
 <title>@ViewData["Title"]</title>
-@model List<T_Stock.Models.Inventory>
+@model List<T_Stock.Models.Product>
+
 
 <div class="main-content">
     <div class="container">
-        <h1>Welcome KaiKai !</h1>
+        <h3>Welcome @displayName !</h3>
     </div>
+
     <div class="search-container">
-        <input type="text" placeholder="Search..." />
+        <input type="text" id="searchBox" placeholder="Search..." />
         <i class="ri-search-line"></i>
+        <div id="search-results"></div>
     </div>
 
     <div class="notitoggle">
@@ -31,19 +37,20 @@
 <div class="dashboard">
     <h3>Overview</h3>
     <div class="info">
-        <a class="ajax-nav" href="/Inventory/Index">
+        <a class="ajax-nav" href="/Inventory/Index" data-ajax="page">
             <div class="product">
                 <div class="i-dashboard">
                     <i class="ri-box-3-fill"></i>
                 </div>
                 <div class="product-text">
-                    <h2>1000</h2>
-                    <p>Total Product</p>
+                    <h2>@ViewBag.TotalStockQuantity</h2>
+                    <p>Stock Quantity</p>
                 </div>
             </div>
         </a>
 
-        <a class="ajax-nav" href="/Inventory/Index">
+
+        <a class="ajax-nav" href="/Inventory/Index" data-ajax="page">
             <div class="order">
                 <div class="i-dashboard">
                     <i class="ri-file-list-fill"></i>
@@ -55,25 +62,25 @@
             </div>
         </a>
 
-        <a class="ajax-nav" href="/Inventory/Index">
+        <a class="ajax-nav" href="/Stock/Index" data-ajax="page">
             <div class="stock">
                 <div class="i-dashboard">
                     <i class="ri-increase-decrease-fill"></i>
                 </div>
                 <div class="stock-text">
-                    <h2>1000</h2>
-                    <p>Total Stock</p>
+                    <h2>@ViewBag.TotalTransactions</h2>
+                    <p>Transactions</p>
                 </div>
             </div>
         </a>
 
-        <a class="ajax-nav" href="/Inventory/Index">
+        <a class="ajax-nav" href="/Stock/Index" data-ajax="page">
             <div class="out-of-stock">
                 <div class="i-dashboard-out">
                     <i class="ri-dropbox-fill"></i>
                 </div>
                 <div class="outstock-text">
-                    <h2>0</h2>
+                    <h2>@ViewBag.OutOfStockCount</h2>
                     <p>Out Of Stock</p>
                 </div>
             </div>
@@ -101,19 +108,3 @@
         <h4>5000 Pending</h4>
     </div>
 </div>
-
-@*
-@if (Model != null && Model.Any())
-{
-    <ul>
-        @foreach (var item in Model)
-        {
-            <li>@item.ItemName</li>
-        }
-    </ul>
-}
-else
-{
-    <p>No items found.</p>
-}
-*@
