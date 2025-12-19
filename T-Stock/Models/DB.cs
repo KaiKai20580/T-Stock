@@ -137,7 +137,7 @@ namespace T_Stock.Models
 
         [BsonElement("Price")]
         [Required]
-        public int Price { get; set; }
+        public decimal Price { get; set; }
     }
 
     public class SupplierProduct
