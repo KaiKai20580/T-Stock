@@ -80,6 +80,7 @@ namespace T_Stock.Controllers
         }
 
         [HttpGet]
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Create()
         {
             var vm = new ProductListVM();
@@ -94,6 +95,7 @@ namespace T_Stock.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(ProductListVM model)
         {
             if (!ModelState.IsValid)
@@ -188,6 +190,9 @@ namespace T_Stock.Controllers
 
                 if (updateResult.MatchedCount > 0)
                 {
+                    // --- Added this line to trigger the CSS popup ---
+                    TempData["SuccessMessage"] = "Product updated successfully!";
+
                     return RedirectToAction(nameof(Index));
                 }
                 else

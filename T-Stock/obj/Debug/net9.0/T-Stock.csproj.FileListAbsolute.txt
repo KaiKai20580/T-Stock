@@ -109,5 +109,5 @@ C:\TARUMT\Y2\S2\T-Stock\T-Stock\bin\Debug\net9.0\package-lock.json
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\bin\Debug\net9.0\package.json
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\jr21c2ylnd-{0}-q2xar4dnzz-q2xar4dnzz.gz
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
-C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\a6efimi58p-{0}-psfeiwltyq-psfeiwltyq.gz
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\emd4mcth0z-{0}-qjlkkyoerc-qjlkkyoerc.gz
+C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\a6efimi58p-{0}-xmmeeh2jpd-xmmeeh2jpd.gz

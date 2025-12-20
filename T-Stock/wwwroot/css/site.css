@@ -9,12 +9,6 @@ body {
     bottom: 2000px;
 }
 
-/*.sidebar:hover ~ #ajax-content .supplierPage {
-    left: 120px;
-    width: calc(100% - 320px);
-    transition: all 0.4s ease;
-}*/
-
 .sidebar:hover ~ #ajax-content .main-content {
     left: 120px;
     width: calc(100% - 320px);
@@ -39,8 +33,8 @@ body {
 
 .sidebar:hover ~ #ajax-content .sales {
     left: 80px;
-    transform:scaleX(0.9);
-    transform-origin:right;
+    transform: scaleX(0.9);
+    transform-origin: right;
 }
 
 .sidebar:hover ~ #ajax-content .purchase-order {
@@ -59,14 +53,9 @@ body {
     width: calc(100% - 800px);
 }
 
-.sidebar:hover ~ #ajax-content .NOTI {
+.sidebar:hover ~ #ajax-content .CREATE-INVENTORY {
     left: 120px;
-    width: calc(100% - 800px);
-}
-
-.sidebar:hover ~ #ajax-content .INVENTORY {
-    left: 120px;
-    width: calc(100% - 800px);
+    width: calc(100% - 320px); /* Adjusted to match main content width */
 }
 
 .sidebar:hover ~ #ajax-content .STOCK {
@@ -103,26 +92,26 @@ body {
     transition: all 0.4s ease;
 }
 
-.sidebar:hover {
-    width: 220px;
-    opacity: 0.9;
-}
+    .sidebar:hover {
+        width: 220px;
+        opacity: 0.9;
+    }
 
-.sidebar .top .logo {
-    color: #fff;
-    display: flex;
-    height: 50px;
-    width: 100%;
-    transform: translateX(18%);
-    align-items: center;
-    opacity: 1;
-    transition: all 0.3s ease;
-}
+    .sidebar .top .logo {
+        color: #fff;
+        display: flex;
+        height: 50px;
+        width: 100%;
+        transform: translateX(18%);
+        align-items: center;
+        opacity: 1;
+        transition: all 0.3s ease;
+    }
 
-.sidebar:hover .top .logo {
-    opacity: 1;
-    transform: translateX(-0.5%);
-}
+    .sidebar:hover .top .logo {
+        opacity: 1;
+        transform: translateX(-0.5%);
+    }
 
 .top .logo i {
     font-size: 2rem;
@@ -136,6 +125,7 @@ body {
     width: 100%;
     align-items: center;
 }
+
 .sidebar:hover .top {
     opacity: 1;
 }
@@ -147,11 +137,11 @@ body {
     padding: 10px 15px;
 }
 
-.user p {
-    color: #fff;
-    opacity: 1;
-    margin: 0;
-}
+    .user p {
+        color: #fff;
+        opacity: 1;
+        margin: 0;
+    }
 
 .bold {
     font-weight: 600;
@@ -170,41 +160,40 @@ body {
     position: relative;
     list-style-type: none;
     height: 50px;
-    width: 90%; 
-    margin: 0.8rem auto; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-}
-
-.sidebar ul li a {
-    color: #fff;
+    width: 90%;
+    margin: 0.8rem auto;
     display: flex;
-    height: 50px;
-    width: 100%;
     align-items: center;
-    transform: translateX(-25px);
-    text-decoration: none;
-    border-radius: 0.8rem;
-    transition: all 0.3s ease;
+    justify-content: center;
 }
 
-.sidebar ul li a:hover {
-    background-color: #fff;
-    color: #12171e;
-}
+    .sidebar ul li a {
+        color: #fff;
+        display: flex;
+        height: 50px;
+        width: 100%;
+        align-items: center;
+        transform: translateX(-25px);
+        text-decoration: none;
+        border-radius: 0.8rem;
+        transition: all 0.3s ease;
+    }
 
-.sidebar ul li a i {
-    min-width: 40px;
-    text-align: center;
-    font-size: 1.5rem;
-    position: relative;
-}
+        .sidebar ul li a:hover {
+            background-color: #fff;
+            color: #12171e;
+        }
+
+        .sidebar ul li a i {
+            min-width: 40px;
+            text-align: center;
+            font-size: 1.5rem;
+            position: relative;
+        }
 
 .sidebar .nav-item {
     opacity: 0;
     transition: all 0.5s ease;
-    
 }
 
 .sidebar:hover .nav-item {
@@ -333,16 +322,15 @@ body {
         flex-wrap: wrap;
         gap: 20px;
         padding-left: 20px;
-        padding-right: 20px; 
+        padding-right: 20px;
         margin-top: 3px;
         width: 100%;
     }
 
-    .dashboard .info a {
-        
-        text-decoration: none;
-        color: black;
-    }
+        .dashboard .info a {
+            text-decoration: none;
+            color: black;
+        }
 
         .dashboard .info > a > div {
             background-color: #f0f0f0;
@@ -356,9 +344,9 @@ body {
 
         .dashboard .info p {
             margin: 0;
-            margin-top: 5px; 
+            margin-top: 5px;
             font-size: 14px;
-            line-height: 1.5; 
+            line-height: 1.5;
             color: #555;
         }
 
@@ -398,7 +386,7 @@ body {
 .i-dashboard {
     background-color: lightgreen;
     border-radius: 10px;
-    border:inherit;
+    border: inherit;
     padding: 15px;
     width: 50px;
     height: 50px;
@@ -442,14 +430,14 @@ body {
     transition: all 0.4s ease;
 }
 
-.sales h3 {
-    padding: 15px;
-}
+    .sales h3 {
+        padding: 15px;
+    }
 
-.sales p {
-    padding-left: 15px;
-    margin: 6px;
-}
+    .sales p {
+        padding-left: 15px;
+        margin: 6px;
+    }
 
 .budget {
     background-color: lightgray;
@@ -462,28 +450,54 @@ body {
     margin-left: 20px;
 }
 
-.budget h3{
-    padding: 15px;
-}
+    .budget h3 {
+        padding: 15px;
+    }
 
-.budget h4 {
-    padding: 5px 20px;
-    color: limegreen;
-}
+    .budget h4 {
+        padding: 5px 20px;
+        color: limegreen;
+    }
 
+/* Container must be relative so the badge can be absolute inside it */
 .notification {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 25px;
-    cursor: pointer;
+    position: relative;
+    display: inline-block;
 }
 
-.notification a {
-    text-decoration: none;
-    color: black;
-    cursor: pointer;
+    /* The Bell Icon style (existing) */
+    .notification i {
+        font-size: 1.5rem; /* Adjust as needed */
+        color: #333;
+    }
+
+/* The Red Badge Style */
+.noti-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #ff4757; /* Bright Red */
+    color: white;
+    border-radius: 50%;
+    padding: 2px 5px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0 2px white; /* Optional: white ring around badge */
+    z-index: 10;
+    /* Hide by default, JS will show it if count > 0 */
+    display: none;
 }
+
+    .notification a {
+        text-decoration: none;
+        color: black;
+        cursor: pointer;
+    }
 
 .button a {
     text-decoration: none;
@@ -505,9 +519,9 @@ body {
     cursor: pointer;
 }
 
-.logout p {
-    transform: translateY(6px);
-}
+    .logout p {
+        transform: translateY(6px);
+    }
 
 .purchase-order {
     background-color: lightgray;
@@ -521,10 +535,10 @@ body {
     margin-left: 20px;
 }
 
-.purchase-order h4 {
-    transform: translate(1px, 16px);
-    color: red;
-}
+    .purchase-order h4 {
+        transform: translate(1px, 16px);
+        color: red;
+    }
 
 .theme-toggle {
     width: 60px;
@@ -539,7 +553,6 @@ body {
     padding: 0 5px;
     top: 10px;
     margin-left: 10px;
-
 }
 
     .theme-toggle i {
@@ -568,14 +581,14 @@ body {
     background: #394049;
 }
 
-.theme-toggle.active i {
-    color: #ffd;
-}
+    .theme-toggle.active i {
+        color: #ffd;
+    }
 
-.theme-toggle.active .toggle-ball {
-    left: 32px;
-    background: #222;
-}
+    .theme-toggle.active .toggle-ball {
+        left: 32px;
+        background: #222;
+    }
 
 .toggle-ball.move-right {
     left: 30px;
@@ -596,6 +609,12 @@ body,
     transition: all 0.5s ease, color 0.5s ease;
 }
 
+.INVENTORY h3 {
+    font-size: 3rem;
+    font-weight: 1000;
+    width: 100%;
+}
+
 .CREATE {
     margin-left: 100px;
     padding: 20px;
@@ -608,26 +627,27 @@ body,
     width: calc(100% - 700px);
 }
 
-.CREATE h2 {
-    width: 1000px;
-}
+    .CREATE h2 {
+        width: 1000px;
+    }
 
-.CREATE table {
-    width: 800px;
-}
+    .CREATE table {
+        width: 800px;
+    }
 
-.CREATE .form-group {
-    width: 500px;
-}
+    .CREATE .form-group {
+        width: 500px;
+    }
 
 .down_container {
     display: flex;
-    width:87%;
-    justify-content:space-around;
+    width: 87%;
+    justify-content: space-around;
     margin: 0;
 }
 
-.NOTI {
+/* Updated to avoid squashing the form */
+.CREATE-INVENTORY {
     margin-left: 100px;
     padding: 20px;
     position: relative;
@@ -636,26 +656,14 @@ body,
     top: 0;
     left: 0px;
     transition: all 0.5s ease;
-    width: calc(100% - 1000px);
+    width: calc(100% - 200px);
 }
 
-.INVENTORY {
-    margin-left: 100px;
-    padding: 20px;
-    position: relative;
-    background-color: #fff;
-    min-height: 10vh;
-    top: 0;
-    left: 0px;
-    transition: all 0.5s ease;
-    width: calc(100% - 700px);
-}
-
-.INVENTORY h3 {
-    font-size: 3rem;
-    font-weight: 1000;
-    width: 100%;
-}
+    .CREATE-INVENTORY h3 {
+        font-size: 3rem;
+        font-weight: 1000;
+        width: 100%;
+    }
 
 .STOCK {
     margin-left: 100px;
@@ -682,7 +690,7 @@ body,
     overflow-y: auto;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     display: none;
-    z-index: 99999; 
+    z-index: 99999;
 }
 
     #search-results ul {
@@ -726,12 +734,68 @@ body,
             transform: scaleY(1);
         }
 
+/* GENERIC BUTTON STYLE - This was causing the gray conflict */
 .button {
     background-color: lightgray;
     border-radius: 20px;
     border: none;
     padding: 6px;
 }
+
+/* ==========================================================
+   NEW INVENTORY BUTTON STYLES (UNIQUE NAMES TO FIX CLASH)
+   ========================================================== */
+.btn-inv-custom {
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+    .btn-inv-custom:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+    }
+
+/* Gray Button (Add Row) */
+.btn-inv-add {
+    background-color: lightgray !important;
+    color: #333 !important;
+    padding: 8px 16px;
+    margin-right: 5px;
+    font-weight: 500;
+}
+
+    .btn-inv-add:hover {
+        background-color: #bfbfbf !important;
+    }
+
+/* Green Button (Create) - Use !important to override .button */
+.btn-inv-create {
+    background-color: #28a745 !important;
+    color: white !important;
+    padding: 8px 16px;
+    font-weight: 500;
+}
+
+    .btn-inv-create:hover {
+        background-color: #218838 !important;
+    }
+
+/* Red Button (Remove) */
+.btn-inv-remove {
+    background-color: #dc3545 !important;
+    color: white !important;
+    padding: 8px 16px;
+    font-weight: 500;
+}
+
+    .btn-inv-remove:hover {
+        background-color: #c82333 !important;
+    }
+
+/* ========================================================== */
 
 .no-result {
     padding: 10px;
@@ -744,54 +808,52 @@ div.stock-heading {
     position: relative;
 }
 
-div.stock-heading .search-container {
-    position: relative;
-    display: flex;
-    top: -60px;
-    left: 35rem;
-    width: calc(100% - 1px);
-    transform: scaleX(0.8);
-    transition: all 0.4s ease;
-}
+    div.stock-heading .search-container {
+        position: relative;
+        display: flex;
+        top: -60px;
+        left: 35rem;
+        width: calc(100% - 1px);
+        transform: scaleX(0.8);
+        transition: all 0.4s ease;
+    }
 
-div.stock-heading .search-container:hover {
-    width: calc(100% - 1px);
-    transform: scaleX(0.9);
-}
+        div.stock-heading .search-container:hover {
+            width: calc(100% - 1px);
+            transform: scaleX(0.9);
+        }
 
-div.stock-heading .search-container input {
-    width: 100%;
-    padding: 10px 40px 10px 20px;
-    border-radius: 25px;
-    border: none;
-    box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
-    font-size: 18px;
-}
+        div.stock-heading .search-container input {
+            width: 100%;
+            padding: 10px 40px 10px 20px;
+            border-radius: 25px;
+            border: none;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+            font-size: 18px;
+        }
 
-div.stock-heading .search-container i {
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #555;
-}
+        div.stock-heading .search-container i {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #555;
+        }
 
-div.stock-heading h3 {
-    font-size: 3rem;
-    font-weight: 1000;
-    width: 100%;
-}
+    div.stock-heading h3 {
+        font-size: 3rem;
+        font-weight: 1000;
+        width: 100%;
+    }
 
 .stockManage {
     display: flex;
-
 }
 
 /* ===== Filters ===== */
 .filter {
     display: flex;
     gap: 20px;
-
 }
 
     .filter h2 {
@@ -853,12 +915,12 @@ div.stock-heading h3 {
 }
 
 td {
-    background-color: white; 
-    transition: background-color 0.5s ease-in-out; 
+    background-color: white;
+    transition: background-color 0.5s ease-in-out;
 }
 
 .highlight td {
-    background-color: yellow; 
+    background-color: yellow;
 }
 
 /* AJAX Pagin and Sorting*/
@@ -875,10 +937,10 @@ td {
     margin-right: 5px;
 }
 
-.page-btn.active {
-    background: #333;
-    color: white;
-}
+    .page-btn.active {
+        background: #333;
+        color: white;
+    }
 
 .inventory-toolbar {
     display: flex;
@@ -892,16 +954,16 @@ td {
     gap: 8px;
 }
 
-.sort-group label {
-    font-size: 14px;
-    color: #555;
-}
+    .sort-group label {
+        font-size: 14px;
+        color: #555;
+    }
 
-.sort-group select {
-    padding: 6px 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-}
+    .sort-group select {
+        padding: 6px 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
 
 .sort-dir {
     border: 1px solid #ccc;
@@ -911,9 +973,9 @@ td {
     cursor: pointer;
 }
 
-.sort-dir:hover {
-    background: #f5f5f5;
-}
+    .sort-dir:hover {
+        background: #f5f5f5;
+    }
 
 #sortDirBtn {
     position: relative;
@@ -931,10 +993,6 @@ td {
     #sortDirBtn:hover {
         background-color: #f0f0f0;
     }
-
-
-
-
 
 
 /*KW CSS*/
@@ -972,27 +1030,27 @@ div.heading {
         transition: all 0.4s ease;
     }
 
-    div.heading .search-container:hover {
-    width: calc(100% - 1px);
-    transform: scaleX(0.9);
-}
+        div.heading .search-container:hover {
+            width: calc(100% - 1px);
+            transform: scaleX(0.9);
+        }
 
-    div.heading .search-container input {
-    width: 100%;
-    padding: 10px 40px 10px 20px;
-    border-radius: 25px;
-    border: none;
-    box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
-    font-size: 18px;
-}
+        div.heading .search-container input {
+            width: 100%;
+            padding: 10px 40px 10px 20px;
+            border-radius: 25px;
+            border: none;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+            font-size: 18px;
+        }
 
-    div.heading .search-container i {
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #555;
-}
+        div.heading .search-container i {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #555;
+        }
 
 
 div.supplierManage {
@@ -1039,12 +1097,12 @@ div.supplierAdd {
     cursor: pointer;
 }
 
-div.supplierAdd:hover {
-    transform: translateY(-5px);
-    transition: all 0.3s ease;
-    background-color: green;
-    color:whitesmoke;
-}
+    div.supplierAdd:hover {
+        transform: translateY(-5px);
+        transition: all 0.3s ease;
+        background-color: green;
+        color: whitesmoke;
+    }
 
     div.supplierAdd h3 {
         font-size: 20px;
@@ -1052,8 +1110,8 @@ div.supplierAdd:hover {
         margin: 0;
     }
 
-div.supplierManage,div.pagination{
-    padding:20px;
+div.supplierManage, div.pagination {
+    padding: 20px;
 }
 
 table {
@@ -1075,16 +1133,16 @@ th {
     font-weight: 900;
 }
 
-td{
-    font-size:1.2rem;
-    font-weight:500;
+td {
+    font-size: 1.2rem;
+    font-weight: 500;
 }
 
     td > a {
         text-decoration: none;
         color: cornflowerblue;
         font-weight: 700;
-        cursor:pointer;
+        cursor: pointer;
     }
 
 
@@ -1112,7 +1170,7 @@ div.pagination button {
         color: black;
         transform: translateY(-5px);
         transition: all 0.3s ease;
-        cursor:pointer;
+        cursor: pointer;
     }
 
 button[name="numbers"] {
@@ -1121,13 +1179,13 @@ button[name="numbers"] {
     margin: 0 15px 0 0;
 }
 
-    div.pagination button.active {
-        background-color: black;
-        color: white;
-    }
+div.pagination button.active {
+    background-color: black;
+    color: white;
+}
 
 div.pagination span {
-    font-weight:800;
+    font-weight: 800;
     margin: 15px 15px 0 0;
 }
 
@@ -1147,7 +1205,7 @@ div.pagination span {
 /* Popup box */
 .modal-content {
     background-color: #e8e8e8;
-    height:min-content;
+    height: min-content;
     width: 80%;
     margin: 10% auto;
     padding: 20px;
@@ -1158,14 +1216,14 @@ div.pagination span {
 div.modal-content h2 {
     font-size: 3rem;
     font-weight: 700;
-    margin-bottom:50px;
+    margin-bottom: 50px;
 }
 
 div.modal-content h3 {
     font-size: 2rem;
     font-weight: 600;
     margin-bottom: 40px;
-    margin-top:50px;
+    margin-top: 50px;
 }
 
 
@@ -1188,9 +1246,9 @@ div.supplierContact {
     justify-content: space-between;
 }
 
-div.supplierContact div{
-    width:30%;
-}
+    div.supplierContact div {
+        width: 30%;
+    }
 
 div.supplierDetail button.addProductBtn {
     margin-left: 40%;
@@ -1205,20 +1263,20 @@ div.supplierDetail button.addProductBtn {
     transition: all 0.2s ease;
 }
 
-div.productRow{
-    display:flex;
-    margin-bottom:20px;
+div.productRow {
+    display: flex;
+    margin-bottom: 20px;
 }
 
-div.productRow select {
-    border-radius: 12px;
-    border-width:0;
-    padding: 7px;
-    margin-right: 40px;
-    height: 50px;
-    font-weight: 700;
-    font-size: 1.3rem;
-}
+    div.productRow select {
+        border-radius: 12px;
+        border-width: 0;
+        padding: 7px;
+        margin-right: 40px;
+        height: 50px;
+        font-weight: 700;
+        font-size: 1.3rem;
+    }
 
 button.removeProductBtn {
     margin-left: 30%;
@@ -1234,106 +1292,90 @@ button.removeProductBtn {
     }
 
 
-        button.removeProductBtn i {
-            font-size: 3rem;
-            color: red;
-            cursor: pointer;
-            padding-top: 15px;
+    button.removeProductBtn i {
+        font-size: 3rem;
+        color: red;
+        cursor: pointer;
+        padding-top: 15px;
+    }
+
+        button.removeProductBtn i:hover {
+            color: #ef0000;
         }
 
-            button.removeProductBtn i:hover {
-                color: #ef0000;
-            }
 
+div.supplierDetail button.addProductBtn:hover {
+    background-color: greenyellow;
+    transform: translateY(-5px);
+    transition: all 0.2s ease;
+}
 
-        div.supplierDetail button.addProductBtn:hover {
-            background-color: greenyellow;
+div.decisionBtn {
+    display: flex;
+    margin-left: 77%
+}
+
+    div.decisionBtn button.cancelBtn {
+        background-color: #ef0000;
+        border-radius: 25px;
+        border: 3px solid black;
+        padding: 5px 20px 5px 20px;
+        font-size: 1.5rem;
+        font-weight: 500;
+        margin-right: 20px;
+        box-shadow: rgba(0,0,0,0.3) 2px 2px 5px 1px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+        div.decisionBtn button.cancelBtn:hover {
+            background-color: #fd0000;
             transform: translateY(-5px);
             transition: all 0.2s ease;
         }
 
-        div.decisionBtn {
-            display: flex;
-            margin-left: 77%
+    div.decisionBtn button.submitBtn {
+        background-color: limegreen;
+        border-radius: 25px;
+        border: 3px solid black;
+        padding: 5px 20px 5px 20px;
+        font-size: 1.5rem;
+        font-weight: 500;
+        box-shadow: rgba(0,0,0,0.3) 2px 2px 5px 1px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+        div.decisionBtn button.submitBtn:hover {
+            background-color: #38f238;
+            transform: translateY(-5px);
+            transition: all 0.2s ease;
         }
 
-            div.decisionBtn button.cancelBtn {
-                background-color: #ef0000;
-                border-radius: 25px;
-                border: 3px solid black;
-                padding: 5px 20px 5px 20px;
-                font-size: 1.5rem;
-                font-weight: 500;
-                margin-right: 20px;
-                box-shadow: rgba(0,0,0,0.3) 2px 2px 5px 1px;
-                cursor: pointer;
-                transition: all 0.2s ease;
-            }
+    div.decisionBtn button.saveBtn {
+        background-color: limegreen;
+        border-radius: 25px;
+        border: 3px solid black;
+        padding: 5px 20px 5px 20px;
+        font-size: 1rem;
+        font-weight: 700;
+        box-shadow: rgba(0,0,0,0.3) 2px 2px 5px 1px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
 
-                div.decisionBtn button.cancelBtn:hover {
-                    background-color: #fd0000;
-                    transform: translateY(-5px);
-                    transition: all 0.2s ease;
-                }
-
-            div.decisionBtn button.submitBtn {
-                background-color: limegreen;
-                border-radius: 25px;
-                border: 3px solid black;
-                padding: 5px 20px 5px 20px;
-                font-size: 1.5rem;
-                font-weight: 500;
-                box-shadow: rgba(0,0,0,0.3) 2px 2px 5px 1px;
-                cursor: pointer;
-                transition: all 0.2s ease;
-            }
-
-                div.decisionBtn button.submitBtn:hover {
-                    background-color: #38f238;
-                    transform: translateY(-5px);
-                    transition: all 0.2s ease;
-                }
-
-            div.decisionBtn button.saveBtn {
-                background-color: limegreen;
-                border-radius: 25px;
-                border: 3px solid black;
-                padding: 5px 20px 5px 20px;
-                font-size: 1rem;
-                font-weight: 700;
-                box-shadow: rgba(0,0,0,0.3) 2px 2px 5px 1px;
-                cursor: pointer;
-                transition: all 0.2s ease;
-            }
-
-            div.decisionBtn button.saveBtn:hover {
-                background-color: #38f238;
-                transform: translateY(-5px);
-                transition: all 0.2s ease;
-            }
-
-        /* Form styling */
-        #addSupplierForm,#editSupplierForm input {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 12px;
+        div.decisionBtn button.saveBtn:hover {
+            background-color: #38f238;
+            transform: translateY(-5px);
+            transition: all 0.2s ease;
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* Form styling */
+#addSupplierForm, #editSupplierForm input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 12px;
+}
 
 /* Dark Mode */
 body.dark-mode {
@@ -1455,10 +1497,16 @@ body.dark-mode {
         background-color: black;
     }
 
+    /* Inventory Container Background for Dark Mode */
+    body.dark-mode .CREATE-INVENTORY {
+        background-color: #1e1e1e; /* Better dark background */
+        color: #e0e0e0;
+    }
 
-        body.dark-mode .INVENTORY th {
-            background-color: darkgray;
-        }
+
+    body.dark-mode .INVENTORY th {
+        background-color: darkgray;
+    }
 
     body.dark-mode .STOCK {
         background-color: black;
@@ -1601,3 +1649,29 @@ body.dark-mode {
         background-color: #635d00 !important; /* Dark Gold/Olive */
         color: #fff;
     }
+
+    /* 9. SPECIFIC DARK MODE OVERRIDES FOR NEW BUTTONS */
+    body.dark-mode .btn-inv-add {
+        background-color: #444 !important;
+        color: #eee !important;
+    }
+
+        body.dark-mode .btn-inv-add:hover {
+            background-color: #666 !important;
+        }
+
+    body.dark-mode .btn-inv-create {
+        background-color: #1e7e34 !important; /* Darker green */
+    }
+
+        body.dark-mode .btn-inv-create:hover {
+            background-color: #28a745 !important;
+        }
+
+    body.dark-mode .btn-inv-remove {
+        background-color: #bd2130 !important; /* Darker red */
+    }
+
+        body.dark-mode .btn-inv-remove:hover {
+            background-color: #dc3545 !important;
+        }

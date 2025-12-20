@@ -4,8 +4,8 @@
 <title>@ViewData["Title"]</title>
 @model T_Stock.Models.ProductListVM
 
-<div class="CREATE">
-    <h2>Add Product</h2>
+<div class="CREATE-INVENTORY">
+    <h2>Create Product</h2>
     <form asp-controller="Inventory" asp-action="Create" method="post" id="createProductForm">
         <table class="table">
             <thead>
@@ -29,10 +29,10 @@
 
                         <td>
                             <select asp-for="Items[@i].Category" class="form-control">
-                                @* CHANGED: added 'disabled selected' so it acts as a placeholder *@
                                 <option value="" disabled selected>-- Select --</option>
                                 <option value="Food">Food</option>
                                 <option value="Drink">Drink</option>
+                                <option value="Snack">Snack</option>
                             </select>
                             <span asp-validation-for="Items[@i].Category" class="text-danger"></span>
                         </td>
@@ -48,14 +48,14 @@
                         </td>
 
                         <td>
-                            <input asp-for="Items[@i].Price" type="number" class="form-control" />
+                            <input asp-for="Items[@i].Price" type="number" class="form-control" step="0.01"/>
                             <span asp-validation-for="Items[@i].Price" class="text-danger"></span>
                         </td>
 
                         <td>
                             @if (i > 0)
                             {
-                                <button type="button" onclick="removeRow(this)" class="btn-custom button btn-remove">Remove</button>
+                                <button type="button" onclick="Inventory_RemoveRow(this)" class="btn-inv-custom btn-inv-remove">Remove</button>
                             }
                         </td>
                     </tr>
@@ -63,13 +63,11 @@
             </tbody>
         </table>
 
-        @* Add Row Button *@
-        <button type="button" onclick="addRow()" class="button btn-custom btn-add-row">
+        <button type="button" onclick="Inventory_AddRow()" class="button btn-inv-custom btn-inv-add">
             + Add Row
         </button>
 
-        @* Create Button *@
-        <button type="submit" class="ajax-button button btn-custom btn-create" data-url="/Inventory/Index">
+        <button type="submit" class="ajax-button button btn-inv-custom btn-inv-create" data-url="/Inventory/Index">
             Create
         </button>
 
@@ -80,8 +78,44 @@
     <a href="/Inventory/Index" class="btn btn-secondary ajax-nav" data-ajax="page">Back</a>
 </div>
 
+@* HIDDEN TEMPLATE 
+   We use a dummy index like [-1] or [0] which we will replace via Javascript later.
+*@
+<template id="row-template">
+    <tr>
+        <td>
+            <input name="Items[0].ProductName" class="form-control" type="text" value="" />
+            <span class="text-danger field-validation-valid" data-valmsg-for="Items[0].ProductName" data-valmsg-replace="true"></span>
+        </td>
+        <td>
+            <select name="Items[0].Category" class="form-control">
+                <option value="" disabled selected>-- Select --</option>
+                <option value="Food">Food</option>
+                <option value="Drink">Drink</option>
+                <option value="Snack">Snack</option>
+            </select>
+            <span class="text-danger field-validation-valid" data-valmsg-for="Items[0].Category" data-valmsg-replace="true"></span>
+        </td>
+        <td>
+            <input name="Items[0].Quantity" class="form-control" type="number" value="0" />
+            <span class="text-danger field-validation-valid" data-valmsg-for="Items[0].Quantity" data-valmsg-replace="true"></span>
+        </td>
+        <td>
+            <input name="Items[0].ReorderLevel" class="form-control" type="number" value="0" />
+            <span class="text-danger field-validation-valid" data-valmsg-for="Items[0].ReorderLevel" data-valmsg-replace="true"></span>
+        </td>
+        <td>
+            <input name="Items[0].Price" class="form-control" type="number" value="0" step="0.01"/>
+            <span class="text-danger field-validation-valid" data-valmsg-for="Items[0].Price" data-valmsg-replace="true"></span>
+        </td>
+        <td>
+            <button type="button" onclick="Inventory_RemoveRow(this)" class="btn-inv-custom btn-inv-remove">Remove</button>
+        </td>
+    </tr>
+</template>
+
 <style>
-    .btn-custom {
+    .btn-inv-custom {
         border: none;
         border-radius: 4px;
         cursor: pointer;
@@ -89,12 +123,13 @@
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
-        .btn-custom:hover {
+        .btn-inv-custom:hover {
             transform: translateY(-3px);
             box-shadow: 0 5px 10px rgba(0,0,0,0.2);
         }
 
-    .btn-add-row {
+    /* GRAY BUTTON (Add Row) */
+    .btn-inv-add {
         background-color: lightgray;
         color: #333;
         padding: 8px 16px;
@@ -102,103 +137,99 @@
         font-weight: 500;
     }
 
-        .btn-add-row:hover {
+        .btn-inv-add:hover {
             background-color: #bfbfbf;
         }
 
-    .btn-create {
+    /* GREEN BUTTON (Create) */
+    .btn-inv-create {
         background-color: #28a745;
         color: white;
         padding: 8px 16px;
         font-weight: 500;
     }
 
-        .btn-create:hover {
+        .btn-inv-create:hover {
             background-color: #218838;
         }
 
-    .btn-remove {
+    /* RED BUTTON (Remove) */
+    .btn-inv-remove {
         background-color: #dc3545;
         color: white;
-        padding: 6px 12px;
+        padding: 8px 16px;
+        font-weight: 500;
     }
 
-        .btn-remove:hover {
+        .btn-inv-remove:hover {
             background-color: #c82333;
         }
 </style>
 
-    <script>
-        function addRow() {
-            var tbody = document.getElementById('item-rows');
-            var firstRow = tbody.rows[0];
-            var newRow = firstRow.cloneNode(true);
+<script>
+    // Distinct name to avoid conflict with external 'addRow'
+    function Inventory_AddRow() {
+        var tbody = document.getElementById('item-rows');
+        var template = document.getElementById('row-template');
 
-            // 1. Clear INPUT values
-            var inputs = newRow.getElementsByTagName('input');
-            for (var i = 0; i < inputs.length; i++) {
-                inputs[i].value = "";
-                inputs[i].classList.remove("input-validation-error");
-            }
+        // 1. Clone the content of the template
+        var clone = template.content.cloneNode(true);
 
-            // 2. Clear SELECT values
-            var selects = newRow.getElementsByTagName('select');
-            for (var k = 0; k < selects.length; k++) {
-                selects[k].selectedIndex = 0;
-                selects[k].options[0].disabled = true;
-                selects[k].options[0].selected = true;
+        // 2. Append the new row to the table
+        tbody.appendChild(clone);
 
-                selects[k].classList.remove("input-validation-error");
-            }
+        // 3. Update indices using the new function name
+        Inventory_UpdateIndices();
 
-            // 3. Clear validation messages
-            var spans = newRow.getElementsByTagName('span');
-            for (var j = 0; j < spans.length; j++) {
-                spans[j].innerHTML = "";
-                spans[j].classList.remove("field-validation-error");
-                spans[j].classList.add("field-validation-valid");
-            }
+        // 4. Re-initialize validation
+        Inventory_RebindValidation();
+    }
 
-            // 4. Inject Remove Button
-            var lastCell = newRow.cells[newRow.cells.length - 1];
-            lastCell.innerHTML = `<button type="button" onclick="removeRow(this)" class="btn-custom btn-remove">Remove</button>`;
+    // Distinct name to avoid conflict with external 'removeRow'
+    function Inventory_RemoveRow(btn) {
+        var row = btn.closest('tr');
+        row.remove();
 
-            // 5. Append
-            tbody.appendChild(newRow);
+        // Update indices to ensure ASP.NET binding stays correct (0, 1, 2...)
+        Inventory_UpdateIndices();
+    }
 
-            // 6. Re-index and Re-parse
-            updateRowIndices();
+    // Renamed helper function
+    function Inventory_UpdateIndices() {
+        var rows = document.querySelectorAll('#item-rows tr');
 
-            var form = $("#createProductForm");
-            form.removeData("validator");
-            form.removeData("unobtrusiveValidation");
-            $.validator.unobtrusive.parse(form);
-        }
-
-        function removeRow(btn) {
-            var tbody = document.getElementById('item-rows');
-            var row = btn.closest('tr');
-            if (tbody.rows.length > 1) {
-                row.remove();
-                updateRowIndices();
-            }
-        }
-
-        function updateRowIndices() {
-            var rows = document.querySelectorAll('#item-rows tr');
-            rows.forEach((row, index) => {
-                var inputs = row.querySelectorAll('input, select');
-                var spans = row.querySelectorAll('span');
-
-                inputs.forEach(input => {
-                    if (input.name) input.name = input.name.replace(/Items\[\d+\]/, `Items[${index}]`);
-                    if (input.id) input.id = input.id.replace(/Items_\d+__/, `Items_${index}__`);
-                });
-
-                spans.forEach(span => {
-                    var valFor = span.getAttribute('data-valmsg-for');
-                    if (valFor) span.setAttribute('data-valmsg-for', valFor.replace(/Items\[\d+\]/, `Items[${index}]`));
-                });
+        rows.forEach((row, index) => {
+            // Update Inputs and Selects
+            var inputs = row.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                // Replace Name: Items[anything].Prop -> Items[index].Prop
+                if (input.name) {
+                    input.name = input.name.replace(/Items\[\d+\]/, `Items[${index}]`);
+                }
+                // Replace ID
+                if (input.id) {
+                    input.id = input.id.replace(/Items_\d+__/, `Items_${index}__`);
+                }
             });
-        }
-    </script>
+
+            // Update Validation Spans
+            var spans = row.querySelectorAll('span[data-valmsg-for]');
+            spans.forEach(span => {
+                var valFor = span.getAttribute('data-valmsg-for');
+                if (valFor) {
+                    span.setAttribute('data-valmsg-for', valFor.replace(/Items\[\d+\]/, `Items[${index}]`));
+                }
+            });
+        });
+    }
+
+    // Renamed validation helper
+    function Inventory_RebindValidation() {
+        var form = $("#createProductForm");
+        // Remove existing validation data
+        form.removeData("validator");
+        form.removeData("unobtrusiveValidation");
+        // Re-parse the form to pick up new inputs
+        $.validator.unobtrusive.parse(form);
+    }
+</script>

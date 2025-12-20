@@ -4,6 +4,13 @@
     ViewData["Title"] = "Inventory";
 }
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="success-notification" class="custom-alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
 <div class="INVENTORY">
     <h3>Inventory</h3>
 
@@ -59,12 +66,10 @@
                         <td>@item.ReorderLevel</td>
                         <td>@item.Price</td>
                         <td>
-                            @* --- ADDED EDIT BUTTON HERE --- *@
                             <a href="/Inventory/Edit/@item.ProductId" class="action-btn edit-btn">Edit</a>
 
                             <form asp-action="Delete" asp-controller="Inventory" method="post" onsubmit="return confirm('Are you sure you want to delete this product?');" style="display:inline;">
                                 <input type="hidden" name="productId" value="@item.ProductId" />
-                                @* Added 'action-btn' class here too for sizing *@
                                 <button type="submit" class="action-btn delete-btn">Delete</button>
                             </form>
                         </td>
@@ -97,7 +102,33 @@
 </div>
 
 <style>
-    /* 1. Shared Styles to ensure equal size */
+    /* --- 2. NEW CSS FOR POPUP (Added) --- */
+    .custom-alert {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        z-index: 9999;
+        /* Green styling */
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+        padding: 15px 30px;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        font-weight: bold;
+        /* STARTING STATE: Moved up out of view (-200%) and centered (-50%) */
+        transform: translate(-50%, -200%);
+        /* Smooth transition */
+        transition: transform 0.5s ease-in-out;
+    }
+
+        /* ACTIVE STATE: Added by JS */
+        .custom-alert.show-alert {
+            transform: translate(-50%, 0);
+        }
+    /* ------------------------------------ */
+
+    /* Existing Styles */
     .action-btn {
         padding: 6px 12px;
         font-size: 14px;
@@ -130,10 +161,8 @@
             color: #212529;
         }
 
-    /* CHANGED: Removed the rotation logic. We now swap classes in JS. */
     .sort-dir i {
         display: inline-block;
-        /* transition: transform 0.3s; <-- Removed to prevent conflicts */
     }
 </style>
 
@@ -145,6 +174,20 @@
         function initInventoryPage() {
             console.log("Initializing Inventory Page Logic...");
 
+            // --- 3. NOTIFICATION LOGIC (Added) ---
+            var notification = document.getElementById("success-notification");
+            if (notification) {
+                // Slide down
+                setTimeout(function () {
+                    notification.classList.add("show-alert");
+                }, 100);
+                // Slide up after 3 seconds
+                setTimeout(function () {
+                    notification.classList.remove("show-alert");
+                }, 3000);
+            }
+            // -------------------------------------
+
             const searchBox = document.getElementById('searchBox');
             const sortBy = document.getElementById('sortBy');
             const sortDirBtn = document.getElementById('sortDirBtn');
@@ -153,12 +196,9 @@
             const csrfToken = csrfTokenInput ? csrfTokenInput.value : '';
 
             // --- ID DETECTION ---
-            // 1. Try Server-Side ID first
             let highlightId = '@ViewBag.HighlightProductId';
-
-            // 2. Fallback: If Server ID is missing, check the URL Hash (e.g. #product-P0010)
             if ((!highlightId || highlightId === '') && window.location.hash.startsWith('#product-')) {
-                highlightId = window.location.hash.substring(9); // Remove '#product-'
+                highlightId = window.location.hash.substring(9);
                 console.log("Detected ID from URL Hash:", highlightId);
             }
 
@@ -172,7 +212,6 @@
 
             // --- CONFIG SETUP ---
             const defaultPageSize = parseInt('@Model.PageSize') || 10;
-
             let initialState = {
                 currentPage: 1,
                 pageSize: defaultPageSize,
@@ -181,7 +220,6 @@
                 searchTerm: ''
             };
 
-            // 1. Merge Browser Storage
             const savedStateJSON = sessionStorage.getItem(STORAGE_KEY);
             if (savedStateJSON) {
                 try {
@@ -191,7 +229,6 @@
                 } catch (err) { console.error(err); }
             }
 
-            // 2. Merge URL Parameters
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('page')) {
                 const urlPage = parseInt(urlParams.get('page'));
@@ -201,7 +238,6 @@
             if (urlParams.has('sort')) initialState.currentSortKey = urlParams.get('sort');
             if (urlParams.has('dir')) initialState.currentSortDir = urlParams.get('dir');
 
-            // Search Term Override (Force Page 1 if searching)
             if (initialState.searchTerm && initialState.searchTerm.trim() !== "") {
                 initialState.currentPage = 1;
             }
@@ -217,7 +253,7 @@
                 if(icon) icon.className = window.pageConfig.currentSortDir === 'asc' ? 'ri-arrow-up-line' : 'ri-arrow-down-line';
             }
 
-            // --- HELPERS & PROCESSOR ---
+            // --- HELPERS ---
             function getSafeValue(obj, key) {
                 if (!obj) return "";
                 let val = undefined;
@@ -278,7 +314,6 @@
                 return processed;
             }
 
-            // --- RENDER ---
             function renderTable(data) {
                 const tableBody = document.querySelector('.inven-table tbody');
                 if (!tableBody) return;
@@ -295,18 +330,11 @@
                 data.forEach(item => {
                     const tr = document.createElement('tr');
                     const pId = getSafeValue(item, 'ProductId');
-
-                    // Check if we need to highlight this row
                     const isHighlight = highlightId && (String(pId) === String(highlightId));
 
                     if (isHighlight) {
                         tr.classList.add('highlight');
                         highlightedRow = tr;
-
-                        // [FIX FOR ONE-TIME HIGHLIGHT]
-                        // Once we found and rendered the highlight, we clear the ID.
-                        // This ensures that if the user clicks "Sort" or "Next Page",
-                        // this row won't stay highlighted unless they reload the specific URL again.
                         highlightId = null;
                     }
 
@@ -336,13 +364,10 @@
                 if (highlightedRow) {
                     setTimeout(() => {
                         highlightedRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        // Optional: Clean the URL hash so the highlight doesn't persist on refresh unintentionally
-                        // history.replaceState(null, null, window.location.pathname + window.location.search);
                     }, 100);
                 }
             }
 
-            // --- UPDATE LOGIC ---
             function updateTable() {
                 if (!window.inventoryData) return;
 
@@ -356,7 +381,6 @@
                 window.history.replaceState(null, '', newUrl);
 
                 let processedData = processData(window.inventoryData, window.pageConfig);
-
                 const container = document.getElementById('pagination-container');
                 const hasSearch = (window.pageConfig.searchTerm || "").trim() !== "";
 
@@ -423,31 +447,23 @@
                 });
             }
 
-            // --- AUTO-CALCULATE PAGE LOGIC ---
-            // If we have an ID (from Server OR Hash), find it and fix the page number
             if (highlightId && window.inventoryData.length > 0) {
                 console.log("Checking Product Location for:", highlightId);
                 const tempSortedData = processData(window.inventoryData, window.pageConfig);
-
                 const foundIndex = tempSortedData.findIndex(item =>
                     String(getSafeValue(item, 'ProductId')) === String(highlightId)
                 );
 
                 if (foundIndex !== -1) {
                     const size = parseInt(window.pageConfig.pageSize) || 10;
-                    // The Standard Pagination Formula: floor(index / size) + 1
                     const correctPage = Math.floor(foundIndex / size) + 1;
-
                     console.log(`Found Index: ${foundIndex}, Correct Page: ${correctPage}`);
-
-                    // Force the correction
                     if (window.pageConfig.currentPage !== correctPage) {
                         window.pageConfig.currentPage = correctPage;
                     }
                 }
             }
 
-            // Initial Render
             updateTable();
         }
 

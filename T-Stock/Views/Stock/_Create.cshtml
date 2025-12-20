@@ -10,6 +10,11 @@
     Layout = isAjax ? null : "_Layout";
 }
 
+@if (!isAjax)
+{
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+}
+
 <style>
     /* ===== General Styles ===== */
     * {
@@ -216,7 +221,7 @@
                 {
                     @for (int i = 0; i < Model.Items.Count; i++)
                     {
-                        <tr class="adding show">
+                        <tr class="transaction-row show">
                             <td>
                                 <input asp-for="Items[i].Reason" class="form-control js-reason" required />
                                 <span asp-validation-for="Items[i].Reason" class="text-danger"></span>
@@ -255,7 +260,7 @@
                 }
                 else
                 {
-                    <tr class="adding show">
+                    <tr class="transaction-row show">
                         <td>
                             <input name="Items[0].Reason" class="form-control js-reason" required />
                             <span class="text-danger field-validation-valid"></span>
@@ -275,7 +280,7 @@
                                 <option value="" disabled selected>-- Select Product --</option>
                                 @if (Model != null && Model.Products != null)
                                 {
-                                    foreach (var prod in Model.Products)
+                                    @foreach (var prod in Model.Products)
                                     {
                                         <option value="@prod.ProductName">@prod.ProductName</option>
                                     }
@@ -290,7 +295,7 @@
         </table>
 
         <div class="down_container">
-            <button type="button" onclick="addRow()" class="btn-action btn-add-row">
+            <button type="button" class="btn-action btn-add-row">
                 <i class="fas fa-plus" style="margin-right: 5px;"></i> Add Row
             </button>
 
@@ -306,19 +311,8 @@
     </div>
 </div>
 
-@* SCRIPT SECTION: 
-   This script block will be executed whether the page is loaded normally OR via AJAX.
-*@
 <script>
-    // Self-executing function to avoid global scope pollution if loaded multiple times via AJAX
     (function() {
-        // Validation scripts if needed
-        @if (isAjax)
-        {
-                 // If AJAX, we might need to manually trigger validation parsing if the library isn't loaded
-                 // usually _ValidationScriptsPartial handles this
-        }
-
         var availableProducts = @Html.Raw(Json.Serialize(Model?.Products ?? new List<T_Stock.Models.Product>()));
 
         // --- 1. Helper Functions ---
@@ -336,15 +330,36 @@
             span.addClass("field-validation-valid");
         }
 
-        // --- 2. Row Adding Logic ---
-        // Attached to window so the onclick="addRow()" in HTML can find it
-        window.addRow = function () {
-            var table = document.getElementById("item-rows");
-            if(!table) return; // Safety check
+        // IMPORTANT: Function to re-index rows (Items[0], Items[1]...)
+        // Without this, deleting a row in the middle breaks the list sent to the controller.
+        function updateIndices() {
+            $('#item-rows tr').each(function (index) {
+                // Find all inputs and selects
+                $(this).find(':input').each(function () {
+                    var name = $(this).attr('name');
+                    if (name) {
+                        // Replace [any number] with [current index]
+                        var newName = name.replace(/\[\d+\]/, '[' + index + ']');
+                        $(this).attr('name', newName);
+                    }
+                });
 
-            var rowIndex = table.rows.length;
-            var newRow = document.createElement("tr");
-            newRow.classList.add("adding");
+                // Find validation spans
+                $(this).find('span[data-valmsg-for]').each(function () {
+                     var valFor = $(this).attr('data-valmsg-for');
+                     if (valFor) {
+                         var newValFor = valFor.replace(/\[\d+\]/, '[' + index + ']');
+                         $(this).attr('data-valmsg-for', newValFor);
+                     }
+                });
+            });
+        }
+
+        // --- 2. Add Row Logic ---
+        // Using event delegation ensures this works even after AJAX reloads
+        $(document).off('click', '.btn-add-row').on('click', '.btn-add-row', function () {
+            var tableBody = $("#item-rows");
+            var rowIndex = tableBody.find("tr").length;
 
             let optionsHtml = '<option value="" disabled selected>-- Select Product --</option>';
             if(availableProducts){
@@ -353,54 +368,62 @@
                 });
             }
 
-            newRow.innerHTML = `
-                <td>
-                    <input name="Items[${rowIndex}].Reason" class="form-control js-reason" required />
-                    <span class="text-danger field-validation-valid"></span>
-                </td>
-                <td>
-                    <select name="Items[${rowIndex}].TransactionType" class="form-control">
-                        <option value="IN">IN</option>
-                        <option value="OUT">OUT</option>
-                    </select>
-                </td>
-                <td>
-                    <input name="Items[${rowIndex}].Quantity" type="number" class="form-control js-qty" value="0" min="1" required />
-                    <span class="text-danger field-validation-valid"></span>
-                </td>
-                <td>
-                    <select name="Items[${rowIndex}].ProductName" class="form-control product-select js-product">
-                        ${optionsHtml}
-                    </select>
-                    <span class="text-danger error-span"></span>
-                </td>
-                <td>
-                    <button type="button" class="removeProductBtn">Remove</button>
-                </td>`;
+            // Note: We create the HTML with a temporary index. updateIndices() will fix it on submit/delete.
+            var newRowHtml = `
+                <tr class="adding">
+                    <td>
+                        <input name="Items[${rowIndex}].Reason" class="form-control js-reason" required />
+                        <span class="text-danger field-validation-valid"></span>
+                    </td>
+                    <td>
+                        <select name="Items[${rowIndex}].TransactionType" class="form-control">
+                            <option value="IN">IN</option>
+                            <option value="OUT">OUT</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input name="Items[${rowIndex}].Quantity" type="number" class="form-control js-qty" value="0" min="1" required />
+                        <span class="text-danger field-validation-valid"></span>
+                    </td>
+                    <td>
+                        <select name="Items[${rowIndex}].ProductName" class="form-control product-select js-product">
+                            ${optionsHtml}
+                        </select>
+                        <span class="text-danger error-span"></span>
+                    </td>
+                    <td>
+                        <button type="button" class="removeProductBtn">Remove</button>
+                    </td>
+                </tr>`;
 
-            table.appendChild(newRow);
+            var $newRow = $(newRowHtml);
+            tableBody.append($newRow);
+
             requestAnimationFrame(() => {
-                newRow.classList.add("show");
+                $newRow.addClass("show");
             });
-        };
+        });
 
         // --- 3. Remove Logic ---
-        // Use event delegation on body or a static parent to handle dynamically added buttons
         $(document).off('click', '.removeProductBtn').on('click', '.removeProductBtn', function () {
             var row = $(this).closest('tr');
             row.addClass('removing');
-            setTimeout(() => row.remove(), 30);
+
+            // Wait for animation, then remove and re-index
+            setTimeout(() => {
+                row.remove();
+                updateIndices(); // Re-calculate indices so Model Binding works
+            }, 30);
         });
 
         // --- 4. SUBMIT LOGIC ---
-        // Unbind previous click events to prevent double submission if partial is reloaded
         $("#btnSubmit").off("click").on("click", function (e) {
             e.preventDefault();
 
             var $form = $("#createTransactionForm");
             let isValid = true;
 
-            // Loop through every row
+            // Loop through every row to validate
             $("#item-rows tr").each(function () {
                 var row = $(this);
                 var reasonInput = row.find(".js-reason");
@@ -423,7 +446,7 @@
                 var qtyVal = parseFloat(quantityInput.val());
                 if (isNaN(qtyVal) || qtyVal <= 0) {
                     isValid = false;
-                    showError(quantityInput, quantitySpan, "Quantity must be > 0");
+                    showError(quantityInput, quantitySpan, "Quantity > 0");
                 } else {
                     clearError(quantityInput, quantitySpan);
                 }
@@ -431,7 +454,7 @@
                 // --- VALIDATE PRODUCT ---
                 if (!productSelect.val() || productSelect.val() === "") {
                     isValid = false;
-                    showError(productSelect, productSpan, "Product is required");
+                    showError(productSelect, productSpan, "Product required");
                 } else {
                     clearError(productSelect, productSpan);
                 }
@@ -441,6 +464,9 @@
                 return;
             }
 
+            // Important: Fix indices before sending to server
+            updateIndices();
+
             $.ajax({
                 url: "/Stock/CreateTransaction",
                 type: "POST",
@@ -449,6 +475,7 @@
                     if (result.success) {
                         window.location.href = "/Stock/Index";
                     } else {
+                        // If validation fails on server, replace the content
                         $(".CREATE").parent().html(result);
                     }
                 },

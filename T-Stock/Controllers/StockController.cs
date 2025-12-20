@@ -128,26 +128,36 @@ namespace T_Stock.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CreateTransaction()
+        public IActionResult CreateTransaction(string productId = null)
         {
-            var products = await _db.ProductCollection.Find(_ => true).ToListAsync();
-
-            var viewModel = new StockTransactionListVM
+            var vm = new StockTransactionListVM
             {
-                Items = new List<StockTransaction>(),
-                Products = products
+                Products = _db.ProductCollection.Find(_ => true).ToList(),
+                Items = new List<StockTransaction>()
             };
 
-            // Check if the request is an AJAX call (sent by jQuery/JavaScript)
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            if (!string.IsNullOrEmpty(productId))
             {
-                // AJAX: Return only the HTML fragment (no layout)
-                return PartialView("_Create", viewModel);
+                var productToRestock = _db.ProductCollection
+                                          .Find(p => p.ProductId == productId)
+                                          .FirstOrDefault();
+
+                if (productToRestock != null)
+                {
+                    vm.Items.Add(new StockTransaction
+                    {
+                        ProductName = productToRestock.ProductName,
+                        TransactionType = "IN",
+                        Reason = "Restock from Notification",
+                        Quantity = 0
+                    });
+                }
             }
 
-            // Normal Request (Browser URL): Return the full page (with layout)
-            return View("_Create", viewModel);
+            return View("_Create", vm);
         }
+
+
 
         [HttpPost]
         public async Task<IActionResult> CreateTransaction(StockTransactionListVM model)

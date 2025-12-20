@@ -152,6 +152,7 @@ namespace T_Stock.Models
         public int ReorderLevel { get; set; }
 
         [BsonElement("Price")]
+        [BsonRepresentation(BsonType.Decimal128)]
         [Range(0.01, double.MaxValue, ErrorMessage = "Price must at least 0.01.")]
         public decimal Price { get; set; }
 
