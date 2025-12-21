@@ -109,7 +109,7 @@ namespace T_Stock.Controllers
 
                 foreach (var po in validPOs)
                 {
-                    if (po.LastUpdated != DateTime.MinValue) continue;
+                    if (po.LastUpdated == DateTime.MinValue) continue;
 
                     
                     var items = allItems.Where(i => i.PO_ID == po.PO_ID);

@@ -1,6 +1,8 @@
 ﻿@model T_Stock.Models.StockTransactionListVM
-<title>@ViewData["Title"]</title>
+
 @{
+    ViewData["Title"] = "Stock Management";
+
     bool isAjax = false;
     if (Context?.Request?.Headers != null &&
         Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
@@ -8,21 +10,28 @@
         isAjax = true;
     }
 
-    ViewData["Title"] = "Stock Management";
     Layout = isAjax ? null : "_Layout";
 }
 
 <div class="STOCK">
+    @* --- Success Notification for New Transaction --- *@
+    @if (ViewBag.NewTxId != null)
+    {
+        <div class="alert alert-success" style="background-color: #d4edda; color: #155724; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #c3e6cb;">
+            <strong>Success!</strong> Transaction @ViewBag.NewTxId has been created successfully.
+        </div>
+    }
+
     <div class="stock-heading">
         <h3>Stock Management</h3>
 
         <div class="search-container">
-            <input type="text" id="searchBox" placeholder="Search..." />
+            <input type="text" id="searchBox" placeholder="Search ID, User, or Reason..." />
             <i class="ri-search-line"></i>
         </div>
     </div>
 
-    @*Management Section*@
+    @* --- Management Section --- *@
     <div class="stockManage">
 
         <div class="filter-container">
@@ -48,18 +57,19 @@
             <div class="filter-group">
                 <label>Order</label>
                 <select id="sortOrder" class="filters">
-                    <option value="desc">Descending (Z-A)</option>
-                    <option value="asc">Ascending (A-Z)</option>
+                    <option value="desc">Descending</option>
+                    <option value="asc">Ascending</option>
                 </select>
             </div>
 
-            <a class="btn-create-stock ajax-nav" data-ajax="page" href="@Url.Action("CreateTransaction", "Stock")">
-                Create
+            <a class="btn-create-stock" href="@Url.Action("CreateTransaction", "Stock")">
+                Create Transaction
             </a>
 
         </div>
-    </div>  
+    </div>
 
+    @* --- Table Container --- *@
     <div id="stockList">
         <partial name="_StockTable" model="Model" />
     </div>
@@ -68,10 +78,9 @@
 
 <style>
     /* =========================================
-           DEFAULT LIGHT MODE STYLES
+               DEFAULT STYLES (Your provided styles)
            ========================================= */
 
-    /* Management Container */
     .stockManage {
         display: flex;
         flex-wrap: wrap;
@@ -81,7 +90,6 @@
         align-items: flex-end;
     }
 
-    /* Filter Container */
     .filter-container {
         display: flex;
         gap: 15px;
@@ -114,7 +122,6 @@
             outline: none;
         }
 
-    /* Green Create Button Styling */
     .btn-create-stock {
         padding: 9px 25px;
         background-color: #28a745;
@@ -134,80 +141,34 @@
             color: white;
         }
 
-    /* --- UPDATED TABLE STYLING --- */
+    /* Table Styles Override to ensure layout consistency */
     #stockList table {
         width: 100%;
         border-collapse: collapse;
-        font-family: sans-serif;
-        table-layout: auto;
     }
-
-    #stockList th, #stockList td {
-        padding: 12px;
-        border-bottom: 1px solid #ddd;
-        text-align: left;
-    }
-
-        /* 1. MAKE TRANSACTION ID (Column 1) EXPAND */
-        #stockList th:nth-child(1),
-        #stockList td:nth-child(1) {
-            width: 100%;
-            min-width: 200px;
-        }
-
-        /* 2. MAKE OTHER COLUMNS SHRINK TO FIT CONTENT */
-        #stockList th:not(:nth-child(1)),
-        #stockList td:not(:nth-child(1)) {
-            width: 1%;
-            white-space: nowrap;
-        }
 
     #stockList th {
         background: #f1f1f1;
         font-weight: bold;
-    }
-
-    .stock-row:hover {
-        background: #f9f9f9;
-    }
-
-    /* Hide detail rows initially */
-    .tx-detail-row {
-        display: none;
-        background: #f8f9fa;
+        padding: 12px;
     }
 
     /* =========================================
-           DARK MODE - STOCK SPECIFIC STYLES
+               DARK MODE
            ========================================= */
 
-    /* 1. Main Container Background */
     body.dark-mode .STOCK {
         color: #e0e0e0;
-        border-radius: 15px;
-        padding: 20px; /* Optional: adds padding inside the dark box */
     }
 
-        /* 2. Heading */
         body.dark-mode .STOCK h3 {
             color: #ffffff;
         }
 
-    /* 3. Search Bar */
     body.dark-mode .search-container input {
         background-color: #2d2d2d;
         color: #ffffff;
         border: 1px solid #444;
-        box-shadow: none;
-    }
-
-    body.dark-mode .search-container i {
-        color: #bbb;
-    }
-
-    /* 4. Filters & Labels */
-    body.dark-mode .filter-group label {
-        color: #bbb;
     }
 
     body.dark-mode .filters {
@@ -216,63 +177,35 @@
         border: 1px solid #444;
     }
 
-        body.dark-mode .filters:focus {
-            border-color: #007bff; /* Keep blue focus or change to lighter grey */
-        }
+    body.dark-mode .filter-group label {
+        color: #bbb;
+    }
 
-    /* 5. Stock List Table */
-    /* Table Header */
     body.dark-mode #stockList th {
-        background-color: #2c3e50; /* Professional Dark Blue-Grey */
+        background-color: #2c3e50;
         color: #ffffff;
         border-bottom: 2px solid #444;
     }
 
-    /* Table Cells */
     body.dark-mode #stockList td {
         background-color: #1e1e1e;
         color: #cccccc;
         border-bottom: 1px solid #333;
     }
 
-    /* Table Row Hover Effect */
     body.dark-mode .stock-row:hover td {
         background-color: #333333;
         color: #ffffff;
     }
 
-    /* 6. Transaction Details (The Hidden Row) */
+    /* Ensure the detail row matches dark mode */
     body.dark-mode .tx-detail-row {
-        background-color: #252525; /* Slightly lighter than main bg to show depth */
+        background-color: #252525 !important;
     }
 
     body.dark-mode .tx-detail-container {
-        border: 1px solid #444;
+        border-color: #444;
         color: #ddd;
-    }
-
-    /* 7. Buttons */
-    /* Create Button (Keep Green, just ensure text is white) */
-    body.dark-mode .btn-create-stock {
-        color: white;
-        /* Optional: darken slightly for better contrast if needed */
-        /* background-color: #1e7e34; */
-    }
-
-    /* View Button inside table */
-    body.dark-mode .btn-view-tx {
-        background-color: #138496; /* Darker Cyan */
-        color: #fff;
-        border: 1px solid #0f6674;
-    }
-
-        body.dark-mode .btn-view-tx:hover {
-            background-color: #117a8b;
-        }
-
-    /* Small timestamp text */
-    body.dark-mode #stockList td div[style*="color: #555"] {
-        color: #888 !important; /* Make the small time text lighter in dark mode */
     }
 </style>
 
@@ -282,9 +215,13 @@
         const sortBy = document.getElementById('sortBy');
         const sortOrder = document.getElementById('sortOrder');
         const searchBox = document.getElementById('searchBox');
-        const tableBody = document.querySelector('#stockTable tbody');
+
+        // Target the table specifically
+        const table = document.getElementById('stockTable');
 
         function updateTable() {
+            // Re-select tbody in case partial reloaded (though in this version it's static)
+            const tableBody = table ? table.querySelector('tbody') : null;
             if (!tableBody) return;
 
             const rows = Array.from(tableBody.querySelectorAll('tr.stock-row'));
@@ -293,14 +230,21 @@
                 const cells = row.querySelectorAll('td');
                 const detailRow = row.nextElementSibling;
 
-                // Extract specific columns
-                const txid = cells[0].innerText.trim();
-                const userid = cells[1].innerText.trim();
-                const dateStr = cells[2].innerText.trim();
-                const typeText = cells[4].innerText.trim().toUpperCase();
+                // --- MAP COLUMNS CORRECTLY TO _StockTable.cshtml ---
+                // 0: Tx ID | 1: User ID | 2: Date | 3: Reason | 4: Type | 5: Actions
 
-                // Build search text ONLY from Transaction ID and User ID
-                const searchString = (txid + " " + userid).toLowerCase();
+                const txid = cells[0] ? cells[0].innerText.trim() : "";
+                const userid = cells[1] ? cells[1].innerText.trim() : "";
+
+                // For Date: Replace newline with space to ensure "2023-01-01\n12:00" parses correctly
+                let dateRaw = cells[2] ? cells[2].innerText.trim() : "";
+                const dateStr = dateRaw.replace(/(\r\n|\n|\r)/gm, " ");
+
+                const reason = cells[3] ? cells[3].innerText.trim() : "";
+                const typeText = cells[4] ? cells[4].innerText.trim().toUpperCase() : "";
+
+                // Build search string: ID + User + Reason
+                const searchString = `${txid} ${userid} ${reason}`.toLowerCase();
 
                 return {
                     element: row,
@@ -309,41 +253,42 @@
                     userid: userid,
                     dateStr: dateStr,
                     type: typeText,
-                    searchText: searchString // Search target
+                    searchText: searchString
                 };
             });
 
-            // FILTERING
+            // 1. FILTERING
             const filterTypeValue = typeFilter.value;
             const searchValue = searchBox.value.toLowerCase().trim();
 
             rowData.forEach(item => {
                 let isVisible = true;
 
-                // 1. Check Type Filter
+                // Check Type
                 if (filterTypeValue !== 'all') {
-                    if (!item.type.includes(filterTypeValue)) {
+                    if (item.type !== filterTypeValue) {
                         isVisible = false;
                     }
                 }
 
-                // 2. Check Search (Transaction ID or User ID)
+                // Check Search
                 if (searchValue && !item.searchText.includes(searchValue)) {
                     isVisible = false;
                 }
 
-                // Toggle visibility
+                // Apply Visibility
                 item.element.style.display = isVisible ? '' : 'none';
 
-                // Handle hidden details
+                // Always hide detail row when filtering/sorting happens
                 if (item.detailElement && item.detailElement.classList.contains('tx-detail-row')) {
                     item.detailElement.style.display = 'none';
+                    // Reset button text
                     const btn = item.element.querySelector('.btn-view-tx');
                     if (btn) btn.textContent = 'View';
                 }
             });
 
-            // SORTING
+            // 2. SORTING
             const sortKey = sortBy.value;
             const order = sortOrder.value;
 
@@ -351,8 +296,8 @@
                 let valA, valB;
 
                 if (sortKey === 'date') {
-                    valA = new Date(a.dateStr);
-                    valB = new Date(b.dateStr);
+                    valA = new Date(a.dateStr).getTime();
+                    valB = new Date(b.dateStr).getTime();
                 } else if (sortKey === 'txid') {
                     valA = a.txid;
                     valB = b.txid;
@@ -369,7 +314,7 @@
                 return 0;
             });
 
-            // Re-append sorted rows
+            // 3. RE-APPEND SORTED ROWS
             rowData.forEach(item => {
                 tableBody.appendChild(item.element);
                 if (item.detailElement) {
@@ -378,10 +323,13 @@
             });
         }
 
+        // Attach Events
         if (typeFilter) typeFilter.addEventListener('change', updateTable);
         if (sortBy) sortBy.addEventListener('change', updateTable);
         if (sortOrder) sortOrder.addEventListener('change', updateTable);
         if (searchBox) searchBox.addEventListener('keyup', updateTable);
 
+        // Initial trigger to ensure correct order
+        // updateTable();
     })();
 </script>

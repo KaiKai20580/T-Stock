@@ -2,11 +2,7 @@
 
 @{
     ViewData["Title"] = "Create Stock Transactions";
-
-    // Detect if this is a direct browser load or an AJAX partial load
     bool isAjax = Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
-
-    // If AJAX, disable Layout. If Normal, use default Layout.
     Layout = isAjax ? null : "_Layout";
 }
 
@@ -52,8 +48,7 @@
         }
 
             /* ===== ACTION COLUMN ===== */
-            .stock-table th:last-child,
-            .stock-table td:last-child {
+            .stock-table th:last-child, .stock-table td:last-child {
                 width: 200px;
                 min-width: 200px;
                 text-align: center;
@@ -217,37 +212,47 @@
                 </tr>
             </thead>
             <tbody id="item-rows">
-                @if (Model != null && Model.Items != null && Model.Items.Count > 0)
+                @{
+                    // We determine the count based on Items, assuming Items and TransactionItems are synced in count
+                    int count = Model?.Items?.Count ?? 0;
+                }
+
+                @if (count > 0)
                 {
-                    @for (int i = 0; i < Model.Items.Count; i++)
+                    @for (int i = 0; i < count; i++)
                     {
+                        var transaction = Model.Items[i];
+                        var item = (Model.TransactionItems != null && Model.TransactionItems.Count > i) ? Model.TransactionItems[i] : new T_Stock.Models.StockTransactionItem();
+
                         <tr class="transaction-row show">
                             <td>
-                                <input asp-for="Items[i].Reason" class="form-control js-reason" required />
-                                <span asp-validation-for="Items[i].Reason" class="text-danger"></span>
+                                <input name="Items[@i].Reason" value="@transaction.Reason" class="form-control js-reason" required />
+                                <span class="text-danger field-validation-valid"></span>
                             </td>
                             <td>
-                                <select asp-for="Items[i].TransactionType" class="form-control">
-                                    <option value="IN">IN</option>
-                                    <option value="OUT">OUT</option>
+                                <select name="Items[@i].transactionType" class="form-control">
+                                    <!option value="IN" @(transaction.transactionType == "IN" ? "selected" : "")>IN</!option>
+                                    <!option value="OUT" @(transaction.transactionType == "OUT" ? "selected" : "")>OUT</!option>
                                 </select>
                             </td>
                             <td>
-                                <input asp-for="Items[i].Quantity" type="number" class="form-control js-qty" min="1" required />
-                                <span asp-validation-for="Items[i].Quantity" class="text-danger"></span>
+                                <input name="TransactionItems[@i].QtyChange" value="@item.QtyChange" type="number" class="form-control js-qty" min="1" required />
+                                <span class="text-danger field-validation-valid"></span>
                             </td>
                             <td>
-                                <select asp-for="Items[i].ProductName" class="form-control product-select js-product">
+                                <select name="TransactionItems[@i].ProductID" class="form-control product-select js-product">
                                     <option value="" disabled selected>-- Select Product --</option>
                                     @if (Model.Products != null)
                                     {
                                         foreach (var prod in Model.Products)
                                         {
-                                            <option value="@prod.ProductName">@prod.ProductName</option>
+                                            <!option value="@prod.ProductId" @(item.ProductID == prod.ProductId ? "selected" : "")>
+                                            @prod.ProductName
+                                            </!option>
                                         }
                                     }
                                 </select>
-                                <span asp-validation-for="Items[i].ProductName" class="text-danger error-span"></span>
+                                <span class="text-danger error-span"></span>
                             </td>
                             <td>
                                 @if (i > 0)
@@ -266,23 +271,23 @@
                             <span class="text-danger field-validation-valid"></span>
                         </td>
                         <td>
-                            <select name="Items[0].TransactionType" class="form-control">
+                            <select name="Items[0].transactionType" class="form-control">
                                 <option value="IN">IN</option>
                                 <option value="OUT">OUT</option>
                             </select>
                         </td>
                         <td>
-                            <input name="Items[0].Quantity" type="number" class="form-control js-qty" value="0" min="1" required />
+                            <input name="TransactionItems[0].QtyChange" type="number" class="form-control js-qty" value="0" min="1" required />
                             <span class="text-danger field-validation-valid"></span>
                         </td>
                         <td>
-                            <select name="Items[0].ProductName" class="form-control product-select js-product">
+                            <select name="TransactionItems[0].ProductID" class="form-control product-select js-product">
                                 <option value="" disabled selected>-- Select Product --</option>
                                 @if (Model != null && Model.Products != null)
                                 {
                                     @foreach (var prod in Model.Products)
                                     {
-                                        <option value="@prod.ProductName">@prod.ProductName</option>
+                                        <option value="@prod.ProductId">@prod.ProductName</option>
                                     }
                                 }
                             </select>
@@ -296,7 +301,7 @@
 
         <div class="down_container">
             <button type="button" class="btn-action btn-add-row">
-                <i class="fas fa-plus" style="margin-right: 5px;"></i> Add Row
+                <i class="ri-add-line" style="margin-right: 5px;"></i> Add Row
             </button>
 
             <button type="button" id="btnSubmit" class="btn-action btn-create ajax-nav" data-ajax="page">
@@ -313,50 +318,37 @@
 
 <script>
     (function() {
+        // Serialize product list for JS usage
         var availableProducts = @Html.Raw(Json.Serialize(Model?.Products ?? new List<T_Stock.Models.Product>()));
 
-        // --- 1. Helper Functions ---
         function showError(input, span, message) {
             input.addClass("input-validation-error");
             span.text(message);
-            span.removeClass("field-validation-valid");
-            span.addClass("field-validation-error");
+            span.removeClass("field-validation-valid").addClass("field-validation-error");
         }
 
         function clearError(input, span) {
             input.removeClass("input-validation-error");
             span.text("");
-            span.removeClass("field-validation-error");
-            span.addClass("field-validation-valid");
+            span.removeClass("field-validation-error").addClass("field-validation-valid");
         }
 
-        // IMPORTANT: Function to re-index rows (Items[0], Items[1]...)
-        // Without this, deleting a row in the middle breaks the list sent to the controller.
+        // --- UPDATED INDEX UPDATER ---
+        // This handles re-indexing for BOTH lists: Items[] and TransactionItems[]
         function updateIndices() {
             $('#item-rows tr').each(function (index) {
-                // Find all inputs and selects
                 $(this).find(':input').each(function () {
                     var name = $(this).attr('name');
                     if (name) {
-                        // Replace [any number] with [current index]
+                        // Regex works for Items[0] AND TransactionItems[0]
                         var newName = name.replace(/\[\d+\]/, '[' + index + ']');
                         $(this).attr('name', newName);
                     }
                 });
-
-                // Find validation spans
-                $(this).find('span[data-valmsg-for]').each(function () {
-                     var valFor = $(this).attr('data-valmsg-for');
-                     if (valFor) {
-                         var newValFor = valFor.replace(/\[\d+\]/, '[' + index + ']');
-                         $(this).attr('data-valmsg-for', newValFor);
-                     }
-                });
             });
         }
 
-        // --- 2. Add Row Logic ---
-        // Using event delegation ensures this works even after AJAX reloads
+        // --- Add Row Logic ---
         $(document).off('click', '.btn-add-row').on('click', '.btn-add-row', function () {
             var tableBody = $("#item-rows");
             var rowIndex = tableBody.find("tr").length;
@@ -364,29 +356,30 @@
             let optionsHtml = '<option value="" disabled selected>-- Select Product --</option>';
             if(availableProducts){
                 availableProducts.forEach(prod => {
-                    optionsHtml += `<option value="${prod.productName}">${prod.productName}</option>`;
+                    // Using productId (camelCase due to JSON serialization)
+                    optionsHtml += `<option value="${prod.productId}">${prod.productName}</option>`;
                 });
             }
 
-            // Note: We create the HTML with a temporary index. updateIndices() will fix it on submit/delete.
+            // Note the two different array names in the inputs below: Items[] and TransactionItems[]
             var newRowHtml = `
-                <tr class="adding">
+                <tr class="transaction-row adding">
                     <td>
                         <input name="Items[${rowIndex}].Reason" class="form-control js-reason" required />
                         <span class="text-danger field-validation-valid"></span>
                     </td>
                     <td>
-                        <select name="Items[${rowIndex}].TransactionType" class="form-control">
+                        <select name="Items[${rowIndex}].transactionType" class="form-control">
                             <option value="IN">IN</option>
                             <option value="OUT">OUT</option>
                         </select>
                     </td>
                     <td>
-                        <input name="Items[${rowIndex}].Quantity" type="number" class="form-control js-qty" value="0" min="1" required />
+                        <input name="TransactionItems[${rowIndex}].QtyChange" type="number" class="form-control js-qty" value="0" min="1" required />
                         <span class="text-danger field-validation-valid"></span>
                     </td>
                     <td>
-                        <select name="Items[${rowIndex}].ProductName" class="form-control product-select js-product">
+                        <select name="TransactionItems[${rowIndex}].ProductID" class="form-control product-select js-product">
                             ${optionsHtml}
                         </select>
                         <span class="text-danger error-span"></span>
@@ -404,26 +397,24 @@
             });
         });
 
-        // --- 3. Remove Logic ---
+        // --- Remove Logic ---
         $(document).off('click', '.removeProductBtn').on('click', '.removeProductBtn', function () {
             var row = $(this).closest('tr');
             row.addClass('removing');
 
-            // Wait for animation, then remove and re-index
             setTimeout(() => {
                 row.remove();
-                updateIndices(); // Re-calculate indices so Model Binding works
-            }, 30);
+                updateIndices();
+            }, 300);
         });
 
-        // --- 4. SUBMIT LOGIC ---
+        // --- Submit Logic ---
         $("#btnSubmit").off("click").on("click", function (e) {
             e.preventDefault();
 
             var $form = $("#createTransactionForm");
             let isValid = true;
 
-            // Loop through every row to validate
             $("#item-rows tr").each(function () {
                 var row = $(this);
                 var reasonInput = row.find(".js-reason");
@@ -434,7 +425,7 @@
                 var quantitySpan = quantityInput.next("span");
                 var productSpan = productSelect.next("span");
 
-                // --- VALIDATE REASON ---
+                // Validate Reason
                 if (!reasonInput.val() || reasonInput.val().trim() === "") {
                     isValid = false;
                     showError(reasonInput, reasonSpan, "Reason is required");
@@ -442,16 +433,16 @@
                     clearError(reasonInput, reasonSpan);
                 }
 
-                // --- VALIDATE QUANTITY ---
+                // Validate Quantity
                 var qtyVal = parseFloat(quantityInput.val());
                 if (isNaN(qtyVal) || qtyVal <= 0) {
                     isValid = false;
-                    showError(quantityInput, quantitySpan, "Quantity > 0");
+                    showError(quantityInput, quantitySpan, "Qty > 0");
                 } else {
                     clearError(quantityInput, quantitySpan);
                 }
 
-                // --- VALIDATE PRODUCT ---
+                // Validate Product
                 if (!productSelect.val() || productSelect.val() === "") {
                     isValid = false;
                     showError(productSelect, productSpan, "Product required");
@@ -460,11 +451,8 @@
                 }
             });
 
-            if (!isValid) {
-                return;
-            }
+            if (!isValid) return;
 
-            // Important: Fix indices before sending to server
             updateIndices();
 
             $.ajax({
@@ -475,7 +463,6 @@
                     if (result.success) {
                         window.location.href = "/Stock/Index";
                     } else {
-                        // If validation fails on server, replace the content
                         $(".CREATE").parent().html(result);
                     }
                 },

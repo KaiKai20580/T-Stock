@@ -25,7 +25,7 @@ public class HomeController : Controller
         ViewBag.TotalStockQuantity = totalQuantity;
 
         // 2. Total Transactions
-        var transactionCount = _db.StockTransactionCollection.CountDocuments(FilterDefinition<StockTransaction>.Empty);
+        var transactionCount = _db.StockTransaction.CountDocuments(FilterDefinition<StockTransaction>.Empty);
         ViewBag.TotalTransactions = transactionCount;
 
         // 3. NEW LOGIC: "Out of Stock" (Quantity <= ReorderLevel)

@@ -1,4 +1,14 @@
-﻿@model List<T_Stock.Models.StockTransaction>
+﻿@model T_Stock.Models.StockTransactionListVM
+
+@{
+    // Retrieve the specific Transaction ID we are rendering details for
+    var currentTxId = ViewData["TransactionID"] as string;
+
+    // 1. Filter items for this specific transaction
+    var detailItems = Model?.TransactionItems?
+        .Where(ti => ti.TransactionID == currentTxId)
+        .ToList();
+}
 
 <div class="inner-table-wrapper">
     <div class="inner-header">
@@ -8,45 +18,37 @@
     <table class="inner-stock-table">
         <thead>
             <tr>
-                <th style="width: 15%;">ID</th>
-                <th style="width: 65%;">Product Name</th>
+                <th style="width: 15%;">Product ID</th>
+                <th style="width: 50%;">Product Name</th>
+                <th style="width: 15%;">Remarks</th>
                 <th style="width: 20%;" class="text-end">Quantity</th>
             </tr>
         </thead>
         <tbody>
-            @if (Model != null && Model.Any())
+            @if (detailItems != null && detailItems.Any())
             {
-                foreach (var tx in Model)
+                foreach (var item in detailItems)
                 {
-                    if (tx.Products != null && tx.Products.Any())
-                    {
-                        foreach (var prod in tx.Products)
-                        {
-                            <tr>
-                                <td class="id-cell">@prod.ProductId</td>
-                                <td class="name-cell">@prod.ProductName</td>
-                                <td class="text-end qty-cell">
-                                    <span class="qty-badge">@prod.Quantity</span>
-                                </td>
-                            </tr>
-                        }
-                    }
-                    else
-                    {
-                        <tr>
-                            <td class="id-cell">@tx.ProductId</td>
-                            <td class="name-cell">@tx.ProductName</td>
-                            <td class="text-end qty-cell">
-                                <span class="qty-badge">@tx.Quantity</span>
-                            </td>
-                        </tr>
-                    }
+                    // 2. Lookup Product Name from the Master List
+                    var product = Model.Products?.FirstOrDefault(p => p.ProductId == item.ProductID);
+                    string productName = product?.ProductName ?? "Unknown Product";
+
+                    <tr>
+                        <td class="id-cell">@item.ProductID</td>
+                        <td class="name-cell">@productName</td>
+                        <td class="name-cell" style="color: #777; font-size: 0.85em;">
+                            @(string.IsNullOrEmpty(item.Remarks) ? "-" : item.Remarks)
+                        </td>
+                        <td class="text-end qty-cell">
+                            <span class="qty-badge">@item.QtyChange</span>
+                        </td>
+                    </tr>
                 }
             }
             else
             {
                 <tr>
-                    <td colspan="3" class="empty-state">
+                    <td colspan="4" class="empty-state">
                         <i class="empty-icon">!</i> No items found.
                     </td>
                 </tr>
@@ -60,10 +62,10 @@
     .inner-table-wrapper {
         background-color: #ffffff;
         border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08); /* Softer shadow */
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         border: 1px solid #eaeaea;
-        overflow: hidden; /* Keeps child elements inside rounded corners */
-        margin: 10px 0; /* Vertical breathing room */
+        overflow: hidden;
+        margin: 10px 0;
         max-width: 100%;
     }
 
@@ -87,10 +89,9 @@
     .inner-stock-table {
         width: 100%;
         border-collapse: collapse;
-        table-layout: fixed; /* STRICTLY enforces column widths */
+        table-layout: fixed;
     }
 
-        /* Header Styling */
         .inner-stock-table thead th {
             background-color: #fff;
             color: #888;
@@ -102,21 +103,18 @@
             text-align: left;
         }
 
-        /* Row/Cell Styling */
         .inner-stock-table tbody td {
-            padding: 12px 20px; /* Balanced padding for height */
+            padding: 12px 20px;
             border-bottom: 1px solid #f5f5f5;
             font-size: 0.9rem;
             vertical-align: middle;
             color: #333;
         }
 
-        /* Hover Effect */
         .inner-stock-table tbody tr:hover {
             background-color: #fcfcfc;
         }
 
-        /* Last row border removal */
         .inner-stock-table tbody tr:last-child td {
             border-bottom: none;
         }
@@ -127,20 +125,22 @@
     }
 
     .id-cell {
-        font-family: 'Consolas', 'Monaco', monospace; /* Monospace for IDs aligns perfectly */
+        font-family: 'Consolas', 'Monaco', monospace;
         color: #999;
         font-size: 0.85rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .name-cell {
         font-weight: 600;
         color: #2c3e50;
-        white-space: nowrap; /* Prevents wrapping */
+        white-space: nowrap;
         overflow: hidden;
-        text-overflow: ellipsis; /* Adds "..." if name is too long */
+        text-overflow: ellipsis;
     }
 
-    /* Quantity Badge Look */
     .qty-cell {
         font-weight: bold;
     }
@@ -153,7 +153,6 @@
         font-size: 0.8rem;
     }
 
-    /* --- 5. Empty State --- */
     .empty-state {
         text-align: center;
         padding: 40px !important;

@@ -43,11 +43,13 @@ namespace T_Stock.Models
     [BsonIgnoreExtraElements]
     public class User
     {
-
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
+
+        [BsonElement("userid")]
+        public string UserId { get; set; }
 
         [BsonElement("email")]
         public string Email { get; set; }
@@ -66,6 +68,7 @@ namespace T_Stock.Models
     {
         public List<StockTransaction> Items { get; set; } = new();
         public List<Product> Products { get; set; } = new();
+        public List<StockTransactionItem> TransactionItems { get; set; } = new();
     }
 
     public class Supplier
@@ -225,10 +228,6 @@ namespace T_Stock.Models
         public int QtyChange { get; set; }
         [BsonElement("Remarks")]
         public string? Remarks { get; set; }
-    }
-    public class InventoryListVM
-    {
-        public List<Inventory> Items { get; set; } = new List<Inventory>();
     }
 
     public class PurchaseOrder

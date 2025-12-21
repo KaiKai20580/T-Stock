@@ -2,7 +2,6 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Security.Claims;
-using System.Text.Json; // Required for serializing data for the redirect
 using T_Stock.Models;
 
 namespace T_Stock.Controllers
@@ -16,268 +15,258 @@ namespace T_Stock.Controllers
             _db = db;
         }
 
-        // --- UPDATED INDEX METHOD ---
-        // Main page - list all stock transactions
-        public IActionResult Index()
+        // --- INDEX: Lists Transaction Headers + Data for Lookups ---
+        public async Task<IActionResult> Index()
         {
-            // 1. Check if we have a "Receipt" from a recently created transaction
-            //    (This comes from the CreateTransaction method via TempData)
-            if (TempData["CreatedTransactions"] != null)
+            // 1. Check for Receipt (New Transaction Created)
+            if (TempData["CreatedTransactionID"] != null)
             {
-                var json = TempData["CreatedTransactions"].ToString();
-                if (!string.IsNullOrEmpty(json))
-                {
-                    var newItems = JsonSerializer.Deserialize<List<StockTransaction>>(json);
-                    ViewBag.NewTransactionReceipt = newItems; // Pass this to the View
-                }
+                string newTxId = TempData["CreatedTransactionID"].ToString();
+                ViewBag.NewTxId = newTxId;
+                // You can load specific details for a receipt modal here if needed
             }
 
-            // 2. Standard Load
-            var transactions = _db.StockTransactionCollection
-                                  .Find(_ => true)
-                                  .SortByDescending(tx => tx.Date)
-                                  .ToList();
+            // 2. Load History (Headers)
+            var transactions = await _db.StockTransaction
+                                    .Find(_ => true)
+                                    .SortByDescending(tx => tx.Date)
+                                    .ToListAsync();
 
+            // 3. Load Related Data (Items & Products) for Lookups
+            // In a large system, you would paginate 'transactions' first, then only load IDs found in those transactions.
+            var txIds = transactions.Select(t => t.TransactionID).ToList();
+
+            var relatedItems = await _db.StockTransactionItemCollection
+                                    .Find(i => txIds.Contains(i.TransactionID))
+                                    .ToListAsync();
+
+            var allProducts = await _db.ProductCollection
+                                    .Find(_ => true)
+                                    .ToListAsync();
+
+            // 4. Construct VM
             var model = new StockTransactionListVM
             {
-                Items = transactions
+                Items = transactions,           // The Headers
+                TransactionItems = relatedItems,// The Details (Rows)
+                Products = allProducts          // The Master Data (for Name lookups)
             };
 
             return View(model);
         }
 
-        // Partial: Get transactions filtered by TransactionID or UserID
-        // In StockController.cs
-
-        public IActionResult GetTransactions(string? transactionId = null, string? userId = null)
+        // --- STOCK TABLE PARTIAL (Refreshed via AJAX) ---
+        // Updated to return Transactions, not Products, matching your _StockTable view
+        public async Task<IActionResult> StockTable(string search, string type, string dateFrom, string dateTo)
         {
-            var filter = Builders<StockTransaction>.Filter.Empty;
+            var builder = Builders<StockTransaction>.Filter;
+            var filter = builder.Empty;
 
-            if (!string.IsNullOrEmpty(transactionId))
-                filter = Builders<StockTransaction>.Filter.Eq(tx => tx.TransactionID, transactionId);
-
-            if (!string.IsNullOrEmpty(userId))
-                filter = Builders<StockTransaction>.Filter.Eq(tx => tx.UserID, userId);
-
-            var transactions = _db.StockTransactionCollection
-                                  .Find(filter)
-                                  .SortByDescending(tx => tx.Date)
-                                  .ToList();
-
-            var model = new StockTransactionListVM
-            {
-                Items = transactions
-            };
-
-            // --- FIX IS HERE ---
-            // Pass 'model.Items' (the List) instead of 'model' (the VM)
-            return PartialView("_StockTransactionDetail", model.Items);
-        }
-
-        // Partial: Stock table for products with filtering
-        public IActionResult StockTable(string? search, string? category, string? stockLevel)
-        {
-            var filter = Builders<Product>.Filter.Empty;
-
-            // Search filter
+            // 1. Apply Search (Transaction ID or Reason)
             if (!string.IsNullOrEmpty(search))
-                filter &= Builders<Product>.Filter.Regex(i => i.ProductName, new BsonRegularExpression(search, "i"));
-
-            // Category filter
-            if (!string.IsNullOrEmpty(category) && category != "all")
-                filter &= Builders<Product>.Filter.Eq(i => i.Category, category);
-
-            // Stock level filter
-            if (!string.IsNullOrEmpty(stockLevel))
             {
-                if (stockLevel == "low")
-                    filter &= Builders<Product>.Filter.Lte(i => i.Quantity, 5);
-                else if (stockLevel == "out")
-                    filter &= Builders<Product>.Filter.Eq(i => i.Quantity, 0);
+                var regex = new BsonRegularExpression(search, "i");
+                filter &= builder.Or(
+                    builder.Regex(x => x.TransactionID, regex),
+                    builder.Regex(x => x.Reason, regex)
+                );
             }
 
-            var products = _db.ProductCollection
-                              .Find(filter)
-                              .SortBy(i => i.ProductName)
-                              .ToList();
+            // 2. Apply Type Filter (IN/OUT)
+            if (!string.IsNullOrEmpty(type) && type != "all")
+            {
+                filter &= builder.Eq(x => x.transactionType, type);
+            }
 
-            return PartialView("_StockTable", products);
-        }
+            // 3. Apply Date Filter
+            if (!string.IsNullOrEmpty(dateFrom) && DateTime.TryParse(dateFrom, out DateTime dtFrom))
+            {
+                filter &= builder.Gte(x => x.Date, dtFrom);
+            }
+            if (!string.IsNullOrEmpty(dateTo) && DateTime.TryParse(dateTo, out DateTime dtTo))
+            {
+                // Add 1 day to include the end date fully
+                filter &= builder.Lt(x => x.Date, dtTo.AddDays(1));
+            }
 
-        // Delete a stock transaction
-        [HttpPost]
-        public IActionResult Delete(string id)
-        {
-            if (string.IsNullOrEmpty(id))
-                return BadRequest();
+            // 4. Fetch Results
+            var transactions = await _db.StockTransaction
+                                    .Find(filter)
+                                    .SortByDescending(tx => tx.Date)
+                                    .ToListAsync();
 
-            _db.StockTransactionCollection.DeleteOne(x => x.Id == id);
+            // 5. Fetch Related Data for these specific transactions
+            var txIds = transactions.Select(t => t.TransactionID).ToList();
+            var relatedItems = await _db.StockTransactionItemCollection
+                                    .Find(i => txIds.Contains(i.TransactionID))
+                                    .ToListAsync();
 
-            // Return updated list in StockTransactionListVM
-            var transactions = _db.StockTransactionCollection
-                                  .Find(FilterDefinition<StockTransaction>.Empty)
-                                  .SortByDescending(tx => tx.Date)
-                                  .ToList();
+            // Optimization: In real apps, cache products or specific lookup. Here we load all.
+            var allProducts = await _db.ProductCollection
+                                    .Find(_ => true)
+                                    .ToListAsync();
 
             var model = new StockTransactionListVM
             {
-                Items = transactions
+                Items = transactions,
+                TransactionItems = relatedItems,
+                Products = allProducts
             };
 
-            return PartialView("_Create", model);
+            return PartialView("_StockTable", model);
         }
 
+        // --- GET SINGLE TRANSACTION DETAIL (For Modal/Expansion) ---
+        public async Task<IActionResult> GetTransactions(string transactionId)
+        {
+            if (string.IsNullOrEmpty(transactionId)) return BadRequest();
+
+            // 1. Fetch Items for this Transaction
+            var items = await _db.StockTransactionItemCollection
+                            .Find(t => t.TransactionID == transactionId)
+                            .ToListAsync();
+
+            // 2. Fetch Products (Required for the partial to lookup names)
+            var allProducts = await _db.ProductCollection
+                            .Find(_ => true)
+                            .ToListAsync();
+
+            // 3. Construct VM
+            var model = new StockTransactionListVM
+            {
+                TransactionItems = items,
+                Products = allProducts
+            };
+
+            // 4. Pass the ID so the Partial knows what to filter (if logic requires it)
+            ViewData["TransactionID"] = transactionId;
+
+            return PartialView("_StockTransactionDetail", model);
+        }
+
+        // --- CREATE (GET) ---
         [HttpGet]
-        public IActionResult CreateTransaction(string productId = null)
+        public async Task<IActionResult> CreateTransaction()
         {
             var vm = new StockTransactionListVM
             {
-                Products = _db.ProductCollection.Find(_ => true).ToList(),
-                Items = new List<StockTransaction>()
+                Products = await _db.ProductCollection.Find(_ => true).ToListAsync(),
+                Items = new List<StockTransaction> { new StockTransaction() },
+                TransactionItems = new List<StockTransactionItem> { new StockTransactionItem { QtyChange = 1 } }
             };
-
-            if (!string.IsNullOrEmpty(productId))
-            {
-                var productToRestock = _db.ProductCollection
-                                          .Find(p => p.ProductId == productId)
-                                          .FirstOrDefault();
-
-                if (productToRestock != null)
-                {
-                    vm.Items.Add(new StockTransaction
-                    {
-                        ProductName = productToRestock.ProductName,
-                        TransactionType = "IN",
-                        Reason = "Restock from Notification",
-                        Quantity = 0
-                    });
-                }
-            }
 
             return View("_Create", vm);
         }
 
-
-
+        // --- CREATE (POST) ---
         [HttpPost]
         public async Task<IActionResult> CreateTransaction(StockTransactionListVM model)
         {
-            // 1. Validation Clean-up
-            if (model.Items != null)
-            {
-                for (int i = 0; i < model.Items.Count; i++)
-                {
-                    ModelState.Remove($"Items[{i}].TransactionID");
-                    ModelState.Remove($"Items[{i}].UserID");
-                    ModelState.Remove($"Items[{i}].Date");
-                    ModelState.Remove($"Items[{i}].Id");
-                    ModelState.Remove($"Items[{i}].ProductId");
-                }
-            }
+            // The Header info is expected in model.Items[0]
+            var headerInput = model.Items?.FirstOrDefault();
 
-            // 2. Check Validation
-            if (!ModelState.IsValid)
+            // 1. Basic Validation
+            if (headerInput == null || model.TransactionItems == null || !model.TransactionItems.Any())
             {
+                ModelState.AddModelError("", "Please provide transaction details.");
                 model.Products = await _db.ProductCollection.Find(_ => true).ToListAsync();
-
-                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-                {
-                    return PartialView("_Create", model);
-                }
-                return View(model);
+                return View("_Create", model);
             }
 
-            // =========================================================================
-            // 3. Setup Variables
-            // =========================================================================
+            // 2. Clear Validation for Generated Fields
+            ModelState.Remove("Items[0].TransactionID");
+            ModelState.Remove("Items[0].UserID");
+            ModelState.Remove("Items[0].Date");
+            ModelState.Remove("Items[0].Id");
 
-            // --- A. Generate Transaction ID (e.g., T0001) ---
-            var lastTx = await _db.StockTransactionCollection
-                .Find(_ => true)
-                .SortByDescending(t => t.TransactionID)
-                .FirstOrDefaultAsync();
+            for (int i = 0; i < model.TransactionItems.Count; i++)
+            {
+                ModelState.Remove($"TransactionItems[{i}].TransactionID");
+                ModelState.Remove($"TransactionItems[{i}].Id");
+                ModelState.Remove($"TransactionItems[{i}].ProductID");
+            }
 
-            string batchId = "T0001";
-
+            // 3. Setup IDs
+            // Generate Transaction ID (T0001, etc.)
+            var lastTx = await _db.StockTransaction.Find(_ => true).SortByDescending(t => t.TransactionID).FirstOrDefaultAsync();
+            string newBatchId = "T0001";
             if (lastTx != null && !string.IsNullOrEmpty(lastTx.TransactionID))
             {
                 string numericPart = lastTx.TransactionID.Substring(1);
                 if (int.TryParse(numericPart, out int currentNum))
                 {
-                    batchId = $"T{currentNum + 1:D4}";
+                    newBatchId = $"T{currentNum + 1:D4}";
                 }
             }
 
-            // --- B. DETECT CURRENT LOGGED-IN USER ID ---
-            // We check the standard NameIdentifier claim (User ID) first, then fallback to Name (Username)
-            string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (string.IsNullOrEmpty(currentUserId))
-            {
-                currentUserId = User.Identity?.Name;
-            }
-
-            // Fallback if user is somehow not logged in (optional safety net)
-            if (string.IsNullOrEmpty(currentUserId))
-            {
-                currentUserId = "UnknownUser";
-            }
-
+            string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.Identity?.Name ?? "Unknown";
             DateTime currentDate = DateTime.Now;
 
-            // =========================================================================
+            // 4. Process Logic
+            headerInput.TransactionID = newBatchId;
+            headerInput.UserID = currentUserId;
+            headerInput.Date = currentDate;
 
-            if (model.Items != null)
+            var validItemsToInsert = new List<StockTransactionItem>();
+
+            foreach (var item in model.TransactionItems)
             {
-                foreach (var item in model.Items)
-                {
-                    // C. Fill Transaction Details
-                    item.TransactionID = batchId;
-                    item.UserID = currentUserId; // <--- Uses the detected ID
-                    item.Date = currentDate;
+                if (string.IsNullOrEmpty(item.ProductID)) continue;
 
-                    if (!string.IsNullOrEmpty(item.ProductName))
+                item.TransactionID = newBatchId;
+
+                var product = await _db.ProductCollection.Find(p => p.ProductId == item.ProductID).FirstOrDefaultAsync();
+
+                if (product != null)
+                {
+                    int changeAmount = item.QtyChange;
+
+                    // Handle 'OUT' logic (Negative Stock)
+                    if (headerInput.transactionType == "OUT")
                     {
-                        var filter = Builders<Product>.Filter.Eq(p => p.ProductName, item.ProductName);
-                        var existingProduct = await _db.ProductCollection.Find(filter).FirstOrDefaultAsync();
-
-                        if (existingProduct != null)
+                        if (product.Quantity < changeAmount)
                         {
-                            // Update Stock
-                            item.ProductId = existingProduct.ProductId;
-
-                            var update = item.TransactionType == "IN"
-                                ? Builders<Product>.Update.Inc(p => p.Quantity, item.Quantity)
-                                : Builders<Product>.Update.Inc(p => p.Quantity, -item.Quantity);
-
-                            await _db.ProductCollection.UpdateOneAsync(filter, update);
-                        }
-                        else
-                        {
-                            // Error: Product not found
-                            ModelState.AddModelError("", $"Product '{item.ProductName}' does not exist in the database.");
+                            ModelState.AddModelError("", $"Insufficient stock for {product.ProductName}. Current: {product.Quantity}");
                             model.Products = await _db.ProductCollection.Find(_ => true).ToListAsync();
-                            return View(model);
+                            return View("_Create", model);
                         }
+                        changeAmount = -changeAmount;
                     }
-                }
 
-                // D. Save Transactions to MongoDB
-                if (model.Items.Count > 0)
-                {
-                    await _db.StockTransactionCollection.InsertManyAsync(model.Items);
+                    // Update Inventory
+                    var updateDef = Builders<Product>.Update.Inc(p => p.Quantity, changeAmount);
+                    await _db.ProductCollection.UpdateOneAsync(p => p.ProductId == item.ProductID, updateDef);
+
+                    validItemsToInsert.Add(item);
                 }
             }
 
-            // 4. Success Response
-            TempData["CreatedTransactions"] = System.Text.Json.JsonSerializer.Serialize(model.Items);
-
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            // 5. Save
+            if (validItemsToInsert.Count > 0)
             {
-                return Json(new { success = true, redirectUrl = Url.Action("Index", "Stock") });
+                await _db.StockTransaction.InsertOneAsync(headerInput);
+                await _db.StockTransactionItemCollection.InsertManyAsync(validItemsToInsert);
+
+                TempData["CreatedTransactionID"] = newBatchId;
+                return RedirectToAction("Index");
             }
 
-            return RedirectToAction("Index", "Stock");
+            ModelState.AddModelError("", "No valid items to process.");
+            model.Products = await _db.ProductCollection.Find(_ => true).ToListAsync();
+            return View("_Create", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return BadRequest();
+
+            // Note: This logic only deletes the header. In a real app, you should also 
+            // 1. Delete the associated Items
+            // 2. Reverse the Stock effect (if needed)
+
+            await _db.StockTransaction.DeleteOneAsync(x => x.Id == id);
+            return RedirectToAction("Index");
         }
     }
 }
