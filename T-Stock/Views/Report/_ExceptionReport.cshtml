@@ -1,0 +1,117 @@
+﻿@{
+    var negative = ViewBag.Negative as List<object[]>;
+    var low = ViewBag.Low as List<object[]>;
+    var dead = ViewBag.Dead as List<object[]>;
+    var now = DateTime.Now;
+
+    int critical = (negative?.Count ?? 0) + (low?.Count ?? 0);
+    int total = critical + (dead?.Count ?? 0);
+    
+    decimal totalDeadValue = 0;
+    if (dead != null)
+    {
+        totalDeadValue = dead.Sum(r => (decimal)r[6]);
+    }
+}
+
+<link rel="stylesheet" href="~/css/Report.css" />
+
+<div class="ER-container">
+    
+    <h1 class="ER-h1">EXCEPTION REPORT</h1>
+    <div class="ER-date">AS OF DATE: @now</div>
+
+    <table class="ER-table">
+        <thead>
+            <tr>
+                <th>PRODUCT ID</th>
+                <th>PRODUCT NAME</th>
+                <th >ON HAND</th>
+                <th>LAST PURCHASE</th>
+                <th >DAYS</th>
+                <th>CATEGORY</th>
+                <th>TOTAL VALUE</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @* Negative *@
+            @if (negative?.Any() == true)
+            {
+                foreach (object[] r in negative)
+                {
+                    <tr>
+                        <td>@r[0]</td>
+                        <td>@r[1]</td>
+                        <td class="ER-right"><strong>@r[2]</strong></td>
+                        <td colspan="3"></td>
+                        <td>*** NEGATIVE STOCK ***</td>
+                    </tr>
+                }
+            }
+
+            @* Low stock *@
+            @if (low?.Any() == true)
+            {
+                foreach (object[] r in low)
+                {
+                    <tr>
+                        <td>@r[0]</td>
+                        <td>@r[1]</td>
+                        <td class="ER-right">@r[2]</td>
+                        <td colspan="3"></td>
+                        <td>BELOW REORDER LEVEL</td>
+                    </tr>
+                }
+            }
+
+            @* Critical total *@
+            @if (critical > 0)
+            {
+                <tr class="ER-total-row ER-double">
+                    <td colspan="2"><strong>CRITICAL EXCEPTIONS TOTAL</strong></td>
+                    <td class="ER-right"><strong>@critical</strong></td>
+                    <td colspan="4"></td>
+                </tr>
+            }
+
+            @* Dead *@
+            @if (dead?.Any() == true)
+            {
+                foreach (object[] r in dead)
+                {
+                    <tr>
+                        <td>@r[0]</td>
+                        <td>@r[1]</td>
+                        <td class="ER-right">@r[2]</td>
+                        <td>@r[3]</td>
+                        <td class="ER-right">@r[4]</td>
+                        <td>@r[5]</td>
+                        <td class="ER-right">
+                            <strong>@string.Format("{0:N2}", r[6])</strong>
+                        </td>
+                    </tr>
+                }
+
+                <tr class="ER-total-row ER-double">
+                    <td colspan="2"><strong>DEAD STOCK TOTAL</strong></td>
+                    <td class="ER-right"><strong>@dead.Count</strong></td>
+                    <td colspan="3"></td>
+                    <td><strong>@string.Format("{0:N2}", totalDeadValue)</strong></td>
+                </tr>
+            }
+
+            <tr class="ER-grand-total ER-thick">
+                <td colspan="2"><strong>GRAND TOTAL EXCEPTIONS</strong></td>
+                <td class="ER-right"><strong>@total</strong></td>
+                <td colspan="4"></td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <div class="ER-footer">
+        *** STRICTLY CONFIDENTIAL - FOR MANAGEMENT USE ONLY ***<br>
+        T-STOCK INVENTORY MANAGEMENT SYSTEM © 2025 ALL RIGHTS RESERVED
+    </div>
+</div>

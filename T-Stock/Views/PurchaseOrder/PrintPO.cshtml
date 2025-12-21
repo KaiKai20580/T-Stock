@@ -1,0 +1,176 @@
+﻿@model T_Stock.Models.PurchaseOrderViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Purchase Order @Model.PO_ID</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            background: #fff;
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Header Layout */
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 20px;
+        }
+
+        .company-info h1 {
+            margin: 0;
+            color: #444;
+        }
+
+        .po-details {
+            text-align: right;
+        }
+
+        /* Supplier Section */
+        .to-section {
+            margin-bottom: 30px;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #666;
+            font-size: 0.9em;
+            text-transform: uppercase;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th {
+            text-align: left;
+            background: #f8f9fa;
+            padding: 10px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        /* Footer/Totals */
+        .totals-section {
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        .total-row {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        /* Print Specifics */
+        @@media print {
+            body {
+                padding: 0;
+                margin: 0;
+            }
+
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <div class="company-info">
+            <h1>PURCHASE ORDER</h1>
+            <p>
+                <strong>TARUMT Convenience Store</strong><br>77, Lorong Lembah Permai 3,<br> 11200 Tanjung Bungah, Pulau Pinang<br>Email: convenience99@gmail.com<br>Contact: 04-8888888
+            </p>
+        </div>
+        <div class="po-details">
+            <h2>#@Model.PO_ID</h2>
+            <p>
+                Date Created: @ViewBag.DateCreated<br>
+                Status: @Model.Status
+            </p>
+        </div>
+    </div>
+
+    <div class="to-section">
+        <div class="label">Vendor</div>
+        <p>
+            <strong>@ViewBag.SupplierName</strong><br>
+            @ViewBag.SupplierAddress
+        </p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th class="text-right">Unit Price</th>
+                <th class="text-right">Qty</th>
+                <th class="text-right">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.POProductItems)
+            {
+                <tr>
+                    <td>
+                        <strong>@item.ProductName</strong><br>
+                    </td>
+                    <td class="text-right">@item.UnitPrice.ToString("C")</td>
+                    <td class="text-right">@item.Quantity</td>
+                    <td class="text-right">@item.TotalPrice.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="totals-section">
+        <p class="total-row">Grand Total: @Model.POProductItems.Sum(x => x.TotalPrice).ToString("C")</p>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.Remarks))
+    {
+        <div style="margin-top: 40px; padding: 15px; background: #f9f9f9; border-left: 4px solid #ddd;">
+            <strong>Remarks:</strong><br>
+            @Model.Remarks
+        </div>
+    }
+
+    <div style="margin-top: 60px; display: flex; justify-content: space-between;">
+        <div>
+            <hr style="width: 200px; border: 1px solid #000;">
+            <p>Authorized Signature</p>
+        </div>
+        <div>
+            <hr style="width: 200px; border: 1px solid #000;">
+            <p>Date</p>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            window.print();
+        }
+    </script>
+</body>
+</html>

@@ -25,11 +25,19 @@ namespace T_Stock.Models
         public IMongoCollection<SupplierProduct> SupplierProductCollection =>
             _db.GetCollection<SupplierProduct>("SupplierProduct");
 
-        public IMongoCollection<StockTransaction> StockTransactionCollection =>
+        public IMongoCollection<PurchaseOrder> PurchaseOrderCollection =>
+            _db.GetCollection<PurchaseOrder>("PurchaseOrder");
+
+        public IMongoCollection<PurchaseOrderItem> PurchaseOrderItemCollection =>
+            _db.GetCollection<PurchaseOrderItem>("PurchaseOrderItem");
+        public IMongoCollection<StockTransaction> StockTransaction =>
             _db.GetCollection<StockTransaction>("StockTransaction");
 
-        public IMongoCollection<User> UserCollection =>
-            _db.GetCollection<User>("User");
+        public IMongoCollection<StockTransactionItem> StockTransactionItemCollection =>
+            _db.GetCollection<StockTransactionItem>("StockTransactionItem");
+
+        public IMongoCollection<User> User =>
+           _db.GetCollection<User>("User");
     }
 
     [BsonIgnoreExtraElements]
@@ -168,58 +176,98 @@ namespace T_Stock.Models
 
         [BsonElement("SupplierID")]
         [Required]
-        public string? SupplierID { get; set; }
+        public string SupplierId { get; set; }
 
         [BsonElement("ProductID")]
         [Required]
-        public string? ProductID { get; set; }
+        public string ProductId { get; set; }
 
         [BsonElement("SupplierPrice")]
         [Required]
         public double SupplierPrice { get; set; }
     }
 
-    [BsonIgnoreExtraElements]
     public class StockTransaction
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string? Id { get; set; }
-
-        // This stores the LINK to the product in the DB
-        [BsonElement("ProductId")]
-        public string? ProductId { get; set; }
-
-        [BsonIgnore]
-        public List<Product> Products { get; set; } = new();
-
-        [BsonIgnore]
-        public List<User> Users { get; set; } = new();
-
+        public string Id { get; set; }
         [BsonElement("TransactionID")]
-        public string? TransactionID { get; set; }
-
-        [BsonElement("UserID")]
-        public string? UserID { get; set; }
-
-        [BsonElement("ProductName")]
         [Required]
-        public string? ProductName { get; set; }
-
-        [BsonElement("Quantity")]
-        [Range(1, int.MaxValue, ErrorMessage = "Quantity cannot be 0")]
-        public int Quantity { get; set; }
-
+        public string TransactionID { get; set; }
+        [BsonElement("UserID")]
+        [Required]
+        public string UserID { get; set; }
         [BsonElement("Date")]
+        [Required]
         public DateTime Date { get; set; }
-
         [BsonElement("Reason")]
-        [Required(ErrorMessage = "Reason cannot be empty")]
-        public string? Reason { get; set; }
-
+        [Required]
+        public string Reason{ get; set; }
         [BsonElement("transactionType")]
         [Required]
-        public string? TransactionType { get; set; }
+        public string transactionType { get; set; }
+    }
+
+    public class StockTransactionItem
+    {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
+        [BsonElement("TransactionID")]
+        [Required]
+        public string TransactionID { get; set; }
+        [BsonElement("ProductID")]
+        [Required]
+        public string ProductID { get; set; }
+        [BsonElement("QtyChange")]
+        [Required]
+        public int QtyChange { get; set; }
+        [BsonElement("Remarks")]
+        public string? Remarks { get; set; }
+    }
+    public class InventoryListVM
+    {
+        public List<Inventory> Items { get; set; } = new List<Inventory>();
+    }
+
+    public class PurchaseOrder
+    {
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string? Id { get; set; }
+
+        [BsonElement("PO_ID")]
+        public string PO_ID { get; set; } = null!;
+        [BsonElement("SupplierID")]
+        public string SupplierID { get; set; } = null!;
+        [BsonElement("UserID")]
+        public string? UserID { get; set; }
+        [BsonElement("Status")]
+        public string Status { get; set; } = null!;    
+        [BsonElement("CreatedDate")]
+        public DateTime CreatedDate { get; set; }
+        [BsonElement("LastUpdated")]
+        public DateTime LastUpdated {  get; set; }
+    public string? Remarks { get; set; }
+}
+    public class PurchaseOrderItem
+    {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string? Id { get; set; }               
+       
+        [BsonElement("PO_ID")] 
+        public string PO_ID { get; set; } = null!;     
+        
+        [BsonElement("ProductID")]
+        public string ProductId { get; set; } = null!;
+        [BsonElement("QuantityOrdered")]
+        public int QuantityOrdered { get; set; }
+        [BsonElement("UnitPrice")]
+        public decimal UnitPrice { get; set; }
+        [BsonElement("TotalPrice")]
+        public decimal TotalPrice { get; set; }       
     }
 
 }

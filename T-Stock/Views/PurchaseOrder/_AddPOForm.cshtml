@@ -1,0 +1,17 @@
+﻿@model T_Stock.Models.PurchaseOrderViewModel
+<input type="hidden" id="loadedProductMap" value='@Html.Raw(ViewBag.ProductSupplierMap ?? "[]")' />
+<h2>Create Purchase Order</h2>
+<form asp-action="AddPO" asp-controller="PurchaseOrder" method="post" id="addPOForm">
+    <div class="supplierDetail">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger" style="margin-bottom: 15px;"></div>
+        <h3>Item(s)</h3>
+        <div id="poProductList"></div>
+        <button type="button" id="addPOProductBtn" class="addProductBtn">Add Item</button>
+    </div>
+
+    <div class="decisionBtn">
+        <button type="button" class="cancelBtn">Cancel</button>
+        <button type="submit" class="submitBtn">Confirm</button>
+    </div>
+</form>

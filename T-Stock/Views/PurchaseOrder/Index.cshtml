@@ -1,5 +1,355 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@* @model IPagedResult<T_Stock.Models.PurchaseOrder> *@
+<div class="supplierPage">
+    <div class="heading">
+        <h3>Purchase Order Management</h3>
+        <div class="search-container">
+            <input type="text" id="searchPO" placeholder="Search..." />
+            <i class="ri-search-line"></i>
+        </div>
+    </div>
+    <div class="supplierManage">
+        <div class="filter">
+            <div class="sorting">
+                <h2>Sort By</h2>
+                <select id="sortKeyPO" class="filters" name="sorting">
+                    <option value="none" selected>None</option>
+                    <option value="poId">PO ID</option>
+                    <option value="supplierId">Supplier ID</option>
+                    <option value="status">Status</option>
+                    <option value="created">Date Created</option>
+                    <option value="lastUpdate">Last Updated</option>
+                </select>
+            </div>
+            <div class="orderBy">
+                <h2>Order By</h2>
+                <select id="sortOrderPO" class="filters" name="orderBy" disabled>
+                    <option value="true">Descending</option>
+                    <option value="false">Ascending</option>
+                </select>
+            </div>
+            <div class="productFilter">
+                <h2>Date Range</h2>
+                <select id="dateFilter" name="dateFilter">
+                    <option value="none" selected>None</option>
+                    <option value="created">Date Created</option>
+                    <option value="lastupdate">Last Updated</option>
+                </select>
+            </div>
+            <div class="dateFilters">
+                <h2>From</h2>
+                <input type="date" id="dateFrom" class="POdate" min="2023-01-01" max="@(DateTime.Today.AddDays(-1))" disabled/>
+            </div>
+            <div class="dateFilters">
+                <h2>To</h2>
+                <input type="date" id="dateTo" class="POdate" min="2023-01-01" max="@(DateTime.Today)" disabled/>
+            </div>
+        </div>
+        @if (Context.Request.Cookies["Role"] != "Supplier")
+        {
+            <div class="poAdd">
+                <i class="ri-article-line"></i>
+                <h3>Create PO</h3>
+            </div>
+        }
+    </div>
+   <div id="POList">
+        <partial name="_POTable" model="Model" />
+    </div>
+</div>
+
+<div id="addPOModal" class="poModal">
+    <div class="poModal-content">
+        @await Html.PartialAsync("_AddPOForm", new PurchaseOrderViewModel() {
+        POProductItems = new List<POItemViewModel>()
+                })
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        let productMap = [];
+        $('#sortKeyPO').on('change', function() {
+            $('#sortOrderPO').prop('disabled', $(this).val() === 'none');
+            loadPO();
+        });
+
+        $('#dateFilter').on('change', function() {
+            $('#dateFrom').prop('disabled', $(this).val() === 'none');
+            $('#dateTo').prop('disabled', $(this).val() === 'none');
+            loadPO();
+        });
+
+        function loadPO(page = 1) {
+            const search = $('#searchPO').val();
+            const sort = $('#sortKeyPO').val();
+            const desc = $('#sortOrderPO').val();
+            const dateFilter = $('#dateFilter').val();
+            const dateFrom = $('#dateFrom').val();
+            const dateTo = $('#dateTo').val();
+
+            $.ajax({
+                url: '@Url.Action("Index", "PurchaseOrder")',
+                type: 'GET',
+                data: { Search: search, Sort: sort, Desc: desc, dateType: dateFilter, dateFrom: dateFrom, dateTo: dateTo, Page: page },
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                success: function(res) {
+                    $('#POList').html(res);
+                }
+            });
+        }
+
+        // search input
+        $('#searchPO').on('input', () => loadPO());
+
+        // filters
+        $('#sortKeyPO, #sortOrderPO, #dateFilter, #dateFrom, #dateTo').on('change', () => loadPO());
+
+        //Open Add Supplier Popup
+        $('.poAdd').on('click', function () {
+            $.ajax({
+                url: '@Url.Action("GetAddPOForm", "PurchaseOrder")',
+                type: 'GET',
+                success: function(res) {
+                    // Inject the Add Form
+                    $('#addPOModal .poModal-content').html(res);
+
+                    // Change Title
+                    $('#addPOModal h2').text('Create Purchase Order');
+
+                    // Show Modal
+                    $('#addPOModal').fadeIn(250);
+
+                    const rawJSON = $('#loadedProductMap').val();
+
+                    if (rawJSON) {
+                         productMap = JSON.parse(rawJSON);
+                     }
+                }
+            });
+        });
+
+        // Add product row
+        $(document).on('click', '.addProductBtn', function(){
+            let poProductIndex = $('#poProductList .poProductRow').length;
+            let displayNumber = poProductIndex + 1;
+            let newRow = `
+                <div class="poProductRow">
+                <div class="itemNum">
+                <h4>${displayNumber}.</h4>
+                </div>
+                <div>
+                <h5>Product Name</h5>
+                    <select name="POProductItems[${poProductIndex}].ProductID" class="poProductSelect">
+                        <option value="">Select Product</option>
+                        @foreach (var p in ViewBag.Products)
+                        {
+                                    <option value="@p.ProductId">@p.ProductId - @p.ProductName</option>
+                        }
+                    </select>
+                    </div>
+                <div>
+                <h5>Supplier</h5>
+                    <select name="POProductItems[${poProductIndex}].SupplierID" class="poSupplierSelect" disabled required>
+                        <option value="">Select Product First</option>
+                    </select>
+                    </div>
+
+                    <div>
+                    <h5>Unit Price (RM)<h5>
+                    <input type="number" name="POProductItems[${poProductIndex}].UnitPrice" class="unitPrice" readonly/>
+                    </div>
+
+                    <div>
+                    <h5>Quantity<h5>
+                    <input type="number" name="POProductItems[${poProductIndex}].Quantity" class="quantity" min="1" required disabled/>
+                    </div>
+
+                    <div>
+                    <h5>Total Price (RM)<h5>
+                    <input type="number" name="POProductItems[${poProductIndex}].TotalPrice" class="rowTotal" readonly value="0.00"/>
+                    </div>
+
+                    <button type="button" class="removePOProductBtn"> <i class="ri-close-circle-line"></i> </button>
+                </div>
+            `;
+
+            $('#poProductList').append(newRow);
+            poProductIndex++;
+        });
+
+
+        // When Product is Selected -> Load Suppliers
+        $(document).on('change', '.poProductSelect', function() {
+            const productId = $(this).val();
+            const row = $(this).closest('.poProductRow');
+            const poSupplierSelect = row.find('.poSupplierSelect');
+    
+            // Clear previous options
+            poSupplierSelect.empty().append('<option value="">Select Supplier</option>');
+    
+            // Clear price and total
+            row.find('.unitPrice').val('');
+            row.find('.rowTotal').val('0.00');
+
+            if (!productId) {
+                poSupplierSelect.prop('disabled', true);
+                return;
+            }
+
+            // Filter the Map Data for this product
+            const relevantSuppliers = productMap.filter(x => x.pId == productId);
+
+            if (relevantSuppliers.length === 0) {
+                poSupplierSelect.append('<option value="">No suppliers found</option>');
+            } else {
+                poSupplierSelect.prop('disabled', false);
+                // Add Options
+                relevantSuppliers.forEach(item => {
+                    // Store the PRICE in a data-attribute for easy access later
+                    poSupplierSelect.append(`<option value="${item.sId}" data-price="${item.price}">${item.sName} - (RM ${item.price})</option>`);
+                });
+            }
+        });
+
+        // When Supplier is Selected -> Set Unit Price
+        $(document).on('change', '.poSupplierSelect', function() {
+            const row = $(this).closest('.poProductRow');
+            // Get the 'data-price' attribute from the selected option
+            const price = $(this).find(':selected').data('price'); 
+    
+            const priceInput = row.find('.unitPrice');
+
+            const quantity = row.find('.quantity');
+    
+            if (price) {
+                quantity.prop('disabled', false);
+                priceInput.val(price); // Set the input
+                calculateRowTotal(row); // Recalculate total immediately
+            } else {
+                priceInput.val('');
+                quantity.prop('disabled', true);
+            }
+        });
+
+        // When Quantity Changes -> Calculate Total
+        $(document).on('input', '.quantity', function() {
+            const row = $(this).closest('.poProductRow');
+            calculateRowTotal(row);
+        });
+
+        // Helper Function for Calculation
+        function calculateRowTotal(row) {
+            const price = parseFloat(row.find('.unitPrice').val()) || 0;
+            const qty = parseInt(row.find('.quantity').val()) || 0;
+            const total = price * qty;
+    
+            row.find('.rowTotal').val(total.toFixed(2)); // Format to 2 decimal places
+        }
+
+        //Delete product row
+        $(document).on('click', '.removePOProductBtn', function () {
+            $(this).closest('.poProductRow').remove();
+
+                $('#poProductList .poProductRow').each(function(index) {
+                    // Update Select name
+                    $(this).find('select').attr('name', `POProductItems[${index}].ProductID`);
+                    // Update Input name
+                    $(this).find('input').attr('name', `POProductItems[${index}].SupplierPrice`);
+                });
+        });
+
+        // Close popup
+        $(document).on('click', '.cancelBtn', function () {
+            $('#addPOModal').fadeOut(250);
+        });
+
+        // Close when clicking outside the box
+        $(window).on('click', function (e) {
+            if ($(e.target).is('#addPOModal')) {
+                $('#addPOModal').fadeOut(250);
+            }
+        });
+
+        //AJAX form submit
+        $(document).on('submit', '#addPOForm', function(e){
+            e.preventDefault(); // prevent normal form submit
+
+            const form = $(this);
+
+            $.ajax({
+            url: '@Url.Action("AddPO", "PurchaseOrder")',
+            type: 'POST',
+            data: form.serialize(),
+            success: function (res) {
+
+            if (res.success) {
+               alert("Purchase Order created successfully!");
+
+                // 2. Close Popup
+                $('#addPOModal').fadeOut(200);
+
+                // 3. Clear the Form
+                form[0].reset();
+
+                // B) Remove all dynamic product rows
+                $('#poProductList').empty();
+
+                // C) Clear any leftover validation error messages
+                form.find('.text-danger').html('');
+                form.find('.validation-summary-errors').html('');
+
+                // 4. Refresh the background table to show the new data
+                loadPO();
+
+            } else {
+                // server returned partial HTML with validation errors
+                $('#addPOModal .poModal-content').html(res);
+            }
+            }
+        });
+            });
+
+        $(document).on('click', '.editPOBtn', function() {
+                var id = $(this).data('id');
+                $.ajax({
+                    url: '@Url.Action("EditPO", "PurchaseOrder")',
+                    type: 'GET',
+                    data: { poId: id },
+                        success: function(res) {
+                $('#addPOModal .poModal-content').html(res);
+                $('#addPOModal').fadeIn(250);
+                const rawJSON = $('#loadedProductMap').val();
+            if (rawJSON) {
+                productMap = JSON.parse(rawJSON);
+            }
+                }
+            });
+        });
+
+        $(document).on('submit', '#editPOForm', function(e){
+            e.preventDefault();
+
+            const form = $(this);
+
+            $.ajax({
+                url: '@Url.Action("UpdatePO", "PurchaseOrder")',
+                type: 'POST',
+                data: form.serialize(),
+                success: function (res) {
+                    if (res.success) {
+
+                        alert("Purchase Order updated successfully!");
+                        $('#addPOModal').fadeOut(200);
+                        loadPO();
+
+                    } else {
+
+                        $('#addPOModal .poModal-content').html(res);
+
+                    }
+                }
+            });
+        });
+
+    </script>
 }

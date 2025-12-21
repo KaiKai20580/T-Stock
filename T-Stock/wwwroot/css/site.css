@@ -996,8 +996,14 @@ td {
 
 
 /*KW CSS*/
+.sidebar:hover ~ #ajax-content .supplierPage {
+    margin-left: 13%;
+    transition: all 0.5s ease;
+}
+
 div.supplierPage {
     margin-left: 100px;
+    transition: all 0.5s ease;
 }
 
 i {
@@ -1110,11 +1116,35 @@ div.supplierAdd {
         margin: 0;
     }
 
-div.supplierManage, div.pagination {
-    padding: 20px;
+div.poAdd {
+    margin-top: 40px;
+    display: flex;
+    border: 2px solid black;
+    border-radius: 15px;
+    background-color: limegreen;
+    box-shadow: rgba(0,0,0,0.1) -3px 2px;
+    transition: all 0.3s ease;
+    cursor: pointer;
 }
 
-table {
+    div.poAdd:hover {
+        transform: translateY(-5px);
+        transition: all 0.3s ease;
+        background-color: green;
+        color: whitesmoke;
+    }
+
+    div.poAdd h3 {
+        font-size: 20px;
+        padding: 6px;
+        margin: 0;
+    }
+
+div.supplierManage,div.pagination{
+    padding:20px;
+}
+
+.supplierPage table {
     width: 97.5%;
     padding: 0;
     border-collapse: separate;
@@ -1145,6 +1175,17 @@ td {
         cursor: pointer;
     }
 
+td:is([data-value = "Pending"], [data-value = "InDelivery"]) {
+    color: #ff981a
+}
+
+td:is([data-value = "Accepted"], [data-value = "Completed"]) {
+    color: #0edf00
+}
+
+td:is([data-value = "Rejected"], [data-value = "Cancelled"]) {
+    color: #ef0000
+}
 
 th, td {
     padding: 10px;
@@ -1153,6 +1194,11 @@ th, td {
 
 tr:hover {
     background-color: lightgrey;
+}
+
+tfoot td {
+    border-top: 2px solid grey;
+    font-weight: 800;
 }
 
 div.pagination button {
@@ -1226,6 +1272,113 @@ div.modal-content h3 {
     margin-top: 50px;
 }
 
+/* PO Background overlay */
+.poModal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(6px);
+}
+
+/* PO Popup box */
+.poModal-content {
+    background-color: #e8e8e8;
+    height: min-content;
+    max-height: 80%;
+    width: 80%;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 10px;
+    position: sticky;
+    overflow: scroll;
+    scrollbar-color: gray #e8e8e8;
+}
+
+div.poModal-content h2 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 50px;
+}
+
+div.poModal-content h3 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 40px;
+    margin-top: 50px;
+}
+
+div.poEditHead {
+    display: flex;
+    justify-content: space-between;
+}
+
+div.poStatus {
+    display: flex;
+
+    h5 {
+        margin-top: 3%;
+        margin-right: 20px;
+        font-weight: 600;
+        font-size: 1.7rem;
+    }
+
+    select {
+        border-radius: 15px;
+        padding: 7px;
+        margin-right: 20px;
+        width: 200px;
+        height: 50px;
+        font-weight: 700;
+        font-size: 1.3rem;
+    }
+
+        select.statusDropdown:has(option:checked:is([value = "Pending"], [value = "InDelivery"])) {
+            color: #ff981a
+        }
+
+        select.statusDropdown:has(option:checked:is([value = "Accepted"], [value = "Completed"])) {
+            color: #0edf00
+        }
+
+        select.statusDropdown:has(option:checked:is([value = "Rejected"], [value = "Cancelled"])) {
+            color: #ef0000
+        }
+
+        select.statusDropdown option {
+            color: black;
+            background-color: white;
+        }
+
+}
+
+div.remarksContainer {
+    display: block;
+
+    h5 {
+        margin-top: 3%;
+        margin-right: 20px;
+        font-weight: 600;
+        font-size: 1.7rem;
+    }
+
+    textarea {
+        width:50%;
+        padding: 7px;
+        margin-right: 40px;
+        background-color: white;
+        border-radius: 12px;
+    }
+}
+
+div.supplierDetail table{
+    width:100%;
+    margin-bottom:5%;
+}
 
 div.supplierDetail label {
     font-size: 1.3rem;
@@ -1238,6 +1391,17 @@ div.supplierDetail input {
     border-width: 0;
     height: 50px;
     font-weight: 500;
+    font-size: 1.3rem;
+}
+
+div.dateFilters input {
+    border-radius: 15px;
+    border-width: 0.5px;
+    padding: 7px;
+    margin-right: 20px;
+    width: 200px;
+    height: 50px;
+    font-weight: 700;
     font-size: 1.3rem;
 }
 
@@ -1303,30 +1467,99 @@ button.removeProductBtn {
             color: #ef0000;
         }
 
+div.poProductRow {
+    display: flex;
+    margin-bottom: 20px;
+}
 
-div.supplierDetail button.addProductBtn:hover {
-    background-color: greenyellow;
-    transform: translateY(-5px);
+    div.poProductRow select {
+        border-radius: 12px;
+        border-width: 0;
+        padding: 7px;
+        margin-right: 40px;
+        height: 50px;
+        font-weight: 700;
+        font-size: 1.3rem;
+    }
+
+    div.poProductRow h4 {
+        margin-top: 100%;
+        font-weight: 600;
+    }
+
+div.itemNum {
+    margin-right: 2%;
+}
+
+button.removePOProductBtn {
+    margin-left: 5%;
+    border: none;
+    background: none;
+    padding-top: 20px;
     transition: all 0.2s ease;
 }
+
+    button.removePOProductBtn:hover {
+        transform: translateY(-3px);
+        transition: all 0.2s ease;
+    }
+
+
+    button.removePOProductBtn i {
+        font-size: 3rem;
+        color: red;
+        cursor: pointer;
+        padding-top: 15px;
+    }
+
+        button.removePOProductBtn i:hover {
+            color: #ef0000;
+        }
+
+        div.supplierDetail button.addProductBtn:hover {
+            background-color: greenyellow;
+            transform: translateY(-5px);
+            transition: all 0.2s ease;
+        }
 
 div.decisionBtn {
     display: flex;
     margin-left: 77%
 }
 
-    div.decisionBtn button.cancelBtn {
-        background-color: #ef0000;
-        border-radius: 25px;
-        border: 3px solid black;
-        padding: 5px 20px 5px 20px;
-        font-size: 1.5rem;
-        font-weight: 500;
-        margin-right: 20px;
-        box-shadow: rgba(0,0,0,0.3) 2px 2px 5px 1px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
+            div.decisionBtn a.printBtn {
+                background-color: #8a8a8a;
+                color: black;
+                border-radius: 25px;
+                border: 3px solid black;
+                padding: 10px 20px 5px 20px;
+                font-size: 1.5rem;
+                font-weight: 500;
+                margin-right: 20px;
+                box-shadow: rgba(0,0,0,0.3) 2px 2px 5px 1px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                text-decoration: none;
+            }
+
+            div.decisionBtn a.printBtn:hover {
+                background-color: #a2a2a2;
+                transform: translateY(-5px);
+                transition: all 0.2s ease;
+            }
+
+            div.decisionBtn button.cancelBtn {
+                background-color: #ef0000;
+                border-radius: 25px;
+                border: 3px solid black;
+                padding: 5px 20px 5px 20px;
+                font-size: 1.5rem;
+                font-weight: 500;
+                margin-right: 20px;
+                box-shadow: rgba(0,0,0,0.3) 2px 2px 5px 1px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
 
         div.decisionBtn button.cancelBtn:hover {
             background-color: #fd0000;
@@ -1675,3 +1908,31 @@ body.dark-mode {
         body.dark-mode .btn-inv-remove:hover {
             background-color: #dc3545 !important;
         }
+        /* Form styling */
+        #addSupplierForm,#editSupplierForm input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 12px;
+        }
+
+div input.quantity {
+    padding: 7px;
+    margin-right: 40px;
+    background-color: white;
+    border-radius: 12px;
+}
+
+div input.unitPrice {
+    padding: 7px;
+    margin-right: 40px;
+    background-color: white;
+    border-radius: 12px;
+}
+
+div input.rowTotal {
+    padding: 7px;
+    margin-right: 40px;
+    background-color: white;
+    border-radius: 12px;
+}
+

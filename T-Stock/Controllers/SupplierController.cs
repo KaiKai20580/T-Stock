@@ -29,10 +29,10 @@ namespace T_Stock.Controllers
             // 2) Product filter (option A)
             if (!string.IsNullOrWhiteSpace(q.Product) && q.Product != "none")
             {
-                var prodFilter = Builders<SupplierProduct>.Filter.Eq(sp => sp.ProductID, q.Product);
+                var prodFilter = Builders<SupplierProduct>.Filter.Eq(sp => sp.ProductId, q.Product);
                 var supplierIds = await _supplierProducts
                     .Find(prodFilter)
-                    .Project(sp => sp.SupplierID)
+                    .Project(sp => sp.SupplierId)
                     .ToListAsync();
 
                 supplierIds = supplierIds.Distinct().ToList();
@@ -172,8 +172,8 @@ namespace T_Stock.Controllers
                 {
                     var supplierProduct = new SupplierProduct
                     {
-                        SupplierID = supplier.SupplierId,
-                        ProductID = item.ProductID,
+                        SupplierId = supplier.SupplierId,
+                        ProductId = item.ProductID,
                         SupplierPrice = item.SupplierPrice
                     };
 
@@ -191,7 +191,7 @@ namespace T_Stock.Controllers
             var supplier = await _suppliers.Find(s => s.SupplierId == id).FirstOrDefaultAsync();
             if (supplier == null) return NotFound();
 
-            var products = await _supplierProducts.Find(sp => sp.SupplierID == id).ToListAsync();
+            var products = await _supplierProducts.Find(sp => sp.SupplierId == id).ToListAsync();
 
             var model = new SupplierViewModel
             {
@@ -203,7 +203,7 @@ namespace T_Stock.Controllers
                 Address = supplier.Address,
                 ProductItems = products.Select(p => new SupplierProductItem
                 {
-                    ProductID = p.ProductID,
+                    ProductID = p.ProductId,
                     SupplierPrice = p.SupplierPrice
                 }).ToList()
             };
@@ -244,7 +244,7 @@ namespace T_Stock.Controllers
             await _suppliers.UpdateOneAsync(s => s.SupplierId == model.SupplierId, updateDef);
 
             // Update Products (Delete All & Re-insert)
-            await _supplierProducts.DeleteManyAsync(sp => sp.SupplierID == model.SupplierId);
+            await _supplierProducts.DeleteManyAsync(sp => sp.SupplierId == model.SupplierId);
 
             if (model.ProductItems != null)
             {
@@ -252,8 +252,8 @@ namespace T_Stock.Controllers
                     .Where(p => !string.IsNullOrEmpty(p.ProductID) && (p.SupplierPrice) > 0)
                     .Select(p => new SupplierProduct
                     {
-                        SupplierID = model.SupplierId,
-                        ProductID = p.ProductID,
+                        SupplierId = model.SupplierId,
+                        ProductId = p.ProductID,
                         SupplierPrice = (double)(p.SupplierPrice)
                     });
 
