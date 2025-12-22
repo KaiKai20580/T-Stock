@@ -10,16 +10,12 @@ namespace T_Stock.Models
     {
         private readonly IMongoDatabase _db;
 
-        // Constructor accepts IMongoDatabase (injected via DI)
         public DB(IMongoDatabase db)
         {
             _db = db;
         }
 
         // Expose the Inventory collection
-        public IMongoCollection<Inventory> InventoryCollection =>
-            _db.GetCollection<Inventory>("InventoryManagement");
-
         public IMongoCollection<Supplier> SupplierCollection =>
             _db.GetCollection<Supplier>("Supplier");
 
@@ -44,28 +40,35 @@ namespace T_Stock.Models
            _db.GetCollection<User>("User");
     }
 
-    // Inventory model
-    public class Inventory
+    [BsonIgnoreExtraElements]
+    public class User
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string? Id { get; set; }
+        public string Id { get; set; }
 
-        [BsonElement("ItemName")]
-        [Required(ErrorMessage = "Item Name cannot be empty.")]
-        public string? ItemName { get; set; }
 
-        [BsonElement("Category")]
-        [Required(ErrorMessage = "Category cannot be empty.")]
-        public string? Category { get; set; }
+        [BsonElement("userid")]
+        public string UserId { get; set; }
 
-        [BsonElement("Quantity")]
-        [Range(1, int.MaxValue, ErrorMessage = "Quantity must at least 1.")]
-        public int Quantity { get; set; }
+        [BsonElement("email")]
+        public string Email { get; set; }
 
-        [BsonElement("Price")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Price must at least 0.01.")]
-        public decimal Price { get; set; }
+        [BsonElement("password")]
+        public string Password { get; set; }
+
+        [BsonElement("role")]
+        public string Role { get; set; }
+
+        public string ResetToken { get; set; }
+        public DateTime? ResetTokenExpiry { get; set; }
+    }
+
+    public class StockTransactionListVM
+    {
+        public List<StockTransaction> Items { get; set; } = new();
+        public List<Product> Products { get; set; } = new();
+        public List<StockTransactionItem> TransactionItems { get; set; } = new();
     }
 
     public class Supplier
@@ -109,6 +112,31 @@ namespace T_Stock.Models
         public DateTime LastUpdated { get; set; }
     }
 
+
+    public class ProductViewModel
+    {
+        public string? ProductId { get; set; }
+        public string? ProductName { get; set; }
+        public int Page { get; set; }
+    }
+
+    public class InventoryTableViewModel
+    {
+        public List<Product> AllProducts { get; set; } = new();
+        public List<Product> Products { get; set; } = new();
+        public int CurrentPage { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
+        public int TotalPages { get; set; } = 1;
+        public string SortBy { get; set; } = "ProductName";
+        public string SortDir { get; set; } = "asc";
+    }
+
+
+    public class ProductListVM
+    {
+        public List<Product> Items { get; set; } = new List<Product>();
+    }
+
     public class Product
     {
         [BsonId]
@@ -116,28 +144,31 @@ namespace T_Stock.Models
         public string? Id { get; set; }
 
         [BsonElement("ProductID")]
-        [Required]
         public string? ProductId { get; set; }
 
         [BsonElement("ProductName")]
-        [Required]
+        [Required(ErrorMessage = "Product Name cannot be empty.")]
         public string? ProductName { get; set; }
 
         [BsonElement("Category")]
-        [Required]
+        [Required(ErrorMessage = "Category cannot be empty.")]
         public string? Category { get; set; }
 
         [BsonElement("Quantity")]
-        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "Quantity must at least 1.")]
         public int Quantity { get; set; }
 
         [BsonElement("ReorderLevel")]
-        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "Reorder Level must be at least 1.")]
         public int ReorderLevel { get; set; }
 
         [BsonElement("Price")]
-        [Required]
+        [BsonRepresentation(BsonType.Decimal128)]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Price must at least 0.01.")]
         public decimal Price { get; set; }
+
+        [BsonIgnore]
+        public int Page { get; set; }
     }
 
     public class SupplierProduct
@@ -197,10 +228,6 @@ namespace T_Stock.Models
         public int QtyChange { get; set; }
         [BsonElement("Remarks")]
         public string? Remarks { get; set; }
-    }
-    public class InventoryListVM
-    {
-        public List<Inventory> Items { get; set; } = new List<Inventory>();
     }
 
     public class PurchaseOrder

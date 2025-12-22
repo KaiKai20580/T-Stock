@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.build.css" />
 </head>
 <body>
     <div class="sidebar">
@@ -34,26 +35,32 @@
         </div>
         <ul>
             <li>
-                <a class="ajax-nav" href="/Home/Index">
+                <a class="ajax-nav" href="/Home/Index" data-ajax="page">
                     <i class="ri-home-5-fill"></i>
                     <span class="nav-item">Home</span>
                 </a>
             </li>
             <li>
-                <a class="ajax-nav" href="/Inventory/Create">
-                    <i class="ri-clipboard-line"></i>
+                <a class="ajax-nav" href="/Inventory/Index" data-ajax="page">
+                    <i class="ri-clipboard-fill"></i>
                     <span class="nav-item">Inventory</span>
                 </a>
             </li>
             <li>
-                <a asp-controller="PurchaseOrder" asp-action="Index">
+                <a asp-controller="Stock" asp-action="Index" data-ajax="page">
+                    <i class="ri-dropbox-fill"></i>
+                    <span class="nav-item">Stock Management</span>
+                </a>
+            </li>
+            <li>
+                <a asp-controller="PurchaseOrder" asp-action="Index" data-ajax="page">
                     <i class="ri-file-list-fill"></i>
                     <span class="nav-item">Purchase <br /> Order</span>
                 </a>
             </li>
             <li>
-                <a asp-controller="Supplier" asp-action="Index">
-                    <i class="ri-caravan-line"></i>
+                <a asp-controller="Supplier" asp-action="Index" data-ajax="page">
+                    <i class="ri-caravan-fill"></i>
                     <span class="nav-item">Supplier</span>
                 </a>
             </li>
@@ -67,14 +74,14 @@
             @if (!string.IsNullOrEmpty(role) && role.ToLower() == "admin")
             {
                 <li>
-                    <a class="ajax-nav" href="/Member/Index">
+                    <a class="ajax-nav" href="/Member/Index" data-ajax="page">
                         <i class="ri-team-fill"></i>
                         <span class="nav-item">Member</span>
                     </a>
                 </li>
             }
         </ul>
-        <a class="" asp-action="Logout" asp-controller="Account">
+        <a class="" asp-action="Logout" asp-controller="Account" data-ajax="page">
             <div class="logout">
                 <i class="ri-shut-down-line"></i>
                 <p>Logout</p>

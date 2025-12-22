@@ -1,0 +1,26 @@
+{
+  "name": "t-stock",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KaiKai20580/T-Stock.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/KaiKai20580/T-Stock/issues"
+  },
+  "homepage": "https://github.com/KaiKai20580/T-Stock#readme",
+  "devDependencies": {
+    "autoprefixer": "^10.4.22",
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1"
+  }
+}

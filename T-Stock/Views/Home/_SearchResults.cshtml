@@ -1,0 +1,22 @@
+﻿@model List<ProductViewModel>
+
+@if (!Model.Any())
+{
+    <div class="no-result">No Result Found</div>
+}
+else
+{
+    <ul class="search-results-list">
+        @foreach (var item in Model)
+        {
+            <li>
+                <a href="/Inventory/Index#product-@item.ProductId"
+                   class="search-result-link"
+                   data-product-id="@item.ProductId"
+                   data-page="@item.Page">
+                    @item.ProductName
+                </a>
+            </li>
+        }
+    </ul>
+}

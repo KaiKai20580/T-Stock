@@ -1,0 +1,20 @@
+{
+  "name": "t-stock",
+  "version": "1.0.0",
+  "description": "",
+  "main": "postcss.config.js",
+  "scripts": {
+    "build:css": "postcss wwwroot/css/site.css -o wwwroot/css/site.build.css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "autoprefixer": "^10.4.22",
+    "eslint": "^9.39.2",
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1",
+    "postcss-pxtorem": "^6.1.0"
+  }
+}

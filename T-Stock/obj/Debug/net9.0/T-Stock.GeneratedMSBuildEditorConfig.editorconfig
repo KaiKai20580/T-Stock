@@ -1,5 +1,7 @@
 is_global = true
 build_property.TargetFramework = net9.0
+build_property.TargetFrameworkIdentifier = .NETCoreApp
+build_property.TargetFrameworkVersion = v9.0
 build_property.TargetPlatformMinVersion = 
 build_property.UsingMicrosoftNETSdkWeb = true
 build_property.ProjectTypeGuids = 
@@ -44,16 +46,24 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxfSW5kZXhQYXJ0aWFsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Home/_SearchResults.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxfU2VhcmNoUmVzdWx0cy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Inventory/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW52ZW50b3J5XENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Inventory/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW52ZW50b3J5XEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Inventory/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW52ZW50b3J5XEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Inventory/Stock.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW52ZW50b3J5XFN0b2NrLmNzaHRtbA==
+[C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Inventory/_InventoryTable.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW52ZW50b3J5XF9JbnZlbnRvcnlUYWJsZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Member/Edit.cshtml]
@@ -80,12 +90,32 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Shared/_IndexSearch.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9JbmRleFNlYXJjaC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Stock/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RvY2tcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Stock/_Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RvY2tcX0NyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Stock/_StockTable.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RvY2tcX1N0b2NrVGFibGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Stock/_StockTransactionDetail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3RvY2tcX1N0b2NrVHJhbnNhY3Rpb25EZXRhaWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Supplier/Index.cshtml]

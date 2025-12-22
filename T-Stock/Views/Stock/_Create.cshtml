@@ -1,0 +1,476 @@
+﻿@model T_Stock.Models.StockTransactionListVM
+
+@{
+    ViewData["Title"] = "Create Stock Transactions";
+    bool isAjax = Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+    Layout = isAjax ? null : "_Layout";
+}
+
+@if (!isAjax)
+{
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+}
+
+<style>
+    /* ===== General Styles ===== */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    /* ===== TABLE CONTAINER STYLE ===== */
+    .stock-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+        .stock-table th, .stock-table td {
+            width: 200px;
+            padding: 10px;
+            font-size: 1rem;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .stock-table th {
+            background-color: lightgrey;
+            font-weight: 900;
+            font-size: 1.1rem;
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        .stock-table td {
+            background-color: white;
+            font-weight: 500;
+        }
+
+            /* ===== ACTION COLUMN ===== */
+            .stock-table th:last-child, .stock-table td:last-child {
+                width: 200px;
+                min-width: 200px;
+                text-align: center;
+                vertical-align: middle;
+            }
+
+    /* ===== Input & Select Styling ===== */
+    .form-control {
+        width: 100%;
+        padding: 6px 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+        background-color: white;
+    }
+
+    select.form-control {
+        cursor: pointer;
+    }
+
+    /* ===== Button Styles ===== */
+    .btn-common {
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: 15px;
+        border: none;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    /* Standardized Action Button Style */
+    .btn-action {
+        padding: 10px 20px;
+        border-radius: 15px;
+        border: none;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        min-width: 120px;
+        text-decoration: none;
+    }
+
+    .btn-nav {
+        background-color: #eee;
+        color: black;
+    }
+
+        .btn-nav:hover {
+            background-color: #ccc;
+        }
+
+    .btn-add-row {
+        background-color: #87CEEB;
+        color: black;
+    }
+
+        .btn-add-row:hover {
+            background-color: #5FB6D9;
+        }
+
+    .btn-create {
+        background-color: #90EE90;
+        color: black;
+    }
+
+        .btn-create:hover {
+            background-color: #76c976;
+        }
+
+    /* ===== REMOVE BUTTON ===== */
+    .removeProductBtn {
+        background: #ff4d4d !important;
+        color: white !important;
+        border: none;
+        border-radius: 15px;
+        padding: 8px 16px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 0.9rem;
+        display: flex;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+        .removeProductBtn:hover {
+            background: #d90000 !important;
+        }
+
+    /* ===== Row Animations ===== */
+    #item-rows tr {
+        transition: transform 0.3s ease, opacity 0.3s ease;
+        transform-origin: top;
+    }
+
+        #item-rows tr.adding {
+            opacity: 0;
+            transform: scaleY(0);
+        }
+
+            #item-rows tr.adding.show {
+                opacity: 1;
+                transform: scaleY(1);
+            }
+
+        #item-rows tr.removing {
+            opacity: 0;
+            transform: scaleY(0);
+        }
+
+    .down_container {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .navigation-buttons {
+        margin-top: 15px;
+        display: flex;
+        gap: 15px;
+    }
+
+    .text-danger {
+        color: red;
+        font-size: 0.8rem;
+    }
+
+    .field-validation-error {
+        color: red;
+        font-size: 0.8rem;
+        display: block;
+        margin-top: 5px;
+    }
+
+    select.input-validation-error {
+        border: 1px solid red;
+    }
+</style>
+
+<div class="CREATE">
+    <h2>Add Stock Transactions</h2>
+
+    <form id="createTransactionForm" asp-controller="Stock" asp-action="CreateTransaction" method="post">
+        <table class="stock-table">
+            <thead>
+                <tr>
+                    <th>Reason</th>
+                    <th>Type</th>
+                    <th>Quantity</th>
+                    <th>Product Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="item-rows">
+                @{
+                    // We determine the count based on Items, assuming Items and TransactionItems are synced in count
+                    int count = Model?.Items?.Count ?? 0;
+                }
+
+                @if (count > 0)
+                {
+                    @for (int i = 0; i < count; i++)
+                    {
+                        var transaction = Model.Items[i];
+                        var item = (Model.TransactionItems != null && Model.TransactionItems.Count > i) ? Model.TransactionItems[i] : new T_Stock.Models.StockTransactionItem();
+
+                        <tr class="transaction-row show">
+                            <td>
+                                <input name="Items[@i].Reason" value="@transaction.Reason" class="form-control js-reason" required />
+                                <span class="text-danger field-validation-valid"></span>
+                            </td>
+                            <td>
+                                <select name="Items[@i].transactionType" class="form-control">
+                                    <!option value="IN" @(transaction.transactionType == "IN" ? "selected" : "")>IN</!option>
+                                    <!option value="OUT" @(transaction.transactionType == "OUT" ? "selected" : "")>OUT</!option>
+                                </select>
+                            </td>
+                            <td>
+                                <input name="TransactionItems[@i].QtyChange" value="@item.QtyChange" type="number" class="form-control js-qty" min="1" required />
+                                <span class="text-danger field-validation-valid"></span>
+                            </td>
+                            <td>
+                                <select name="TransactionItems[@i].ProductID" class="form-control product-select js-product">
+                                    <option value="" disabled selected>-- Select Product --</option>
+                                    @if (Model.Products != null)
+                                    {
+                                        foreach (var prod in Model.Products)
+                                        {
+                                            <!option value="@prod.ProductId" @(item.ProductID == prod.ProductId ? "selected" : "")>
+                                            @prod.ProductName
+                                            </!option>
+                                        }
+                                    }
+                                </select>
+                                <span class="text-danger error-span"></span>
+                            </td>
+                            <td>
+                                @if (i > 0)
+                                {
+                                    <button type="button" class="removeProductBtn">Remove</button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr class="transaction-row show">
+                        <td>
+                            <input name="Items[0].Reason" class="form-control js-reason" required />
+                            <span class="text-danger field-validation-valid"></span>
+                        </td>
+                        <td>
+                            <select name="Items[0].transactionType" class="form-control">
+                                <option value="IN">IN</option>
+                                <option value="OUT">OUT</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input name="TransactionItems[0].QtyChange" type="number" class="form-control js-qty" value="0" min="1" required />
+                            <span class="text-danger field-validation-valid"></span>
+                        </td>
+                        <td>
+                            <select name="TransactionItems[0].ProductID" class="form-control product-select js-product">
+                                <option value="" disabled selected>-- Select Product --</option>
+                                @if (Model != null && Model.Products != null)
+                                {
+                                    @foreach (var prod in Model.Products)
+                                    {
+                                        <option value="@prod.ProductId">@prod.ProductName</option>
+                                    }
+                                }
+                            </select>
+                            <span class="text-danger error-span"></span>
+                        </td>
+                        <td></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="down_container">
+            <button type="button" class="btn-action btn-add-row">
+                <i class="ri-add-line" style="margin-right: 5px;"></i> Add Row
+            </button>
+
+            <button type="button" id="btnSubmit" class="btn-action btn-create ajax-nav" data-ajax="page">
+                Create
+            </button>
+        </div>
+    </form>
+
+    <div class="navigation-buttons">
+        <a href="/Home/Index" class="btn-common btn-nav ajax-nav" data-ajax="page">Home</a>
+        <a href="/Stock/Index" class="btn-common btn-nav ajax-nav" data-ajax="page">Back</a>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // Serialize product list for JS usage
+        var availableProducts = @Html.Raw(Json.Serialize(Model?.Products ?? new List<T_Stock.Models.Product>()));
+
+        function showError(input, span, message) {
+            input.addClass("input-validation-error");
+            span.text(message);
+            span.removeClass("field-validation-valid").addClass("field-validation-error");
+        }
+
+        function clearError(input, span) {
+            input.removeClass("input-validation-error");
+            span.text("");
+            span.removeClass("field-validation-error").addClass("field-validation-valid");
+        }
+
+        // --- UPDATED INDEX UPDATER ---
+        // This handles re-indexing for BOTH lists: Items[] and TransactionItems[]
+        function updateIndices() {
+            $('#item-rows tr').each(function (index) {
+                $(this).find(':input').each(function () {
+                    var name = $(this).attr('name');
+                    if (name) {
+                        // Regex works for Items[0] AND TransactionItems[0]
+                        var newName = name.replace(/\[\d+\]/, '[' + index + ']');
+                        $(this).attr('name', newName);
+                    }
+                });
+            });
+        }
+
+        // --- Add Row Logic ---
+        $(document).off('click', '.btn-add-row').on('click', '.btn-add-row', function () {
+            var tableBody = $("#item-rows");
+            var rowIndex = tableBody.find("tr").length;
+
+            let optionsHtml = '<option value="" disabled selected>-- Select Product --</option>';
+            if(availableProducts){
+                availableProducts.forEach(prod => {
+                    // Using productId (camelCase due to JSON serialization)
+                    optionsHtml += `<option value="${prod.productId}">${prod.productName}</option>`;
+                });
+            }
+
+            // Note the two different array names in the inputs below: Items[] and TransactionItems[]
+            var newRowHtml = `
+                <tr class="transaction-row adding">
+                    <td>
+                        <input name="Items[${rowIndex}].Reason" class="form-control js-reason" required />
+                        <span class="text-danger field-validation-valid"></span>
+                    </td>
+                    <td>
+                        <select name="Items[${rowIndex}].transactionType" class="form-control">
+                            <option value="IN">IN</option>
+                            <option value="OUT">OUT</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input name="TransactionItems[${rowIndex}].QtyChange" type="number" class="form-control js-qty" value="0" min="1" required />
+                        <span class="text-danger field-validation-valid"></span>
+                    </td>
+                    <td>
+                        <select name="TransactionItems[${rowIndex}].ProductID" class="form-control product-select js-product">
+                            ${optionsHtml}
+                        </select>
+                        <span class="text-danger error-span"></span>
+                    </td>
+                    <td>
+                        <button type="button" class="removeProductBtn">Remove</button>
+                    </td>
+                </tr>`;
+
+            var $newRow = $(newRowHtml);
+            tableBody.append($newRow);
+
+            requestAnimationFrame(() => {
+                $newRow.addClass("show");
+            });
+        });
+
+        // --- Remove Logic ---
+        $(document).off('click', '.removeProductBtn').on('click', '.removeProductBtn', function () {
+            var row = $(this).closest('tr');
+            row.addClass('removing');
+
+            setTimeout(() => {
+                row.remove();
+                updateIndices();
+            }, 300);
+        });
+
+        // --- Submit Logic ---
+        $("#btnSubmit").off("click").on("click", function (e) {
+            e.preventDefault();
+
+            var $form = $("#createTransactionForm");
+            let isValid = true;
+
+            $("#item-rows tr").each(function () {
+                var row = $(this);
+                var reasonInput = row.find(".js-reason");
+                var quantityInput = row.find(".js-qty");
+                var productSelect = row.find(".js-product");
+
+                var reasonSpan = reasonInput.next("span");
+                var quantitySpan = quantityInput.next("span");
+                var productSpan = productSelect.next("span");
+
+                // Validate Reason
+                if (!reasonInput.val() || reasonInput.val().trim() === "") {
+                    isValid = false;
+                    showError(reasonInput, reasonSpan, "Reason is required");
+                } else {
+                    clearError(reasonInput, reasonSpan);
+                }
+
+                // Validate Quantity
+                var qtyVal = parseFloat(quantityInput.val());
+                if (isNaN(qtyVal) || qtyVal <= 0) {
+                    isValid = false;
+                    showError(quantityInput, quantitySpan, "Qty > 0");
+                } else {
+                    clearError(quantityInput, quantitySpan);
+                }
+
+                // Validate Product
+                if (!productSelect.val() || productSelect.val() === "") {
+                    isValid = false;
+                    showError(productSelect, productSpan, "Product required");
+                } else {
+                    clearError(productSelect, productSpan);
+                }
+            });
+
+            if (!isValid) return;
+
+            updateIndices();
+
+            $.ajax({
+                url: "/Stock/CreateTransaction",
+                type: "POST",
+                data: $form.serialize(),
+                success: function (result) {
+                    if (result.success) {
+                        window.location.href = "/Stock/Index";
+                    } else {
+                        $(".CREATE").parent().html(result);
+                    }
+                },
+                error: function (xhr) {
+                    console.error(xhr.responseText);
+                    alert("Server error.");
+                }
+            });
+        });
+    })();
+</script>

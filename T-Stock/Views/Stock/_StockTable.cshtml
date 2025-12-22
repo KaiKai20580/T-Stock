@@ -1,0 +1,155 @@
+﻿@model T_Stock.Models.StockTransactionListVM
+
+@{
+    ViewData["Title"] = "Stock Transactions";
+}
+
+<style>
+    .stock-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: sans-serif;
+        table-layout: auto;
+    }
+
+        .stock-table th, .stock-table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+            vertical-align: top;
+            white-space: normal !important;
+        }
+
+        .stock-table th {
+            background-color: #f2f2f2;
+            white-space: nowrap !important;
+        }
+
+        .stock-table td:nth-child(1),
+        .stock-table td:nth-child(2) {
+            white-space: nowrap !important;
+        }
+
+        .stock-table td:nth-child(3) {
+            white-space: normal !important;
+            min-width: 150px;
+        }
+
+        .stock-table td:nth-child(4) {
+            white-space: normal !important;
+            word-wrap: break-word;
+            max-width: 450px;
+            min-width: 300px;
+        }
+
+    .tx-detail-row {
+        background-color: #f8f9fa;
+        display: none;
+    }
+
+    /* Note: We removed the .tx-detail-container style here because
+           the partial view now handles its own container styling */
+
+    .btn-view-tx {
+        padding: 5px 15px;
+        border-radius: 4px;
+        border: none;
+        background-color: #17a2b8;
+        color: white;
+        cursor: pointer;
+        min-width: 60px;
+    }
+
+        .btn-view-tx:hover {
+            background-color: #138496;
+        }
+</style>
+
+<div class="transaction-list">
+    <h2>Stock Transactions</h2>
+
+    <table class="stock-table" id="stockTable">
+        <thead>
+            <tr>
+                <th>Transaction ID</th>
+                <th>User ID</th>
+                <th>Date</th>
+                <th>Reason</th>
+                <th>Type</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model != null && Model.Items != null && Model.Items.Any())
+            {
+                foreach (var tx in Model.Items)
+                {
+                    <tr class="tx-row stock-row">
+                        <td>@tx.TransactionID</td>
+                        <td>@tx.UserID</td>
+
+                        <td>
+                            <div>@tx.Date.ToString("yyyy-MM-dd")</div>
+                            <div style="font-size: 0.85em; color: #555;">@tx.Date.ToString("HH:mm")</div>
+                        </td>
+
+                        <td>@tx.Reason</td>
+                        <td>@tx.transactionType</td>
+                        <td>
+                            <button type="button" class="btn-view-tx">View</button>
+                        </td>
+                    </tr>
+
+                    @* This is the expansion row *@
+                    <tr class="tx-detail-row" style="display:none;">
+                        <td colspan="6" style="padding: 0;">
+
+                            @* Implementation of the Partial View:
+                               1. Model="Model": Passes the whole ViewModel (Products + Items).
+                               2. ViewData: Creates a new dictionary to pass the specific TransactionID 
+                                  so the partial knows which items to filter.
+                            *@
+                            <partial name="_StockTransactionDetail"
+                                     model="Model"
+                                     view-data='@new ViewDataDictionary(ViewData) { { "TransactionID", tx.TransactionID } }' />
+
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" class="text-center">No stock transactions found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    (function () {
+        var table = document.getElementById("stockTable");
+        if (table) {
+            table.addEventListener("click", function (e) {
+                var btn = e.target.closest(".btn-view-tx");
+                if (btn) {
+                    e.preventDefault();
+                    var mainRow = btn.closest("tr");
+                    var detailRow = mainRow.nextElementSibling;
+
+                    if (detailRow && detailRow.classList.contains("tx-detail-row")) {
+                        if (detailRow.style.display === "none" || detailRow.style.display === "") {
+                            detailRow.style.display = "table-row";
+                            btn.textContent = "Hide";
+                        } else {
+                            detailRow.style.display = "none";
+                            btn.textContent = "View";
+                        }
+                    }
+                }
+            });
+        }
+    })();
+</script>
