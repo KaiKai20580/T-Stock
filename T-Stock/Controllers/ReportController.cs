@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using System;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using T_Stock.Models;
@@ -63,7 +63,11 @@ namespace T_Stock.Controllers
             ViewBag.SelectedCategory = category;
             ViewBag.SortBy = sortBy;
 
-            
+            string userEmail = Request.Cookies["User"];
+            string userRole = Request.Cookies["Role"] ?? "User";
+            string displayName = userEmail.Contains("@") ? userEmail.Split('@')[0] : userEmail;
+
+
             List<string> allowedPOIds = new List<string>();
             bool hasDateFilter = startDate.HasValue || endDate.HasValue;
 
@@ -96,14 +100,14 @@ namespace T_Stock.Controllers
 
             if (reportType == "Summary" || reportType == "Exception")
             {
-                
+
                 var poQueryFilter = allowedPOIds.Any()
                     ? Builders<PurchaseOrder>.Filter.In(p => p.PO_ID, allowedPOIds)
                     : Builders<PurchaseOrder>.Filter.Empty;
 
                 var validPOs = _purchaseOrder.Find(poQueryFilter).ToList();
 
-               
+
                 var validPOIds = validPOs.Select(p => p.PO_ID).ToList();
                 var allItems = _purchaseOrderItem.Find(i => validPOIds.Contains(i.PO_ID)).ToList();
 
@@ -111,7 +115,7 @@ namespace T_Stock.Controllers
                 {
                     if (po.LastUpdated == DateTime.MinValue) continue;
 
-                    
+
                     var items = allItems.Where(i => i.PO_ID == po.PO_ID);
 
                     foreach (var item in items)
@@ -154,10 +158,11 @@ namespace T_Stock.Controllers
                             };
                         }).ToList();
 
+
+
                     ViewBag.ReportMonth = startDate.HasValue ? startDate.Value.ToString("MMMM yyyy") : "All Time";
                     ViewBag.GeneratedDate = today.ToString("dd MMMM yyyy");
-                    ViewBag.GeneratedBy = "Koay Kah Wooi (Admin)";
-                    ViewBag.ActiveProducts = allProduct.Count(p => p.Quantity > 0);
+                    ViewBag.GeneratedBy = $"{displayName} ({userRole})"; ViewBag.ActiveProducts = allProduct.Count(p => p.Quantity > 0);
                     ViewBag.TotalStockQty = allProduct.Sum(p => p.Quantity).ToString("N0");
                     ViewBag.OutOfStockCount = allProduct.Count(p => p.Quantity <= 0);
                     ViewBag.Top10Items = top5;
@@ -171,7 +176,7 @@ namespace T_Stock.Controllers
                 if (string.Equals(reportType, "Exception", StringComparison.OrdinalIgnoreCase))
                 {
                     var today = DateTime.Today;
-                    int deadStockDays = 7;
+                    int deadStockDays = 7; //control dead stock day
 
                     // Category Filter
                     var builder = Builders<Product>.Filter;
@@ -198,19 +203,19 @@ namespace T_Stock.Controllers
                         .ToList();
 
                     // Deadstock
-                        var deadStock = filteredProductList
-                        .Where(p => p.Quantity > 0)
-                        .Select(p => {
-                            bool hasRecord = lastPurchaseDict.ContainsKey(p.ProductId);
-                            var lastDate = hasRecord ? lastPurchaseDict[p.ProductId] : (DateTime?)null;
-                            int days = lastDate.HasValue ? (today - lastDate.Value.Date).Days : 999;
+                    var deadStock = filteredProductList
+                    .Where(p => p.Quantity > 0 && p.Quantity > p.ReorderLevel)
+                    .Select(p => {
+                        bool hasRecord = lastPurchaseDict.ContainsKey(p.ProductId);
+                        var lastDate = hasRecord ? lastPurchaseDict[p.ProductId] : (DateTime?)null;
+                        int days = lastDate.HasValue ? (today - lastDate.Value.Date).Days : 999;
 
-                            if (days < deadStockDays) return null;
+                        if (days < deadStockDays) return null;
 
-                            decimal unitPrice = lastPriceDict.ContainsKey(p.ProductId) ? lastPriceDict[p.ProductId] : 0;
+                        decimal unitPrice = lastPriceDict.ContainsKey(p.ProductId) ? lastPriceDict[p.ProductId] : 0;
 
-                            // [0]ID, [1]ProductName, [2]Qty, [3]DateStr, [4]DaysStr, [5]Category, [6]Value
-                            return new object[] {
+                        // [0]ID, [1]ProductName, [2]Qty, [3]DateStr, [4]DaysStr, [5]Category, [6]Value
+                        return new object[] {
                                 p.ProductId,
                                 p.ProductName ?? "Unknown",
                                 p.Quantity,
@@ -218,11 +223,11 @@ namespace T_Stock.Controllers
                                 days >= 999 ? ">365" : days.ToString(),
                                 p.Category ?? "-",
                                 p.Quantity * unitPrice
-                            };
-                        }).Where(x => x != null).ToList();
+                        };
+                    }).Where(x => x != null).ToList();
 
                     // Sort Filter
-                    Comparison<object[]> sortDelegate = (x, y) => 0; 
+                    Comparison<object[]> sortDelegate = (x, y) => 0;
 
                     if (sortBy == "Name")
                         sortDelegate = (x, y) => ((string)x[1]).CompareTo((string)y[1]); // sort by A-Z
