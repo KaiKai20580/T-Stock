@@ -4,10 +4,13 @@
     ViewData["Title"] = "Inventory";
 }
 
+@* 1. NOTIFICATION CONTAINER 
+   This renders only if the Controller passed a success message (e.g., after Edit or Delete).
+*@
 @if (TempData["SuccessMessage"] != null)
 {
-    <div id="success-notification" class="custom-alert">
-        @TempData["SuccessMessage"]
+    <div id="slide-notification">
+        <i class="ri-checkbox-circle-fill"></i> @TempData["SuccessMessage"]
     </div>
 }
 
@@ -102,33 +105,34 @@
 </div>
 
 <style>
-    /* --- 2. NEW CSS FOR POPUP (Added) --- */
-    .custom-alert {
+    /* --- 2. SLIDE-IN NOTIFICATION CSS --- */
+    #slide-notification {
         position: fixed;
-        top: 20px;
+        top: -100px; /* Start hidden above the screen */
         left: 50%;
-        z-index: 9999;
-        /* Green styling */
-        background-color: #d4edda;
-        color: #155724;
-        border: 1px solid #c3e6cb;
+        transform: translateX(-50%);
+        /* Green Success Color */
+        background-color: #28a745;
+        color: white;
         padding: 15px 30px;
-        border-radius: 5px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        font-weight: bold;
-        /* STARTING STATE: Moved up out of view (-200%) and centered (-50%) */
-        transform: translate(-50%, -200%);
-        /* Smooth transition */
-        transition: transform 0.5s ease-in-out;
+        border-radius: 0 0 10px 10px; /* Rounded bottom corners */
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        z-index: 9999;
+        font-weight: 600;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        /* Smooth Bouncy Transition */
+        transition: top 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
     }
 
-        /* ACTIVE STATE: Added by JS */
-        .custom-alert.show-alert {
-            transform: translate(-50%, 0);
+        /* Class added by JS to slide it down */
+        #slide-notification.show {
+            top: 0;
         }
-    /* ------------------------------------ */
 
-    /* Existing Styles */
+    /* --- Existing Styles --- */
     .action-btn {
         padding: 6px 12px;
         font-size: 14px;
@@ -174,16 +178,17 @@
         function initInventoryPage() {
             console.log("Initializing Inventory Page Logic...");
 
-            // --- 3. NOTIFICATION LOGIC (Added) ---
-            var notification = document.getElementById("success-notification");
+            // --- 3. NOTIFICATION LOGIC (Updated) ---
+            var notification = document.getElementById("slide-notification");
             if (notification) {
-                // Slide down
+                // Slide down (add 'show' class)
                 setTimeout(function () {
-                    notification.classList.add("show-alert");
+                    notification.classList.add("show");
                 }, 100);
-                // Slide up after 3 seconds
+
+                // Slide up (remove 'show' class) after 3 seconds
                 setTimeout(function () {
-                    notification.classList.remove("show-alert");
+                    notification.classList.remove("show");
                 }, 3000);
             }
             // -------------------------------------
@@ -199,7 +204,6 @@
             let highlightId = '@ViewBag.HighlightProductId';
             if ((!highlightId || highlightId === '') && window.location.hash.startsWith('#product-')) {
                 highlightId = window.location.hash.substring(9);
-                console.log("Detected ID from URL Hash:", highlightId);
             }
 
             // --- LOAD DATA ---
@@ -314,59 +318,71 @@
                 return processed;
             }
 
-            function renderTable(data) {
-                const tableBody = document.querySelector('.inven-table tbody');
-                if (!tableBody) return;
-                tableBody.innerHTML = '';
+                function renderTable(data) {
+                    const tableBody = document.querySelector('.inven-table tbody');
+                    if (!tableBody) return;
+                    tableBody.innerHTML = '';
 
-                if (!data || data.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 20px;">No products found</td></tr>';
-                    return;
-                }
-
-                const fragment = document.createDocumentFragment();
-                let highlightedRow = null;
-
-                data.forEach(item => {
-                    const tr = document.createElement('tr');
-                    const pId = getSafeValue(item, 'ProductId');
-                    const isHighlight = highlightId && (String(pId) === String(highlightId));
-
-                    if (isHighlight) {
-                        tr.classList.add('highlight');
-                        highlightedRow = tr;
-                        highlightId = null;
+                    if (!data || data.length === 0) {
+                        tableBody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 20px;">No products found</td></tr>';
+                        return;
                     }
 
-                    tr.classList.add('inventory-row');
-                    tr.id = `product-${pId}`;
+                    const fragment = document.createDocumentFragment();
+                    let highlightedRow = null;
 
-                    tr.innerHTML = `
-                        <td>${pId}</td>
-                        <td>${getSafeValue(item, 'ProductName')}</td>
-                        <td>${getSafeValue(item, 'Category')}</td>
-                        <td>${getSafeValue(item, 'Quantity')}</td>
-                        <td>${getSafeValue(item, 'ReorderLevel')}</td>
-                        <td>${getSafeValue(item, 'Price')}</td>
-                        <td>
-                            <a href="/Inventory/Edit/${pId}" class="action-btn edit-btn">Edit</a>
-                            <form action="/Inventory/Delete" method="post" onsubmit="return confirm('Delete?');" style="display:inline;">
-                                <input type="hidden" name="__RequestVerificationToken" value="${csrfToken}" />
-                                <input type="hidden" name="productId" value="${pId}" />
-                                <button type="submit" class="action-btn delete-btn">Delete</button>
-                            </form>
-                        </td>
-                    `;
-                    fragment.appendChild(tr);
-                });
-                tableBody.appendChild(fragment);
+                    data.forEach(item => {
+                        const tr = document.createElement('tr');
+                        const pId = getSafeValue(item, 'ProductId');
+                        // Check if this is the row to highlight
+                        const isHighlight = highlightId && (String(pId) === String(highlightId));
 
-                if (highlightedRow) {
-                    setTimeout(() => {
+                        if (isHighlight) {
+                            // We do NOT add the class here yet. We just capture the row element.
+                            highlightedRow = tr;
+                            highlightId = null; // Reset global var so it doesn't trigger again
+                        }
+
+                        tr.classList.add('inventory-row');
+                        tr.id = `product-${pId}`;
+
+                        tr.innerHTML = `
+                            <td>${pId}</td>
+                            <td>${getSafeValue(item, 'ProductName')}</td>
+                            <td>${getSafeValue(item, 'Category')}</td>
+                            <td>${getSafeValue(item, 'Quantity')}</td>
+                            <td>${getSafeValue(item, 'ReorderLevel')}</td>
+                            <td>${getSafeValue(item, 'Price')}</td>
+                            <td>
+                                <a href="/Inventory/Edit/${pId}" class="action-btn edit-btn">Edit</a>
+                                <form action="/Inventory/Delete" method="post" onsubmit="return confirm('Are you sure you want to delete this product?');" style="display:inline;">
+                                    <input type="hidden" name="__RequestVerificationToken" value="${csrfToken}" />
+                                    <input type="hidden" name="productId" value="${pId}" />
+                                    <button type="submit" class="action-btn delete-btn">Delete</button>
+                                </form>
+                            </td>
+                        `;
+                        fragment.appendChild(tr);
+                    });
+                    tableBody.appendChild(fragment);
+
+                    // --- HIGHLIGHT ANIMATION LOGIC ---
+                    if (highlightedRow) {
+                        // 1. Scroll immediately so user sees the target area
                         highlightedRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }, 100);
+
+                        // 2. Wait 1000ms (Start Highlight Delay)
+                        setTimeout(() => {
+                            highlightedRow.classList.add('highlight');
+
+                            // 3. Wait 1000ms (Duration of Highlight), then remove
+                            setTimeout(() => {
+                                highlightedRow.classList.remove('highlight');
+                            }, 1000);
+
+                        }, 1000);
+                    }
                 }
-            }
 
             function updateTable() {
                 if (!window.inventoryData) return;
@@ -448,7 +464,6 @@
             }
 
             if (highlightId && window.inventoryData.length > 0) {
-                console.log("Checking Product Location for:", highlightId);
                 const tempSortedData = processData(window.inventoryData, window.pageConfig);
                 const foundIndex = tempSortedData.findIndex(item =>
                     String(getSafeValue(item, 'ProductId')) === String(highlightId)
@@ -457,7 +472,6 @@
                 if (foundIndex !== -1) {
                     const size = parseInt(window.pageConfig.pageSize) || 10;
                     const correctPage = Math.floor(foundIndex / size) + 1;
-                    console.log(`Found Index: ${foundIndex}, Correct Page: ${correctPage}`);
                     if (window.pageConfig.currentPage !== correctPage) {
                         window.pageConfig.currentPage = correctPage;
                     }

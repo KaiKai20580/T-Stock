@@ -34,6 +34,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZXNldFBhc3N3b3JkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Account/SetPassword.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxTZXRQYXNzd29yZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -66,8 +70,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW52ZW50b3J5XF9JbnZlbnRvcnlUYWJsZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Member/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVtYmVyXEVkaXQuY3NodG1s
+[C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Member/Add.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVtYmVyXEFkZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Member/Index.cshtml]
@@ -84,6 +88,50 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/PurchaseOrder/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVyY2hhc2VPcmRlclxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/PurchaseOrder/PrintPO.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVyY2hhc2VPcmRlclxQcmludFBPLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/PurchaseOrder/_AddPOForm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVyY2hhc2VPcmRlclxfQWRkUE9Gb3JtLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/PurchaseOrder/_EditPOForm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVyY2hhc2VPcmRlclxfRWRpdFBPRm9ybS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/PurchaseOrder/_POTable.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVyY2hhc2VPcmRlclxfUE9UYWJsZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Report/Filters/_FilterDetail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XEZpbHRlcnNcX0ZpbHRlckRldGFpbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Report/Filters/_FilterException.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XEZpbHRlcnNcX0ZpbHRlckV4Y2VwdGlvbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Report/Filters/_FilterSummary.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XEZpbHRlcnNcX0ZpbHRlclN1bW1hcnkuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Report/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Report/_DetailReport.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XF9EZXRhaWxSZXBvcnQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Report/_ExceptionReport.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XF9FeGNlcHRpb25SZXBvcnQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Report/_SummaryReport.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XF9TdW1tYXJ5UmVwb3J0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/TARUMT/Y2/S2/T-Stock/T-Stock/Views/Shared/Error.cshtml]

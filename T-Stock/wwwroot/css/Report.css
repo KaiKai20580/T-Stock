@@ -1,15 +1,49 @@
-﻿body {
+﻿/* =========================================================
+   1. GLOBAL & LAYOUT (Light Mode Default - 原本的排版)
+   ========================================================= */
+
+body {
     font-family: Arial, sans-serif;
-    background-color: #f4f6f9; 
+    background-color: #f4f6f9; /* 亮色模式背景 */
+    color: #333;
+    margin: 0;
+    padding: 0;
 }
 
+/* --- Support Utility Classes --- */
+.text-right {
+    text-align: right;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.font-bold {
+    font-weight: bold;
+}
+
+.text-red {
+    color: #c00;
+}
+
+.text-green {
+    color: #28a745;
+}
+
+.text-muted {
+    color: #666;
+}
+
+/* --- Main Layout Containers --- */
 .report-container {
     display: flex;
     gap: 20px;
     padding: 20px;
-    margin-left: 0; 
+    margin-left: 0;
 }
 
+/* --- Left Navigation --- */
 .left-nav {
     width: 220px;
     background: #ffffff;
@@ -19,8 +53,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    height: fit-content; 
-
+    height: fit-content;
 }
 
     .left-nav h3 {
@@ -47,9 +80,9 @@
             border-color: #007bff;
         }
 
-
+/* --- Right Panel & Filter Section --- */
 .right-panel {
-    flex: 1; 
+    flex: 1;
     background: #fff;
     padding: 30px;
     border-radius: 8px;
@@ -76,7 +109,7 @@
 .filter-row {
     display: flex;
     gap: 20px;
-    align-items: flex-end; 
+    align-items: flex-end;
 }
 
     .filter-row div {
@@ -91,17 +124,18 @@
         color: #555;
     }
 
-
 .preview-area {
     border: 1px solid #ddd;
     padding: 40px;
     border-radius: 4px;
     background: white;
     min-height: 500px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.05); 
+    box-shadow: 0 0 15px rgba(0,0,0,0.05);
 }
 
-/* ================= 2. Detail Report  ================= */
+/* =========================================================
+   2. DETAIL REPORT STYLES (.Dreport-*)
+   ========================================================= */
 .Dreport-header {
     text-align: center;
     position: relative;
@@ -137,6 +171,13 @@
     margin: 15px 0;
 }
 
+.Dreport-footer {
+    margin-top: 30px;
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+}
+
 .Dreport-table {
     width: 100%;
     border-collapse: collapse;
@@ -157,13 +198,16 @@
         vertical-align: top;
     }
 
-/* ================= 3. Exception Report  ================= */
+/* =========================================================
+   3. EXCEPTION REPORT STYLES (.ER-*)
+   ========================================================= */
 .ER-container {
     width: 100%;
     border: 4px solid black;
     padding: 20px;
     background: white;
     box-sizing: border-box;
+    margin-bottom: 20px;
 }
 
 .ER-h1 {
@@ -173,6 +217,12 @@
     letter-spacing: 2px;
     text-transform: uppercase;
     margin: 10px 0;
+}
+
+.ER-date {
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: bold;
 }
 
 .ER-table {
@@ -195,10 +245,57 @@
         text-transform: uppercase;
     }
 
-/* ================= 4. Summary Report  ================= */
+.ER-right {
+    text-align: right;
+}
+
+.ER-double {
+    border-top: 3px double black;
+}
+
+.ER-thick {
+    border-top: 2px solid black;
+}
+
+.ER-total-row {
+    background-color: #f9f9f9;
+}
+
+.ER-grand-total {
+    font-size: 14px;
+    background-color: #eee;
+}
+
+.ER-footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+/* =========================================================
+   4. SUMMARY REPORT STYLES (.sreport-*)
+   ========================================================= */
+.sreport-body {
+    background: #fff;
+    padding: 40px;
+    color: #000;
+}
+
 .sreport-header {
     text-align: center;
     margin-bottom: 30px;
+}
+
+.sreport-company {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.sreport-address {
+    font-size: 14px;
+    margin-bottom: 15px;
 }
 
 .sreport-title {
@@ -206,6 +303,12 @@
     font-weight: bold;
     text-decoration: underline;
     margin: 10px 0;
+    text-transform: uppercase;
+}
+
+.sreport-period {
+    font-size: 14px;
+    font-style: italic;
 }
 
 .sreport-table {
@@ -215,77 +318,261 @@
     border: 1px solid #000;
 }
 
-    .sreport-table th {
-        background: #fff;
-        padding: 8px;
-        border-bottom: 2px solid #000;
-        font-weight: bold;
-        text-align: left;
+.sreport-no-border {
+    border: none !important;
+    margin: 10px 0;
+}
+
+    .sreport-no-border td {
+        border: none !important;
+        padding: 4px;
     }
 
-    .sreport-table td {
-        padding: 6px;
-        border-bottom: 1px solid #999;
-    }
+.sreport-table th {
+    background: #f0f0f0;
+    padding: 8px;
+    border-bottom: 2px solid #000;
+    font-weight: bold;
+    text-align: left;
+    border: 1px solid #000;
+}
 
-/* ================= support ================= */
-.text-right {
+.sreport-table td {
+    padding: 6px;
+    border: 1px solid #999;
+}
+
+.sreport-text-right {
     text-align: right;
 }
 
-.text-center {
-    text-align: center;
-}
-
-.font-bold {
+.sreport-total {
+    border-top: 2px solid #000 !important;
     font-weight: bold;
 }
 
-.text-red {
-    color: #c00;
+.sreport-double {
+    border-bottom: 4px double #000 !important;
 }
 
-.text-muted {
-    color: #666;
+.sreport-footer {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 12px;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
 }
-/* for printting */
+
+/* =========================================================
+   5. PRINT MEDIA QUERY (Strictly White - 保持打印是白底黑字)
+   ========================================================= */
 @media print {
-   
     body * {
         visibility: hidden;
     }
 
-    #reportPreview, #reportPreview * {
+    #reportPreview, #reportPreview *,
+    .right-panel, .ER-container, .sreport-body,
+    .right-panel *, .ER-container *, .sreport-body * {
         visibility: visible;
     }
 
-    #reportPreview {
+    #reportPreview, .right-panel, .ER-container, .sreport-body {
         position: absolute;
         left: 0;
         top: 0;
         width: 100%;
         margin: 0;
         padding: 0;
-        background: white; 
-        border: none; 
-        box-shadow: none;
+        border: none !important;
+        box-shadow: none !important;
+        background: white !important;
+        color: black !important;
     }
 
-    .left-nav,
-    .filter-section,
-    .sidebar,
-    header, nav, aside, footer,
-    .btn, button {
+    .left-nav, .filter-section, .sidebar,
+    header, nav, aside, footer, .btn, button {
         display: none !important;
     }
 
-    @page {
-        margin: 10mm; 
-        size: auto;
+    /* 强制打印时表格显示正确 */
+    thead {
+        display: table-header-group !important;
     }
 
-    * {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
+    tfoot {
+        display: table-footer-group !important;
+    }
+
+    tr {
+        page-break-inside: avoid !important;
+    }
+
+    table, th, td {
+        background: white !important;
+        color: black !important;
+        border: 1px solid black !important;
+    }
+
+    /* 覆盖 Dark Mode 设置，确保打印还是白色的 */
+    body.dark-mode,
+    body.dark-mode .right-panel,
+    body.dark-mode .ER-container,
+    body.dark-mode .sreport-body {
+        background-color: white !important;
+        color: black !important;
     }
 }
+
+/* =========================================================
+   6. DARK MODE OVERRIDES (黑色背景设计)
+   ========================================================= */
+
+body.dark-mode {
+    background-color: #000000; /* 纯黑背景 */
+    color: #e0e0e0; /* 字体变浅灰，方便阅读 */
+}
+
+    /* --- Utilities in Dark Mode --- */
+    body.dark-mode .text-red {
+        color: #ff6b6b;
+    }
+
+    body.dark-mode .text-green {
+        color: #4ade80;
+    }
+
+    body.dark-mode .text-muted {
+        color: #aaa;
+    }
+
+    body.dark-mode h2, body.dark-mode h3 {
+        color: #fff;
+    }
+
+    /* --- Layout Panels (保持排版，但颜色变深) --- */
+    body.dark-mode .right-panel,
+    body.dark-mode .left-nav,
+    body.dark-mode .filter-section,
+    body.dark-mode .preview-area {
+        background-color: #111111; /* 面板使用极深灰，与纯黑背景区分 */
+        border-color: #333;
+        color: #e0e0e0;
+        /* 阴影稍微调整，使其在黑色背景上隐约可见 */
+        box-shadow: 0 2px 4px rgba(255,255,255,0.05);
+    }
+
+        /* --- Buttons --- */
+        body.dark-mode .left-nav button {
+            background-color: #222;
+            color: #e0e0e0;
+            border-color: #444;
+        }
+
+            body.dark-mode .left-nav button:hover,
+            body.dark-mode .left-nav button.active {
+                background-color: #0056b3;
+                color: white;
+                border-color: #0056b3;
+            }
+
+    /* --- Main Titles --- */
+    body.dark-mode .report-title {
+        color: white;
+        border-bottom-color: #444;
+    }
+
+    /* --- Detail Report (Dreport) Styles --- */
+    body.dark-mode .Dreport-header {
+        border-bottom-color: #555;
+    }
+
+    body.dark-mode .Dreport-address,
+    body.dark-mode .Dreport-footer {
+        color: #bbb;
+    }
+
+    body.dark-mode .Dreport-table th {
+        background-color: #1a1a1a; /* 表头稍微亮一点 */
+        color: white;
+        border-bottom-color: #666;
+    }
+
+    body.dark-mode .Dreport-table td {
+        background-color: #111111;
+        color: #ddd;
+        border-bottom-color: #333;
+    }
+
+    /* --- Exception Report (ER) Styles --- */
+    body.dark-mode .ER-container {
+        background-color: #0a0a0a;
+        border-color: #444;
+        color: #eee;
+    }
+
+    body.dark-mode .ER-table {
+        border-color: #444;
+    }
+
+        body.dark-mode .ER-table th {
+            background-color: #1f1f1f;
+            color: #fff;
+            border-color: #444;
+        }
+
+        body.dark-mode .ER-table td {
+            border-color: #444;
+            color: #ddd;
+            background-color: #0a0a0a;
+        }
+
+    body.dark-mode .ER-double {
+        border-top: 3px double #777;
+    }
+
+    body.dark-mode .ER-thick {
+        border-top: 2px solid #777;
+    }
+
+    body.dark-mode .ER-total-row {
+        background-color: #161616;
+    }
+
+    body.dark-mode .ER-grand-total {
+        background-color: #222222;
+    }
+
+    /* --- Summary Report (sreport) Styles --- */
+    body.dark-mode .sreport-body {
+        background-color: #111111;
+        color: #eee;
+    }
+
+    body.dark-mode .sreport-table {
+        border-color: #444;
+    }
+
+        body.dark-mode .sreport-table th {
+            background-color: #1a1a1a;
+            color: white;
+            border-color: #444;
+        }
+
+        body.dark-mode .sreport-table td {
+            background-color: #111111;
+            border-color: #444;
+            color: #ddd;
+        }
+
+    body.dark-mode .sreport-total {
+        border-top: 2px solid #777 !important;
+    }
+
+    body.dark-mode .sreport-double {
+        border-bottom: 4px double #777 !important;
+    }
+
+    body.dark-mode .sreport-footer {
+        border-top-color: #444;
+    }

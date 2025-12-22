@@ -1,162 +1,117 @@
 ﻿@model T_Stock.Models.StockTransactionListVM
 
 @{
-    // Retrieve the specific Transaction ID we are rendering details for
+    // Retrieve the specific Transaction ID
     var currentTxId = ViewData["TransactionID"] as string;
 
-    // 1. Filter items for this specific transaction
+    // 1. Filter items for this transaction
+    // 2. Group by ProductID to merge duplicates for display
     var detailItems = Model?.TransactionItems?
         .Where(ti => ti.TransactionID == currentTxId)
+        .GroupBy(ti => ti.ProductID)
+        .Select(g => new
+        {
+            ProductID = g.Key,
+            // Sum the quantity of merged rows
+            TotalQty = g.Sum(x => x.QtyChange),
+            // Optional: Combine remarks if they are different
+            CombinedRemarks = string.Join("; ", g.Select(x => x.Remarks).Where(r => !string.IsNullOrEmpty(r)).Distinct())
+        })
         .ToList();
 }
 
-<div class="inner-table-wrapper">
-    <div class="inner-header">
-        <h5 class="inner-table-title">Transaction Items</h5>
-    </div>
+<div class="simple-list-wrapper">
+    <h5 class="list-title">Transaction Items</h5>
 
-    <table class="inner-stock-table">
-        <thead>
-            <tr>
-                <th style="width: 15%;">Product ID</th>
-                <th style="width: 50%;">Product Name</th>
-                <th style="width: 15%;">Remarks</th>
-                <th style="width: 20%;" class="text-end">Quantity</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (detailItems != null && detailItems.Any())
+    @if (detailItems != null && detailItems.Any())
+    {
+        <ul class="stock-item-list">
+            @foreach (var item in detailItems)
             {
-                foreach (var item in detailItems)
-                {
-                    // 2. Lookup Product Name from the Master List
-                    var product = Model.Products?.FirstOrDefault(p => p.ProductId == item.ProductID);
-                    string productName = product?.ProductName ?? "Unknown Product";
+                // Lookup Product Name
+                var product = Model.Products?.FirstOrDefault(p => p.ProductId == item.ProductID);
+                string productName = product?.ProductName ?? "Unknown Product";
 
-                    <tr>
-                        <td class="id-cell">@item.ProductID</td>
-                        <td class="name-cell">@productName</td>
-                        <td class="name-cell" style="color: #777; font-size: 0.85em;">
-                            @(string.IsNullOrEmpty(item.Remarks) ? "-" : item.Remarks)
-                        </td>
-                        <td class="text-end qty-cell">
-                            <span class="qty-badge">@item.QtyChange</span>
-                        </td>
-                    </tr>
-                }
+                <li>
+                    <span class="product-name">@productName</span>:
+                    <span class="qty-text">@item.TotalQty units</span>
+
+                    @if (!string.IsNullOrEmpty(item.CombinedRemarks))
+                    {
+                        <span class="remarks-text">(@item.CombinedRemarks)</span>
+                    }
+                </li>
             }
-            else
-            {
-                <tr>
-                    <td colspan="4" class="empty-state">
-                        <i class="empty-icon">!</i> No items found.
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+        </ul>
+    }
+    else
+    {
+        <div class="empty-state">
+            No items found.
+        </div>
+    }
 </div>
 
 <style>
-    /* --- 1. Wrapper: Card Style --- */
-    .inner-table-wrapper {
-        background-color: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    /* --- Wrapper --- */
+    .simple-list-wrapper {
+        background-color: #fff;
+        padding: 15px;
         border: 1px solid #eaeaea;
-        overflow: hidden;
+        border-radius: 6px;
         margin: 10px 0;
-        max-width: 100%;
     }
 
-    /* --- 2. Header Section --- */
-    .inner-header {
-        background-color: #fafafa;
-        padding: 12px 20px;
-        border-bottom: 1px solid #eaeaea;
-    }
-
-    .inner-table-title {
-        margin: 0;
-        font-size: 0.85rem;
+    .list-title {
+        margin: 0 0 10px 0;
+        font-size: 0.9rem;
         font-weight: 700;
         color: #5f6368;
         text-transform: uppercase;
         letter-spacing: 0.05em;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 8px;
     }
 
-    /* --- 3. Table Layout --- */
-    .inner-stock-table {
-        width: 100%;
-        border-collapse: collapse;
-        table-layout: fixed;
+    /* --- List Styling --- */
+    .stock-item-list {
+        list-style-type: disc; /* Simple bullets */
+        padding-left: 20px; /* Indent for bullets */
+        margin: 0;
     }
 
-        .inner-stock-table thead th {
-            background-color: #fff;
-            color: #888;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            padding: 10px 20px;
-            border-bottom: 2px solid #f0f0f0;
-            text-align: left;
-        }
-
-        .inner-stock-table tbody td {
-            padding: 12px 20px;
-            border-bottom: 1px solid #f5f5f5;
-            font-size: 0.9rem;
-            vertical-align: middle;
+        .stock-item-list li {
+            margin-bottom: 6px;
             color: #333;
+            font-size: 0.95rem;
+            line-height: 1.5;
         }
 
-        .inner-stock-table tbody tr:hover {
-            background-color: #fcfcfc;
-        }
+            .stock-item-list li:last-child {
+                margin-bottom: 0;
+            }
 
-        .inner-stock-table tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-    /* --- 4. Specific Column Styling --- */
-    .text-end {
-        text-align: right;
-    }
-
-    .id-cell {
-        font-family: 'Consolas', 'Monaco', monospace;
-        color: #999;
-        font-size: 0.85rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .name-cell {
+    /* --- Content Styling --- */
+    .product-name {
         font-weight: 600;
         color: #2c3e50;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
 
-    .qty-cell {
-        font-weight: bold;
+    .qty-text {
+        font-weight: 500;
+        color: #1976d2; /* Blue highlight for numbers */
     }
 
-    .qty-badge {
-        background-color: #e3f2fd;
-        color: #1976d2;
-        padding: 4px 10px;
-        border-radius: 12px;
-        font-size: 0.8rem;
+    .remarks-text {
+        color: #888;
+        font-style: italic;
+        font-size: 0.85em;
+        margin-left: 5px;
     }
 
     .empty-state {
-        text-align: center;
-        padding: 40px !important;
-        color: #a0a0a0;
+        color: #999;
         font-style: italic;
+        padding: 5px 0;
     }
 </style>

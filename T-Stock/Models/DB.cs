@@ -206,10 +206,10 @@ namespace T_Stock.Models
         public DateTime Date { get; set; }
         [BsonElement("Reason")]
         [Required]
-        public string Reason{ get; set; }
+        public string? Reason{ get; set; }
         [BsonElement("transactionType")]
         [Required]
-        public string transactionType { get; set; }
+        public string? transactionType { get; set; }
     }
 
     public class StockTransactionItem

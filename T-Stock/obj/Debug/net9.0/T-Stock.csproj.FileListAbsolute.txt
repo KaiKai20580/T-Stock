@@ -1,5 +1,7 @@
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\bin\Debug\net9.0\appsettings.Development.json
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\bin\Debug\net9.0\appsettings.json
+C:\TARUMT\Y2\S2\T-Stock\T-Stock\bin\Debug\net9.0\package-lock.json
+C:\TARUMT\Y2\S2\T-Stock\T-Stock\bin\Debug\net9.0\package.json
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\bin\Debug\net9.0\T-Stock.staticwebassets.runtime.json
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\bin\Debug\net9.0\T-Stock.staticwebassets.endpoints.json
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\bin\Debug\net9.0\T-Stock.exe
@@ -9,6 +11,7 @@ C:\TARUMT\Y2\S2\T-Stock\T-Stock\bin\Debug\net9.0\T-Stock.dll
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\bin\Debug\net9.0\T-Stock.pdb
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\bin\Debug\net9.0\AWSSDK.Core.dll
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\bin\Debug\net9.0\AWSSDK.SecurityToken.dll
+C:\TARUMT\Y2\S2\T-Stock\T-Stock\bin\Debug\net9.0\BCrypt.Net-Next.dll
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\bin\Debug\net9.0\DnsClient.dll
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\bin\Debug\net9.0\MongoDB.Bson.dll
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\bin\Debug\net9.0\MongoDB.Driver.dll
@@ -34,7 +37,9 @@ C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\rjimswa.dswa.cache.json
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\scopedcss\bundle\T-Stock.styles.css
+C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\jr21c2ylnd-{0}-q2xar4dnzz-q2xar4dnzz.gz
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\782n8hyfgo-{0}-61n19gt1b8-61n19gt1b8.gz
+C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\emd4mcth0z-{0}-qjlkkyoerc-qjlkkyoerc.gz
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\dag9hgxy78-{0}-t1cqhe9u97-t1cqhe9u97.gz
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\xx9k522u1b-{0}-c2jlpeoesf-c2jlpeoesf.gz
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\fwg7a2wq03-{0}-sejl45xvog-sejl45xvog.gz
@@ -99,15 +104,12 @@ C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\staticwebassets.build.json.cach
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\staticwebassets.development.json
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\staticwebassets.build.endpoints.json
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\swae.build.ex.cache
+C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\T-Stock.csproj.Up2Date
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\T-Stock.dll
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\refint\T-Stock.dll
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\T-Stock.pdb
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\T-Stock.genruntimeconfig.cache
 C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\ref\T-Stock.dll
-C:\TARUMT\Y2\S2\T-Stock\T-Stock\bin\Debug\net9.0\package-lock.json
-C:\TARUMT\Y2\S2\T-Stock\T-Stock\bin\Debug\net9.0\package.json
-C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\jr21c2ylnd-{0}-q2xar4dnzz-q2xar4dnzz.gz
-C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
-C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\emd4mcth0z-{0}-qjlkkyoerc-qjlkkyoerc.gz
-C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\a6efimi58p-{0}-xmmeeh2jpd-xmmeeh2jpd.gz
+C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\tagoua7exn-{0}-8dixav8aqx-8dixav8aqx.gz
+C:\TARUMT\Y2\S2\T-Stock\T-Stock\obj\Debug\net9.0\compressed\a6efimi58p-{0}-dr4escpkrw-dr4escpkrw.gz
