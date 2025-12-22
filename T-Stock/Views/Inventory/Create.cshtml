@@ -1,12 +1,15 @@
 ﻿@{
     ViewData["Title"] = "Create Product";
+    Layout = null; /* Crucial for AJAX loading so you don't get a nested layout */
 }
-<title>@ViewData["Title"]</title>
 @model T_Stock.Models.ProductListVM
 
 <div class="CREATE-INVENTORY">
     <h2>Create Product</h2>
+
     <form asp-controller="Inventory" asp-action="Create" method="post" id="createProductForm">
+        @Html.AntiForgeryToken()
+
         <table class="table">
             <thead>
                 <tr>
@@ -23,39 +26,34 @@
                 {
                     <tr>
                         <td>
-                            <input asp-for="Items[@i].ProductName" class="form-control" value="" />
-                            <span asp-validation-for="Items[@i].ProductName" class="text-danger"></span>
+                            <input asp-for="Items[i].ProductName" class="form-control" />
+                            <span asp-validation-for="Items[i].ProductName" class="text-danger"></span>
                         </td>
-
                         <td>
-                            <select asp-for="Items[@i].Category" class="form-control">
+                            <select asp-for="Items[i].Category" class="form-control">
                                 <option value="" disabled selected>-- Select --</option>
                                 <option value="Food">Food</option>
                                 <option value="Drink">Drink</option>
                                 <option value="Snack">Snack</option>
                             </select>
-                            <span asp-validation-for="Items[@i].Category" class="text-danger"></span>
+                            <span asp-validation-for="Items[i].Category" class="text-danger"></span>
                         </td>
-
                         <td>
-                            <input asp-for="Items[@i].Quantity" type="number" class="form-control" />
-                            <span asp-validation-for="Items[@i].Quantity" class="text-danger"></span>
+                            <input asp-for="Items[i].Quantity" type="number" class="form-control" />
+                            <span asp-validation-for="Items[i].Quantity" class="text-danger"></span>
                         </td>
-
                         <td>
-                            <input asp-for="Items[@i].ReorderLevel" type="number" class="form-control" />
-                            <span asp-validation-for="Items[@i].ReorderLevel" class="text-danger"></span>
+                            <input asp-for="Items[i].ReorderLevel" type="number" class="form-control" />
+                            <span asp-validation-for="Items[i].ReorderLevel" class="text-danger"></span>
                         </td>
-
                         <td>
-                            <input asp-for="Items[@i].Price" type="number" class="form-control" step="0.01"/>
-                            <span asp-validation-for="Items[@i].Price" class="text-danger"></span>
+                            <input asp-for="Items[i].Price" type="number" step="0.01" class="form-control" />
+                            <span asp-validation-for="Items[i].Price" class="text-danger"></span>
                         </td>
-
                         <td>
                             @if (i > 0)
                             {
-                                <button type="button" onclick="Inventory_RemoveRow(this)" class="btn-inv-custom btn-inv-remove">Remove</button>
+                                <button type="button" class="btn-inv-custom btn-inv-remove">Remove</button>
                             }
                         </td>
                     </tr>
@@ -63,32 +61,30 @@
             </tbody>
         </table>
 
-        <button type="button" onclick="Inventory_AddRow()" class="button btn-inv-custom btn-inv-add">
+        <button type="button" class="button btn-inv-custom btn-inv-add">
             + Add Row
         </button>
 
-        <button type="submit" class="ajax-button button btn-inv-custom btn-inv-create" data-url="/Inventory/Index">
+        <button type="submit" class="button btn-inv-custom btn-inv-create">
             Create
         </button>
 
     </form>
 
     <br />
-    <a href="/Home/Index" class="btn btn-secondary ajax-nav" data-ajax="page">Home</a>
-    <a href="/Inventory/Index" class="btn btn-secondary ajax-nav" data-ajax="page">Back</a>
+    <div class="nav-buttons">
+        <a href="/Inventory/Index" class="btn btn-secondary">Back to List</a>
+    </div>
 </div>
 
-@* HIDDEN TEMPLATE 
-   We use a dummy index like [-1] or [0] which we will replace via Javascript later.
-*@
 <template id="row-template">
     <tr>
         <td>
-            <input name="Items[0].ProductName" class="form-control" type="text" value="" />
+            <input name="Items[0].ProductName" id="Items_0__ProductName" class="form-control" type="text" />
             <span class="text-danger field-validation-valid" data-valmsg-for="Items[0].ProductName" data-valmsg-replace="true"></span>
         </td>
         <td>
-            <select name="Items[0].Category" class="form-control">
+            <select name="Items[0].Category" id="Items_0__Category" class="form-control">
                 <option value="" disabled selected>-- Select --</option>
                 <option value="Food">Food</option>
                 <option value="Drink">Drink</option>
@@ -97,139 +93,149 @@
             <span class="text-danger field-validation-valid" data-valmsg-for="Items[0].Category" data-valmsg-replace="true"></span>
         </td>
         <td>
-            <input name="Items[0].Quantity" class="form-control" type="number" value="0" />
+            <input name="Items[0].Quantity" id="Items_0__Quantity" class="form-control" type="number" value="0" />
             <span class="text-danger field-validation-valid" data-valmsg-for="Items[0].Quantity" data-valmsg-replace="true"></span>
         </td>
         <td>
-            <input name="Items[0].ReorderLevel" class="form-control" type="number" value="0" />
+            <input name="Items[0].ReorderLevel" id="Items_0__ReorderLevel" class="form-control" type="number" value="0" />
             <span class="text-danger field-validation-valid" data-valmsg-for="Items[0].ReorderLevel" data-valmsg-replace="true"></span>
         </td>
         <td>
-            <input name="Items[0].Price" class="form-control" type="number" value="0" step="0.01"/>
+            <input name="Items[0].Price" id="Items_0__Price" class="form-control" type="number" value="0" step="0.01" />
             <span class="text-danger field-validation-valid" data-valmsg-for="Items[0].Price" data-valmsg-replace="true"></span>
         </td>
         <td>
-            <button type="button" onclick="Inventory_RemoveRow(this)" class="btn-inv-custom btn-inv-remove">Remove</button>
+            <button type="button" class="btn-inv-custom btn-inv-remove">Remove</button>
         </td>
     </tr>
 </template>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+<script>
+    (function($) {
+        // --- 1. HANDLE "ADD ROW" CLICK ---
+        // Using $(document).on(...) ensures this works even after AJAX page loads
+        $(document).off('click', '.btn-inv-add').on('click', '.btn-inv-add', function () {
+
+            var tbody = document.getElementById('item-rows');
+            var template = document.getElementById('row-template');
+
+            if (!tbody || !template) return;
+
+            // Clone the template content
+            var clone = template.content.cloneNode(true);
+            tbody.appendChild(clone);
+
+            Inventory_UpdateIndices();
+            Inventory_RebindValidation();
+        });
+
+        // --- 2. HANDLE "REMOVE ROW" CLICK ---
+        $(document).off('click', '.btn-inv-remove').on('click', '.btn-inv-remove', function () {
+            var row = $(this).closest('tr');
+            row.remove();
+            Inventory_UpdateIndices();
+        });
+
+        // --- 3. HANDLE FORM SUBMISSION (AJAX) ---
+        $(document).off('submit', '#createProductForm').on('submit', '#createProductForm', function (e) {
+            e.preventDefault();
+            var $form = $(this);
+
+            if (!$form.valid()) return;
+
+            $.ajax({
+                url: $form.attr('action'),
+                method: $form.attr('method'),
+                data: $form.serialize(),
+                headers: { "X-Requested-With": "XMLHttpRequest" },
+                success: function (response) {
+                    if (response.success && response.redirectUrl) {
+                        window.location.href = response.redirectUrl;
+                    }
+                    else {
+                        // Reload the container with the partial view (usually contains validation errors)
+                        $('.CREATE-INVENTORY').parent().html(response);
+                    }
+                },
+                error: function () {
+                    alert("An error occurred while saving.");
+                }
+            });
+        });
+
+        // --- HELPER: UPDATE INDEXES FOR MODEL BINDING ---
+        function Inventory_UpdateIndices() {
+            var rows = document.querySelectorAll('#item-rows tr');
+            rows.forEach((row, index) => {
+                var inputs = row.querySelectorAll('input, select');
+                inputs.forEach(input => {
+                    if (input.name) input.name = input.name.replace(/Items\[\d+\]/, `Items[${index}]`);
+                    if (input.id) input.id = input.id.replace(/Items_\d+__/, `Items_${index}__`);
+                });
+                var spans = row.querySelectorAll('span[data-valmsg-for]');
+                spans.forEach(span => {
+                    var valFor = span.getAttribute('data-valmsg-for');
+                    if (valFor) span.setAttribute('data-valmsg-for', valFor.replace(/Items\[\d+\]/, `Items[${index}]`));
+                });
+            });
+        }
+
+        // --- HELPER: RE-ENABLE VALIDATION ---
+        function Inventory_RebindValidation() {
+            var $form = $("#createProductForm");
+            $form.removeData("validator");
+            $form.removeData("unobtrusiveValidation");
+            $.validator.unobtrusive.parse($form);
+        }
+
+        // Initialize validation immediately in case AJAX killed it
+        Inventory_RebindValidation();
+
+    })(jQuery);
+</script>
 
 <style>
     .btn-inv-custom {
         border: none;
         border-radius: 4px;
         cursor: pointer;
-        transition: all 0.2s ease-in-out;
+        transition: all 0.2s;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
         .btn-inv-custom:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+            transform: translateY(-2px);
         }
 
-    /* GRAY BUTTON (Add Row) */
     .btn-inv-add {
         background-color: lightgray;
         color: #333;
-        padding: 8px 16px;
+        padding: 6px 12px;
         margin-right: 5px;
-        font-weight: 500;
     }
 
-        .btn-inv-add:hover {
-            background-color: #bfbfbf;
-        }
-
-    /* GREEN BUTTON (Create) */
     .btn-inv-create {
         background-color: #28a745;
         color: white;
-        padding: 8px 16px;
-        font-weight: 500;
+        padding: 6px 12px;
     }
 
         .btn-inv-create:hover {
             background-color: #218838;
         }
 
-    /* RED BUTTON (Remove) */
     .btn-inv-remove {
         background-color: #dc3545;
         color: white;
-        padding: 8px 16px;
-        font-weight: 500;
+        padding: 5px 10px;
+        font-size: 0.9rem;
     }
 
         .btn-inv-remove:hover {
             background-color: #c82333;
         }
 </style>
-
-<script>
-    // Distinct name to avoid conflict with external 'addRow'
-    function Inventory_AddRow() {
-        var tbody = document.getElementById('item-rows');
-        var template = document.getElementById('row-template');
-
-        // 1. Clone the content of the template
-        var clone = template.content.cloneNode(true);
-
-        // 2. Append the new row to the table
-        tbody.appendChild(clone);
-
-        // 3. Update indices using the new function name
-        Inventory_UpdateIndices();
-
-        // 4. Re-initialize validation
-        Inventory_RebindValidation();
-    }
-
-    // Distinct name to avoid conflict with external 'removeRow'
-    function Inventory_RemoveRow(btn) {
-        var row = btn.closest('tr');
-        row.remove();
-
-        // Update indices to ensure ASP.NET binding stays correct (0, 1, 2...)
-        Inventory_UpdateIndices();
-    }
-
-    // Renamed helper function
-    function Inventory_UpdateIndices() {
-        var rows = document.querySelectorAll('#item-rows tr');
-
-        rows.forEach((row, index) => {
-            // Update Inputs and Selects
-            var inputs = row.querySelectorAll('input, select');
-            inputs.forEach(input => {
-                // Replace Name: Items[anything].Prop -> Items[index].Prop
-                if (input.name) {
-                    input.name = input.name.replace(/Items\[\d+\]/, `Items[${index}]`);
-                }
-                // Replace ID
-                if (input.id) {
-                    input.id = input.id.replace(/Items_\d+__/, `Items_${index}__`);
-                }
-            });
-
-            // Update Validation Spans
-            var spans = row.querySelectorAll('span[data-valmsg-for]');
-            spans.forEach(span => {
-                var valFor = span.getAttribute('data-valmsg-for');
-                if (valFor) {
-                    span.setAttribute('data-valmsg-for', valFor.replace(/Items\[\d+\]/, `Items[${index}]`));
-                }
-            });
-        });
-    }
-
-    // Renamed validation helper
-    function Inventory_RebindValidation() {
-        var form = $("#createProductForm");
-        // Remove existing validation data
-        form.removeData("validator");
-        form.removeData("unobtrusiveValidation");
-        // Re-parse the form to pick up new inputs
-        $.validator.unobtrusive.parse(form);
-    }
-</script>

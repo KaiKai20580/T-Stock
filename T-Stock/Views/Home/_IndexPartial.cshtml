@@ -57,7 +57,7 @@
                     <i class="ri-file-list-fill"></i>
                 </div>
                 <div class="order-text">
-                    <h2>1000</h2>
+                    <h2>@ViewBag.TotalOrders</h2>
                     <p>Orders</p>
                 </div>
             </div>
@@ -82,7 +82,7 @@
                 </div>
                 <div class="outstock-text">
                     <h2>@ViewBag.OutOfStockCount</h2>
-                    <p>Out Of Stock</p>
+                    <p>Low Stock</p>
                 </div>
             </div>
         </a>
@@ -106,7 +106,7 @@
 
     <div class="purchase-order">
         <h3>Purchase Order</h3>
-        <h4>5000 Pending</h4>
+        <h4>@ViewBag.PendingPOCount Pending</h4>
     </div>
 </div>
 

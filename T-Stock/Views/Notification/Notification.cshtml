@@ -2,7 +2,6 @@
 @{
     ViewData["Title"] = "Notifications";
 
-    // 1. Logic: Filter for Out of Stock (0) and Low Stock (<= ReorderLevel)
     var outOfStockItems = Model.Where(p => p.Quantity == 0).ToList();
     var lowStockItems = Model.Where(p => p.Quantity > 0 && p.Quantity <= p.ReorderLevel).ToList();
 
@@ -36,7 +35,7 @@
             </div>
         }
 
-        @* --- CHANGED SECTION: Out of Stock --- *@
+        @* --- SECTION 1: Out of Stock (Critical) -> Goes to Restock Page --- *@
         @foreach (var item in outOfStockItems)
         {
             <div class="noti-item critical unread">
@@ -59,6 +58,8 @@
                     <a asp-controller="Stock"
                        asp-action="CreateTransaction"
                        asp-route-productId="@item.ProductId"
+                       asp-route-productName="@item.ProductName"
+                       asp-route-reason="Emergency Restock (Out of Stock)"
                        class="btn-sm btn-danger">
                         Restock
                     </a>
@@ -66,6 +67,7 @@
             </div>
         }
 
+        @* --- SECTION 2: Low Stock (Warning) -> Goes to Inventory List --- *@
         @foreach (var item in lowStockItems)
         {
             <div class="noti-item warning unread">
@@ -78,15 +80,15 @@
                         <span class="time">Warning</span>
                     </div>
                     <p class="noti-msg">
-                        Quantity <strong>@item.Quantity</strong> is below Reorder Level (@item.ReorderLevel).
+                        Quantity <strong>@item.Quantity</strong> is below or equal to Reorder Level (@item.ReorderLevel).
                     </p>
                 </div>
                 <div class="noti-action">
-                    @* UPDATED LINK: Redirects to Stock/Create *@
-                    <a asp-controller="Stock"
-                       asp-action="CreateTransaction"
-                       asp-route-productId="@item.ProductId"
-                       class="btn-sm btn-outline">
+                    @* UPDATED: Points to Inventory Index with highlightId *@
+                    <a asp-controller="Inventory"
+                       asp-action="Index"
+                       asp-route-highlightId="@item.ProductId"
+                       class="ajax-nav btn-sm btn-outline">
                         View
                     </a>
                 </div>
@@ -97,7 +99,7 @@
 </div>
 
 <style>
-    /* CSS remains exactly the same as your request */
+    /* ... (Keep your existing CSS) ... */
     .NOTI-CONTAINER {
         max-width: 800px;
         margin: 30px auto;

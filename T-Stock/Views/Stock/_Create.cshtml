@@ -20,6 +20,10 @@
         font-family: Arial, sans-serif;
     }
 
+    body {
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
     /* ===== TABLE CONTAINER STYLE ===== */
     .stock-table {
         width: 100%;
@@ -40,11 +44,13 @@
             font-size: 1.1rem;
             white-space: nowrap;
             text-align: center;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .stock-table td {
             background-color: white;
             font-weight: 500;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
             /* ===== ACTION COLUMN ===== */
@@ -63,6 +69,7 @@
         border: 1px solid #ccc;
         font-size: 1rem;
         background-color: white;
+        transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
     }
 
     select.form-control {
@@ -195,6 +202,68 @@
     select.input-validation-error {
         border: 1px solid red;
     }
+
+    /* ========================================= */
+    /* DARK MODE OVERRIDES             */
+    /* ========================================= */
+
+    /* 1. Main Background and Text */
+    body.dark-mode {
+        background-color: black; /* Very dark grey/black */
+        color: #e0e0e0; /* Light grey text */
+    }
+
+        /* 2. Headings */
+        body.dark-mode h2 {
+            color: #ffffff;
+        }
+
+        /* 3. Table Styling */
+        body.dark-mode .stock-table th {
+            background-color: #333333; /* Dark header background */
+            color: #ffffff;
+            border-bottom: 1px solid #444;
+        }
+
+        body.dark-mode .stock-table td {
+            background-color: #1e1e1e; /* Dark row background */
+            color: #e0e0e0;
+            border-bottom: 1px solid #444;
+        }
+
+        /* 4. Form Controls (Inputs & Selects) */
+        body.dark-mode .form-control {
+            background-color: #2b2b2b;
+            border: 1px solid #444;
+            color: #ffffff;
+        }
+
+            body.dark-mode .form-control:focus {
+                border-color: #87CEEB; /* Keep the light blue focus for visibility */
+                background-color: #333;
+            }
+
+        /* 5. Navigation Buttons (Home / Back) */
+        body.dark-mode .btn-nav {
+            background-color: #333;
+            color: #ffffff;
+            border: 1px solid #444;
+        }
+
+            body.dark-mode .btn-nav:hover {
+                background-color: #444;
+            }
+
+        /* 6. Validation Errors */
+        /* Use a lighter red on dark backgrounds for readability */
+        body.dark-mode .text-danger,
+        body.dark-mode .field-validation-error {
+            color: #ff6b6b;
+        }
+
+        body.dark-mode select.input-validation-error {
+            border-color: #ff6b6b;
+        }
 </style>
 
 <div class="CREATE">
@@ -213,7 +282,6 @@
             </thead>
             <tbody id="item-rows">
                 @{
-                    // We determine the count based on Items, assuming Items and TransactionItems are synced in count
                     int count = Model?.Items?.Count ?? 0;
                 }
 
@@ -226,11 +294,15 @@
 
                         <tr class="transaction-row show">
                             <td>
-                                <input name="Items[@i].Reason" value="@transaction.Reason" class="form-control js-reason" required />
+                                <input name="Items[@i].Reason" value="@transaction.Reason" class="form-control js-reason" @(i == 0 ? "required" : "") />
                                 <span class="text-danger field-validation-valid"></span>
                             </td>
                             <td>
-                                <select name="Items[@i].transactionType" class="form-control">
+                                <select name="Items[@i].transactionType" class="form-control js-type">
+                                    @if (i > 0)
+                                    {
+                                        <option value="">-- Select --</option>
+                                    }
                                     <!option value="IN" @(transaction.transactionType == "IN" ? "selected" : "")>IN</!option>
                                     <!option value="OUT" @(transaction.transactionType == "OUT" ? "selected" : "")>OUT</!option>
                                 </select>
@@ -271,7 +343,7 @@
                             <span class="text-danger field-validation-valid"></span>
                         </td>
                         <td>
-                            <select name="Items[0].transactionType" class="form-control">
+                            <select name="Items[0].transactionType" class="form-control js-type">
                                 <option value="IN">IN</option>
                                 <option value="OUT">OUT</option>
                             </select>
@@ -318,7 +390,7 @@
 
 <script>
     (function() {
-        // Serialize product list for JS usage
+        // Serialize the product list for the "Add Row" function
         var availableProducts = @Html.Raw(Json.Serialize(Model?.Products ?? new List<T_Stock.Models.Product>()));
 
         function showError(input, span, message) {
@@ -333,14 +405,13 @@
             span.removeClass("field-validation-error").addClass("field-validation-valid");
         }
 
-        // --- UPDATED INDEX UPDATER ---
-        // This handles re-indexing for BOTH lists: Items[] and TransactionItems[]
+        // Re-indexes names so the ModelBinder works (Items[0], Items[1], etc.)
         function updateIndices() {
             $('#item-rows tr').each(function (index) {
                 $(this).find(':input').each(function () {
                     var name = $(this).attr('name');
                     if (name) {
-                        // Regex works for Items[0] AND TransactionItems[0]
+                        // Regex to replace the index number
                         var newName = name.replace(/\[\d+\]/, '[' + index + ']');
                         $(this).attr('name', newName);
                     }
@@ -348,34 +419,29 @@
             });
         }
 
-        // --- Add Row Logic ---
+        // --- 1. Add Row Logic ---
         $(document).off('click', '.btn-add-row').on('click', '.btn-add-row', function () {
             var tableBody = $("#item-rows");
             var rowIndex = tableBody.find("tr").length;
 
+            // Generate Product Options
             let optionsHtml = '<option value="" disabled selected>-- Select Product --</option>';
             if(availableProducts){
                 availableProducts.forEach(prod => {
-                    // Using productId (camelCase due to JSON serialization)
                     optionsHtml += `<option value="${prod.productId}">${prod.productName}</option>`;
                 });
             }
 
-            // Note the two different array names in the inputs below: Items[] and TransactionItems[]
+            // HTML for the new row
+            // Note: We include classes js-reason, js-type, js-qty, js-product for the logic to work
             var newRowHtml = `
                 <tr class="transaction-row adding">
                     <td>
-                        <input name="Items[${rowIndex}].Reason" class="form-control js-reason" required />
-                        <span class="text-danger field-validation-valid"></span>
                     </td>
                     <td>
-                        <select name="Items[${rowIndex}].transactionType" class="form-control">
-                            <option value="IN">IN</option>
-                            <option value="OUT">OUT</option>
-                        </select>
                     </td>
                     <td>
-                        <input name="TransactionItems[${rowIndex}].QtyChange" type="number" class="form-control js-qty" value="0" min="1" required />
+                        <input name="TransactionItems[${rowIndex}].QtyChange" type="number" class="form-control js-qty" value="1" min="1" required />
                         <span class="text-danger field-validation-valid"></span>
                     </td>
                     <td>
@@ -392,30 +458,76 @@
             var $newRow = $(newRowHtml);
             tableBody.append($newRow);
 
+            // Animation
             requestAnimationFrame(() => {
                 $newRow.addClass("show");
             });
         });
 
-        // --- Remove Logic ---
+        // --- 2. Remove Logic ---
         $(document).off('click', '.removeProductBtn').on('click', '.removeProductBtn', function () {
             var row = $(this).closest('tr');
             row.addClass('removing');
-
             setTimeout(() => {
                 row.remove();
                 updateIndices();
-            }, 300);
+            }, 30);
         });
 
-        // --- Submit Logic ---
+        // --- 3. MERGE LOGIC (Crucial Step) ---
+        $(document).off('change', '.js-product').on('change', '.js-product', function () {
+            var $currentSelect = $(this);
+            var $currentRow = $currentSelect.closest('tr');
+            var selectedProductId = $currentSelect.val();
+
+            // We must match Type (IN/OUT) as well as Product
+            var currentType = $currentRow.find('.js-type').val();
+            var currentQty = parseFloat($currentRow.find('.js-qty').val()) || 0;
+
+            if (!selectedProductId) return;
+
+            // Iterate over all OTHER rows
+            $('.transaction-row').not($currentRow).each(function () {
+                var $otherRow = $(this);
+                var otherProductId = $otherRow.find('.js-product').val();
+                var otherType = $otherRow.find('.js-type').val();
+
+                // Check for duplicate: Same Product AND Same Transaction Type (IN/IN or OUT/OUT)
+                if (otherProductId === selectedProductId && otherType === currentType) {
+
+                    var otherQtyInput = $otherRow.find('.js-qty');
+                    var otherQty = parseFloat(otherQtyInput.val()) || 0;
+
+                    // A. Update Existing Row
+                    var newTotal = otherQty + currentQty;
+                    otherQtyInput.val(newTotal);
+
+                    // B. Reset Current Row (to prevent duplicate entry)
+                    $currentSelect.val(""); // Reset dropdown
+                    $currentRow.find('.js-qty').val(1); // Reset qty default
+
+                    // C. Visual Feedback
+                    alert("Merged: Product '" + $currentSelect.find("option:selected").text() + "' already exists. Quantity added to existing row.");
+
+                    // Flash effect
+                    $otherRow.css("transition", "background-color 0.5s");
+                    $otherRow.css("background-color", "#90EE90"); // Light Green
+                    setTimeout(function() {
+                        $otherRow.css("background-color", "");
+                    }, 1000);
+
+                    return false; // Stop loop
+                }
+            });
+        });
+
+        // --- 4. Submit Validation ---
         $("#btnSubmit").off("click").on("click", function (e) {
             e.preventDefault();
-
             var $form = $("#createTransactionForm");
             let isValid = true;
 
-            $("#item-rows tr").each(function () {
+            $("#item-rows tr").each(function (index) {
                 var row = $(this);
                 var reasonInput = row.find(".js-reason");
                 var quantityInput = row.find(".js-qty");
@@ -425,8 +537,8 @@
                 var quantitySpan = quantityInput.next("span");
                 var productSpan = productSelect.next("span");
 
-                // Validate Reason
-                if (!reasonInput.val() || reasonInput.val().trim() === "") {
+                // Validate Reason (Strict only for first row)
+                if (index === 0 && (!reasonInput.val() || reasonInput.val().trim() === "")) {
                     isValid = false;
                     showError(reasonInput, reasonSpan, "Reason is required");
                 } else {
@@ -453,7 +565,7 @@
 
             if (!isValid) return;
 
-            updateIndices();
+            updateIndices(); // Ensure indices are correct [0], [1], [2] before submit
 
             $.ajax({
                 url: "/Stock/CreateTransaction",
@@ -467,7 +579,6 @@
                     }
                 },
                 error: function (xhr) {
-                    console.error(xhr.responseText);
                     alert("Server error.");
                 }
             });

@@ -51,13 +51,13 @@
         </a>
 
 
-        <a class="ajax-nav" href="/Inventory/Index" data-ajax="page">
+        <a class="ajax-nav" href="/PurchaseOrder/Index" data-ajax="page">
             <div class="order">
                 <div class="i-dashboard">
                     <i class="ri-file-list-fill"></i>
                 </div>
                 <div class="order-text">
-                    <h2>1000</h2>
+                    <h2>@ViewBag.TotalOrders</h2>
                     <p>Orders</p>
                 </div>
             </div>
@@ -82,7 +82,7 @@
                 </div>
                 <div class="outstock-text">
                     <h2>@ViewBag.OutOfStockCount</h2>
-                    <p>Out Of Stock</p>
+                    <p>Low Stock</p>
                 </div>
             </div>
         </a>

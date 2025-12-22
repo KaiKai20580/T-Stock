@@ -4,75 +4,210 @@
     ViewData["Title"] = "Edit Product";
 }
 
-<div class="EDIT-CONTAINER">
-    <h2>Edit Product</h2>
+<div class="edit-container">
+    <div class="form-header">
+        <h2>Edit Product</h2>
+        <p class="text-muted">Update details for product: <strong>@Model.ProductName</strong></p>
+    </div>
 
-    <form asp-action="Edit" method="post">
+    <form asp-action="Edit" class="edit-form">
         <input type="hidden" asp-for="Id" />
 
-        <input type="hidden" asp-for="ProductId" />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-        <div class="form-group">
-            <label asp-for="ProductName">Product Name</label>
-            <input asp-for="ProductName" class="form-control" />
-            <span asp-validation-for="ProductName" class="text-danger"></span>
+        <div class="form-grid">
+            <div class="form-group">
+                <label asp-for="ProductId" class="control-label">Product ID</label>
+                <input asp-for="ProductId" class="form-control readonly-input" readonly />
+                <span asp-validation-for="ProductId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ProductName" class="control-label">Product Name</label>
+                <input asp-for="ProductName" class="form-control" />
+                <span asp-validation-for="ProductName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Category" class="control-label">Category</label>
+                <select asp-for="Category" class="form-control">
+                    <option value="" disabled>-- Select Category --</option>
+                    <option value="Food">FOOD</option>
+                    <option value="Snack">SNACK</option>
+                    <option value="Drink">DRINK</option>
+                </select>
+                <span asp-validation-for="Category" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Price" class="control-label">Price</label>
+                <div class="input-prefix-wrapper">
+                    <span class="prefix">$</span>
+                    <input asp-for="Price" class="form-control" type="number" step="0.01" />
+                </div>
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ReorderLevel" class="control-label">Reorder Level</label>
+                <input asp-for="ReorderLevel" class="form-control" type="number" />
+                <span asp-validation-for="ReorderLevel" class="text-danger"></span>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label asp-for="Category">Category</label>
-            <input asp-for="Category" class="form-control" />
-            <span asp-validation-for="Category" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="Quantity">Quantity</label>
-            <input asp-for="Quantity" type="number" class="form-control" />
-            <span asp-validation-for="Quantity" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="ReorderLevel">Reorder Level</label>
-            <input asp-for="ReorderLevel" type="number" class="form-control" />
-            <span asp-validation-for="ReorderLevel" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="Price">Price</label>
-            <input asp-for="Price" type="number" step="0.01" class="form-control" />
-            <span asp-validation-for="Price" class="text-danger"></span>
-        </div>
-
-        <div class="button-group" style="margin-top: 20px;">
-            <button type="submit" class="btn btn-primary" style="background-color: #007bff; border: none;">Save Changes</button>
-            <a asp-action="Index" class="btn btn-secondary ajax-nav" data-ajax="page">Cancel</a>
+        <div class="form-actions">
+            <a asp-action="Index" class="btn-cancel">Cancel</a>
+            <button type="submit" class="btn-save">Save Changes</button>
         </div>
     </form>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
 
 <style>
-    .EDIT-CONTAINER {
-        max-width: 600px;
-        margin: 0 auto;
-        padding: 20px;
-        background: #f9f9f9;
+    /* --- Edit Page Container --- */
+    .edit-container {
+        max-width: 800px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 30px;
         border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        font-family: 'Segoe UI', sans-serif;
     }
+
+    .form-header {
+        margin-bottom: 25px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 15px;
+    }
+
+        .form-header h2 {
+            margin: 0;
+            color: #333;
+        }
+
+    .text-muted {
+        color: #6c757d;
+        font-size: 0.95rem;
+        margin-top: 5px;
+    }
+
+    /* --- Grid Layout --- */
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    /* Make Name full width on small screens or just generally cleaner */
+    .form-group:nth-child(2) { /* Product Name */
+        grid-column: span 2;
+    }
+
+    /* --- Inputs --- */
     .form-group {
-        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
     }
-    label {
-        font-weight: bold;
-        display: block;
-        margin-bottom: 5px;
+
+    .control-label {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: #444;
     }
+
     .form-control {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #ccc;
+        padding: 10px;
+        border: 1px solid #ddd;
         border-radius: 4px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+        /* Ensure select dropdowns match input height/style */
+        background-color: #fff;
+    }
+
+        .form-control:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
+
+    .readonly-input {
+        background-color: #e9ecef;
+        cursor: not-allowed;
+        color: #6c757d;
+    }
+
+    /* --- Price Prefix Wrapper --- */
+    .input-prefix-wrapper {
+        position: relative;
+    }
+
+        .input-prefix-wrapper .prefix {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .input-prefix-wrapper input {
+            padding-left: 25px;
+        }
+
+    /* --- Buttons --- */
+    .form-actions {
+        margin-top: 30px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+    }
+
+    .btn-save {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 25px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: background 0.2s;
+    }
+
+        .btn-save:hover {
+            background-color: #218838;
+        }
+
+    .btn-cancel {
+        text-decoration: none;
+        color: #555;
+        padding: 10px 20px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        transition: background 0.2s;
+    }
+
+        .btn-cancel:hover {
+            background-color: #f8f9fa;
+        }
+
+    /* --- Responsive --- */
+    @@media (max-width: 600px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group:nth-child(2) {
+            grid-column: span 1;
+        }
     }
 </style>

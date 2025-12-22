@@ -22,22 +22,78 @@ public class HomeController : Controller
     }
     public IActionResult Index()
     {
+        // ==========================================
         // 1. Total Stock Quantity
+        // ==========================================
         var totalQuantity = _db.ProductCollection.AsQueryable().Sum(p => p.Quantity);
         ViewBag.TotalStockQuantity = totalQuantity;
 
+        // ==========================================
         // 2. Total Transactions
+        // ==========================================
         var transactionCount = _db.StockTransaction.CountDocuments(FilterDefinition<StockTransaction>.Empty);
         ViewBag.TotalTransactions = transactionCount;
 
-        // 3. NEW LOGIC: "Out of Stock" (Quantity <= ReorderLevel)
-        // We use AsQueryable() because it handles comparing two fields (Quantity vs ReorderLevel) efficiently.
+        // ==========================================
+        // 3. "Out of Stock" (Quantity <= ReorderLevel)
+        // ==========================================
         var outOfStockCount = _db.ProductCollection.AsQueryable()
-                                 .Where(p => p.Quantity <= p.ReorderLevel)
-                                 .Count();
-
+                                         .Where(p => p.Quantity <= p.ReorderLevel)
+                                         .Count();
         ViewBag.OutOfStockCount = outOfStockCount;
 
+        // ==========================================
+        // 4. Purchase Orders & Pending Count (With Role Security)
+        // ==========================================
+        long totalOrders = 0;
+        long pendingOrders = 0; // <--- NEW VARIABLE
+
+        // Get User Info from Cookies
+        var userRole = Request.Cookies["Role"];
+        var userEmail = Request.Cookies["User"];
+
+        if (userRole == "Supplier" && !string.IsNullOrEmpty(userEmail))
+        {
+            // 4a. If Supplier: Look up their ID using SupplierCollection
+            var currentSupplier = _db.SupplierCollection
+                                     .Find(s => s.Email == userEmail)
+                                     .FirstOrDefault();
+
+            if (currentSupplier != null)
+            {
+                // Count TOTAL orders for this Supplier
+                totalOrders = _db.PurchaseOrderCollection
+                                 .CountDocuments(p => p.SupplierID == currentSupplier.SupplierId);
+
+                // Count PENDING orders for this Supplier
+                pendingOrders = _db.PurchaseOrderCollection
+                                   .CountDocuments(p => p.SupplierID == currentSupplier.SupplierId && p.Status == "Pending");
+            }
+            else
+            {
+                totalOrders = 0;
+                pendingOrders = 0;
+            }
+        }
+        else
+        {
+            // 4b. Admin/Staff/Manager: Sees ALL orders
+            totalOrders = _db.PurchaseOrderCollection
+                             .CountDocuments(FilterDefinition<PurchaseOrder>.Empty);
+
+            // Count ALL Pending orders
+            pendingOrders = _db.PurchaseOrderCollection
+                               .CountDocuments(p => p.Status == "Pending");
+        }
+
+        // Store in ViewBag for the View to render
+        ViewBag.TotalOrders = totalOrders;
+        ViewBag.PendingPOCount = pendingOrders; // <--- PASS TO VIEW
+
+
+        // ==========================================
+        // 5. AJAX Check (Return Partial if requested)
+        // ==========================================
 
         // Test top 5 2025-12-22 16:26 
         var allProducts = _db.ProductCollection.Find(_ => true).ToList();
@@ -91,8 +147,6 @@ public class HomeController : Controller
 
         return View();
     }
-
-    // HomeController
     public IActionResult Search(string q)
     {
         var results = new List<ProductViewModel>();
@@ -119,27 +173,6 @@ public class HomeController : Controller
 
         return PartialView("_SearchResults", results);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()

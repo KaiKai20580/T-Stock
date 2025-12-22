@@ -98,15 +98,17 @@ namespace T_Stock.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(ProductListVM model)
         {
+            // 1. Validation Check
             if (!ModelState.IsValid)
             {
+                // If AJAX, return the form partial with validation errors
                 if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
                     return PartialView("Create", model);
 
                 return View(model);
             }
 
-            // 1. Get the last ProductID
+            // 2. Get the last ProductID and Calculate Next
             var lastProduct = _db.ProductCollection.Find(_ => true)
                                                    .SortByDescending(p => p.ProductId)
                                                    .Limit(1)
@@ -120,19 +122,27 @@ namespace T_Stock.Controllers
                     nextNumber = lastNumber + 1;
             }
 
-            // 2. Assign new ProductId
+            // 3. Assign new ProductIds
             foreach (var item in model.Items)
             {
-                item.ProductId = $"P{nextNumber:D4}";
+                item.ProductId = $"P{nextNumber:D4}"; // e.g. P0001
                 nextNumber++;
             }
 
-            // 3. Insert
+            // 4. Insert into MongoDB
             _db.ProductCollection.InsertMany(model.Items);
 
-            // 4. Return
+            // --- CRITICAL STEP FOR POPUP ---
+            // Set the message here. It will be stored in a cookie/session 
+            // and displayed when the browser loads the Index page.
+            TempData["SuccessMessage"] = $"{model.Items.Count} Product(s) created successfully.";
+
+            // 5. Return Response
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-                return Json(new { success = true });
+            {
+                // Return JSON telling the JS to redirect
+                return Json(new { success = true, redirectUrl = Url.Action("Index", "Inventory") });
+            }
 
             return RedirectToAction("Index");
         }
@@ -141,8 +151,7 @@ namespace T_Stock.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(string productId)
         {
-            if (string.IsNullOrEmpty(productId))
-                return BadRequest();
+            if (string.IsNullOrEmpty(productId)) return BadRequest();
 
             var collection = _db.ProductCollection;
             var filter = Builders<Product>.Filter.Eq(p => p.ProductId, productId);
@@ -150,11 +159,14 @@ namespace T_Stock.Controllers
 
             if (result.DeletedCount > 0)
             {
-                TempData["Message"] = "Product deleted successfully.";
+                // CHANGED: Key must match Index.cshtml
+                TempData["SuccessMessage"] = "Product deleted successfully.";
             }
             else
             {
-                TempData["Message"] = "Product not found.";
+                // You might want to handle errors differently, 
+                // but for now let's keep success flow clean.
+                TempData["ErrorMessage"] = "Product not found.";
             }
             return RedirectToAction("Index");
         }

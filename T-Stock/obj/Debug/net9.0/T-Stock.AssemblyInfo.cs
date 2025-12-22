@@ -14,7 +14,15 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("T-Stock")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
+<<<<<<< HEAD
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9b06d4e5eefbca3d4cfb1268e253479a2cd1007a")]
+=======
+<<<<<<< HEAD
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d5e5b63689009638866b2df8c735371dd516640e")]
+=======
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4b320d59567f226711fab257062d5b7383c9f625")]
+>>>>>>> 9b06d4e5eefbca3d4cfb1268e253479a2cd1007a
+>>>>>>> 326da16839586925fff5e60552addf1153fdc20a
 [assembly: System.Reflection.AssemblyProductAttribute("T-Stock")]
 [assembly: System.Reflection.AssemblyTitleAttribute("T-Stock")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
