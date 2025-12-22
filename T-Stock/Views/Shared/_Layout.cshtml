@@ -34,49 +34,61 @@
             </div>
         </div>
         <ul>
-            <li>
-                <a class="ajax-nav" href="/Home/Index" data-ajax="page">
-                    <i class="ri-home-5-fill"></i>
-                    <span class="nav-item">Home</span>
-                </a>
-            </li>
-            <li>
-                <a class="ajax-nav" href="/Inventory/Index" data-ajax="page">
-                    <i class="ri-clipboard-fill"></i>
-                    <span class="nav-item">Inventory</span>
-                </a>
-            </li>
-            <li>
-                <a class="ajax-nav" asp-controller="Stock" asp-action="Index" data-ajax="page">
-                    <i class="ri-dropbox-fill"></i>
-                    <span class="nav-item">Stock Management</span>
-                </a>
-            </li>
-            <li>
-                <a asp-controller="PurchaseOrder" asp-action="Index" data-ajax="page">
-                    <i class="ri-file-list-fill"></i>
-                    <span class="nav-item">Purchase <br /> Order</span>
-                </a>
-            </li>
-            <li>
-                <a asp-controller="Supplier" asp-action="Index" data-ajax="page">
-                    <i class="ri-caravan-fill"></i>
-                    <span class="nav-item">Supplier</span>
-                </a>
-            </li>
-            <li>
-                <a asp-controller="Report" asp-action="Index">
-                    <i class="ri-file-chart-fill"></i>
-                    <span class="nav-item">Reports</span>
-                </a>
-            </li>
-
-            @if (!string.IsNullOrEmpty(role) && role.ToLower() == "admin")
+            @if (!string.IsNullOrEmpty(role) && (role.ToLower() == "admin" || role.ToLower() == "staff"))
             {
                 <li>
-                    <a class="ajax-nav" href="/Member/Index" data-ajax="page">
-                        <i class="ri-team-fill"></i>
-                        <span class="nav-item">Member</span>
+                    <a class="ajax-nav" href="/Home/Index" data-ajax="page">
+                        <i class="ri-home-5-fill"></i>
+                        <span class="nav-item">Home</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="ajax-nav" href="/Inventory/Index" data-ajax="page">
+                        <i class="ri-clipboard-fill"></i>
+                        <span class="nav-item">Inventory</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Stock" asp-action="Index" data-ajax="page">
+                        <i class="ri-dropbox-fill"></i>
+                        <span class="nav-item">Stock Management</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="PurchaseOrder" asp-action="Index" data-ajax="page">
+                        <i class="ri-file-list-fill"></i>
+                        <span class="nav-item">Purchase <br /> Order</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Supplier" asp-action="Index" data-ajax="page">
+                        <i class="ri-caravan-fill"></i>
+                        <span class="nav-item">Supplier</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Report" asp-action="Index">
+                        <i class="ri-file-chart-fill"></i>
+                        <span class="nav-item">Reports</span>
+                    </a>
+                </li>
+
+                @if (!string.IsNullOrEmpty(role) && role.ToLower() == "admin")
+                {
+                    <li>
+                        <a class="ajax-nav" href="/Member/Index" data-ajax="page">
+                            <i class="ri-team-fill"></i>
+                            <span class="nav-item">Member</span>
+                        </a>
+                    </li>
+                }
+            }
+            else
+            {
+                <li>
+                    <a asp-controller="PurchaseOrder" asp-action="Index" data-ajax="page">
+                        <i class="ri-file-list-fill"></i>
+                        <span class="nav-item">Purchase <br /> Order</span>
                     </a>
                 </li>
             }

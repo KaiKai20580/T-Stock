@@ -67,7 +67,14 @@ namespace T_Stock.Controllers
                 Expires = DateTimeOffset.UtcNow.AddHours(3)
             });
 
-            return RedirectToAction("Index", "Home");
+            if (user.Role == "Admin" || user.Role == "Staff")
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return RedirectToAction("Index", "PurchaseOrder");
+            }
         }
 
         // ===================== FORGOT PASSWORD =====================

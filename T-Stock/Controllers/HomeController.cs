@@ -11,13 +11,15 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly DB _db;
+    private readonly IMongoCollection<PurchaseOrderItem> _purchaseOrderItem;
 
-    public HomeController(ILogger<HomeController> logger, DB db)
+    public HomeController(ILogger<HomeController> logger, DB db, IMongoDatabase mongoDb)
     {
         _logger = logger;
         _db = db;
-    }
+        _purchaseOrderItem = mongoDb.GetCollection<PurchaseOrderItem>("PurchaseOrderItem");
 
+    }
     public IActionResult Index()
     {
         // ==========================================
@@ -92,6 +94,52 @@ public class HomeController : Controller
         // ==========================================
         // 5. AJAX Check (Return Partial if requested)
         // ==========================================
+
+        // Test top 5 2025-12-22 16:26 
+        var allProducts = _db.ProductCollection.Find(_ => true).ToList();
+        var lastPriceDict = _purchaseOrderItem.Find(_ => true).ToList()
+                         .GroupBy(i => i.ProductId)
+                         .ToDictionary(g => g.Key, g => g.Last().UnitPrice);
+        var top5Product = allProducts
+        .Select(p => {
+            decimal price = lastPriceDict.ContainsKey(p.ProductId) ? lastPriceDict[p.ProductId] : 0;
+            return new
+            {
+                p.ProductName,
+                p.Quantity,
+                p.Category,
+                UnitPrice = price,
+                TotalValue = p.Quantity * price
+            };
+        })
+             .OrderByDescending(x => x.TotalValue)
+             .Take(5)
+             .ToList();
+
+        ViewBag.Top5Value = top5Product;
+
+        // Monthly budget testing
+        var now = DateTime.Now;
+        var startOfMonth = new DateTime(now.Year, now.Month, 1);
+        var endOfMonth = startOfMonth.AddMonths(1);
+
+        //Find that month PO Id
+        var thisMonthPOIds = _db.PurchaseOrderCollection.AsQueryable()
+                            .Where(po => po.LastUpdated >= startOfMonth && po.LastUpdated <= endOfMonth)
+                            .Select(po => po.PO_ID)
+                            .ToList();
+
+        decimal monthlySpending = 0;
+        if (thisMonthPOIds.Any())
+        {
+            monthlySpending = _purchaseOrderItem.AsQueryable()
+                                .Where(item => thisMonthPOIds.Contains(item.PO_ID))
+                                .Sum(item => item.TotalPrice);
+        }
+
+        ViewBag.MonthlySpending = monthlySpending;
+
+        // 4. AJAX Check
         if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
         {
             return PartialView("_IndexPartial");
